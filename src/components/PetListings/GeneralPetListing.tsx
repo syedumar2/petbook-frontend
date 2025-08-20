@@ -126,21 +126,21 @@ const GeneralPetListing = () => {
 
         <div className="flex justify-center items-center gap-3 my-6">
       {/* Previous button */}
-      <Button className="hover:cursor-pointer" disabled>
+      <Button className="hover:cursor-pointer" disabled variant={undefined} size={undefined}>
         Previous
       </Button>
 
       {/* Page numbers */}
       <div className="flex gap-2 ">
-        <Button className="hover:cursor-pointer bg-red-600 text-white">1</Button>
-        <Button className="hover:cursor-pointer bg-red-600 text-white">2</Button>
-        <Button className="hover:cursor-pointer bg-red-600 text-white">3</Button>
+        <Button className="hover:cursor-pointer bg-red-600 text-white" variant={undefined} size={undefined}>1</Button>
+        <Button className="hover:cursor-pointer bg-red-600 text-white" variant={undefined} size={undefined}>2</Button>
+        <Button className="hover:cursor-pointer bg-red-600 text-white" variant={undefined} size={undefined}>3</Button>
         <span className="px-2 py-1 text-gray-500">...</span>
-        <Button className="hover:cursor-pointer bg-gray-200 text-gray-700">10</Button>
+        <Button className="hover:cursor-pointer bg-gray-200 text-gray-700" variant={undefined} size={undefined}>10</Button>
       </div>
 
       {/* Next button */}
-      <Button className="hover:cursor-pointer">Next</Button>
+      <Button className="hover:cursor-pointer" variant={undefined} size={undefined}>Next</Button>
     </div>
     </section>
   );

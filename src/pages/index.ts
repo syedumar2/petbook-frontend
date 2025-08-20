@@ -5,4 +5,4 @@ import PetListing from "./PetListing";
 import PetDetail from "./PetDetail";
 import UserDashboard from "./UserDashboard";
 import AdminDashboard from "./AdminDashboard";
-export { Home, Login, Register, PetListing, PetDetail, UserDashboard };
+export { Home, Login, Register, PetListing, PetDetail, UserDashboard, AdminDashboard };

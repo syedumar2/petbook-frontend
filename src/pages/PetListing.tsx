@@ -1,4 +1,4 @@
-import { Header, SearchBar, Footer, GeneralPetListing } from "@/components";
+import { Header,SearchBar,GeneralPetListing,Footer } from "@/components";
 import { Button } from "@/components/ui/button";
 
 const PetListing = () => {

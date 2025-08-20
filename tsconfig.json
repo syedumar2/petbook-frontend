@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    /* Paths / Aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    /* File Layout */
+    // "rootDir": "./src",
+    // "outDir": "./dist",
+
+    /* Environment Settings */
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "jsx": "react-jsx",
+
+    /* Node types (if you use Node APIs like process.env) */
+    // "types": ["node"],
+
+    /* Outputs */
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* Recommended */
+    "isolatedModules": true,
+    "skipLibCheck": true,
+
+    /* Style checks */
+    // "noImplicitReturns": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

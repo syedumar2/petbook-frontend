@@ -22,6 +22,7 @@ import UsersList from "./Admin/UsersList";
 import PetList from "./Admin/PetList";
 import UnapprovedPets from "./Admin/UnapprovedPetList";
 import ApprovedPets from "./Admin/ApprovedPetListing";
+import LoginForm from './Forms/LoginForm';
 
 
 export {
@@ -48,5 +49,6 @@ export {
   UsersList,
   PetList,
   UnapprovedPets,
-  ApprovedPets
+  ApprovedPets,
+  LoginForm
 };
