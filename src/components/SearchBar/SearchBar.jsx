@@ -1,4 +1,4 @@
-import React from "react";
+import AdvancedSearchDropDown from "../ui/AdvancedSearchDropDown";
 
 const SearchBar = () => {
   return (
@@ -66,6 +66,7 @@ const SearchBar = () => {
           >
             Search
           </button>
+            <AdvancedSearchDropDown/>
         </form>
       </section>
     </section>

@@ -1,5 +1,5 @@
 import { Header, SearchBar, Footer, GeneralPetListing } from "@/components";
-import React from "react";
+import { Button } from "@/components/ui/button";
 
 const PetListing = () => {
   return (
@@ -7,8 +7,8 @@ const PetListing = () => {
       <Header />
       <main>
         <SearchBar />
-       
-        <GeneralPetListing/>
+
+        <GeneralPetListing />
       </main>
       <Footer />
     </div>

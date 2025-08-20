@@ -8,6 +8,7 @@ import {
 import { Link } from "react-router-dom";
 
 import { Button } from "../ui/button";
+import SortDropdown from "../ui/SortDropDown";
 const pets = [
   {
     petId: 1,
@@ -81,7 +82,10 @@ const pets = [
 const GeneralPetListing = () => {
   return (
     <section>
-         <h3 className="ml-6 my-2 text-xl font-semibold">Showing results for: </h3>
+         <div className="flex mx-auto px-6 pt-2 justify-between w-full">
+           <h3 className=" text-xl font-semibold">Showing results for: </h3>
+           <SortDropdown/>
+         </div>
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4 pb-12">
         
           {pets.map((pet, index) => (
