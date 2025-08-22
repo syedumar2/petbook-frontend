@@ -1,102 +1,75 @@
-import {
-  getUserInfoApi,
-  loginApi,
-  logoutApi,
-  registerApi,
-} from "@/api/authApi";
+import { createContext,  useEffect, useState } from "react";
+import { authService, AuthResponse } from "@/services/authService";
 import { LoginRequest, RegisterRequest, UserInfo } from "@/types/user";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
 import { clearTokens, getAccessToken, setAccessToken } from "./tokenStore";
 import { toast } from "sonner";
 
+
 type AuthContextType = {
   user: UserInfo | null;
-  login: (credentials: LoginRequest) => Promise<BaseResponse>;
-  register: (registerForm: RegisterRequest) => Promise<BaseResponse>;
+  login: (credentials: LoginRequest) => Promise<AuthResponse>;
+  register: (registerForm: RegisterRequest) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
+
   getUser: () => Promise<void>;
 };
-type Props = {
-  children?: React.ReactNode;
-};
 
-type BaseResponse = {
-  success: boolean;
-  message: string;
-};
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: Props) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    !!getAccessToken()
-  );
+
+
+export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!getAccessToken());
   const [user, setUser] = useState<UserInfo | null>(null);
+  
 
-  const login = async (data: LoginRequest): Promise<BaseResponse> => {
-   //no issue here
-    const res = await loginApi(data);
-    if (res.success && res.token) {
-      setAccessToken(res.token);
+  const login = async (data: LoginRequest): Promise<AuthResponse> => {
+    const res = await authService.login(data);
+    if (res.success) {
       setIsAuthenticated(true);
 
-      return {
-        success: res.success,
-        message: res.message,
-      };
-    } else {
-      return {
-        success: res.success,
-        message: res.message,
-      };
+      await getUser(); // fetch profile after login
     }
+    return res;
   };
 
-  const register = async (data: RegisterRequest): Promise<BaseResponse> => {
-    const res = await registerApi(data);
+  const register = async (data: RegisterRequest): Promise<AuthResponse> => {
+    const res = await authService.register(data);
     if (res.success) {
-      return {
-        success: res.success,
-        message: res.message,
-      };
-    } else {
-      return {
-        success: res.success,
-        message: res.message,
-      };
+      toast.success("Registered successfully. You can now log in.");
     }
+    return res;
   };
 
   const logout = async () => {
-    if (isAuthenticated) {
-      await logoutApi();
-      clearTokens();
-      window.location.href = "/login";
-      toast.message("Logged out successfully");
-    }
+    await authService.logout();
+    clearTokens();
+    setIsAuthenticated(false);
+    setUser(null);
+    toast.message("Logged out successfully");
+    window.location.href = "/login";
   };
 
   const getUser = async () => {
     if (isAuthenticated) {
-      const res = await getUserInfoApi();
+      const res = await authService.getUserInfo();
+      console.log("GetUser at context", res);
+
       if (res.success && res.data) {
         setUser(res.data);
       }
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated && !user) {
-      getUser();
-    }
-  }, [isAuthenticated]);
+
+
+useEffect(()=>{
+  if(isAuthenticated) getUser();
+},[isAuthenticated])
 
   return (
     <AuthContext.Provider
@@ -107,15 +80,10 @@ export const AuthProvider = ({ children }: Props) => {
         logout,
         isAuthenticated,
         getUser,
+
       }}
     >
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
 };

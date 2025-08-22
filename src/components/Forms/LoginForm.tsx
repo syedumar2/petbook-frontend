@@ -1,4 +1,5 @@
-import { useAuth } from "@/context/AuthContext";
+
+import { useAuth } from "@/hooks/useAuth";
 import { LoginRequest } from "@/types/user";
 
 import { useState } from "react";

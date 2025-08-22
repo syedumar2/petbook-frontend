@@ -2,8 +2,12 @@ import { Button } from "@/components/ui/button";
 import { LogOut, MessageCircle, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import UserDisplay from "./UserDisplay";
+import { useAuth } from "@/hooks/useAuth";
 
 const UserNavbar = () => {
+  const { logout } = useAuth();
+
+
   return (
     <nav className="">
       <div className="max-w-6xl mx-auto px-4 py-2">
@@ -36,14 +40,14 @@ const UserNavbar = () => {
               <Link to={"/profile/conversations"}>
                 <MessageCircle />
               </Link>
-                 <div class="w-1/4 md:w-auto md:flex text-right">
+                 <div className="w-1/4 md:w-auto md:flex text-right">
              
                <UserDisplay/>
               </div>
-              <Button className="bg-red-700 text-white rounded-full px-8 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95">
+              <Button className="bg-red-700 text-white rounded-full px-8 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95" variant={undefined} size={undefined}>
                 <Plus /> Add Pet
               </Button>
-              <LogOut/>
+              <LogOut onClick={()=>logout()}/>
             </section>
           </div>
         </div>

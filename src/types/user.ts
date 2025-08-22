@@ -20,7 +20,7 @@ export interface LoginResponse {
 export interface UserInfoResponse {
     success: boolean;
     message?: string;
-    data?: UserInfo;
+    data?: UserInfo | null;
 }
 export type UserInfo = {
     email: string;

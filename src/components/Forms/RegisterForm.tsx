@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { RegisterRequest } from "@/types/user";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -28,7 +28,7 @@ const RegisterForm = () => {
   const LNAME_REGEX = /^[A-Za-z][A-Za-z'-]{1,}$/;
   const EMAIL_REGEX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/;
   const PSWD_LENGTH = 4;
-  const LOCATION_REGEX = /^[A-Za-z]+,\s[A-Za-z]+/;
+  const LOCATION_REGEX = /^([A-Za-z]+( [A-Za-z]+)+),.*([A-Za-z]+( [A-Za-z]+)+)/;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,8 +58,7 @@ const RegisterForm = () => {
         ...prev,
         lastname: LNAME_REGEX.test(value) ? "" : "Enter a Valid Last Name",
       }));
-    }
-    else if (name == "location") {
+    } else if (name == "location") {
       setErrors((prev) => ({
         ...prev,
         location: LOCATION_REGEX.test(value) ? "" : "Enter a Valid Location",

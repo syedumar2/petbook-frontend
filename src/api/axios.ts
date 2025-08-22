@@ -1,7 +1,9 @@
 import { getAccessToken, setAccessToken, clearTokens } from "@/context/tokenStore";
+import { authService } from "@/services/authService";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { toast } from "sonner";
-import { refreshTokenApi } from "./authApi";
+import { authApi } from "./authApi";
+
 
 const axiosInstance = axios.create(
     {
@@ -10,9 +12,10 @@ const axiosInstance = axios.create(
     }
 );
 
-axios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         const token = getAccessToken();
+
         if (token) { config.headers.Authorization = `Bearer ${token}` };
         return config;
 
@@ -34,22 +37,22 @@ axios.interceptors.request.use(
 )
 
 
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
         if (error.response?.status === 401) {
             try {
-                const newToken = await refreshTokenApi();
-                if (newToken) {
+                const res = await authApi.refreshToken();
+                const newToken = res.data?.data.token
+                if (res.data?.data.token) {
                     setAccessToken(newToken);
-
                     const originalRequest = error.config as InternalAxiosRequestConfig;
                     originalRequest.headers.Authorization = `Bearer ${newToken}`;
                     return axiosInstance(originalRequest);
                 }
             } catch (refreshError) {
                 clearTokens();
-                window.location.href = "/login"; 
+                window.location.href = "/login";
                 toast.error("Refresh failed");
 
             }
