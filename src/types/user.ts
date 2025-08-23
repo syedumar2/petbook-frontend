@@ -27,8 +27,12 @@ export type UserInfo = {
 
     firstname: string;
     lastname: string;
-    roles: string[];
+    roles: Role[];
     createdAt: string;
     profileImageUrl: string;
     location: string;
 }
+export type Authority = "ADMIN" | "USER" 
+export type Role = {
+  authority: Authority;
+};

@@ -1,19 +1,19 @@
 // src/api/authApi.ts
 import axiosInstance from "./axios";
-import { LoginRequest, RegisterRequest, UserInfoResponse } from "@/types/user";
+import { LoginRequest, RegisterRequest } from "@/types/user";
 
 export const authApi = {
   login: (data: LoginRequest) =>
-    axiosInstance.post("/auth/login", data),
+    axiosInstance.post("/login", data),
 
   register: (data: RegisterRequest) =>
-    axiosInstance.post("/auth/register", data),
+    axiosInstance.post("/register", data),
 
   refreshToken: () =>
-    axiosInstance.post("/auth/refresh"),
+    axiosInstance.post("/refresh"),
 
   logout: () =>
-    axiosInstance.post("/auth/logout"),
+    axiosInstance.post("/logout"),
 
   getUserInfo: () =>
     axiosInstance.get("/user/me"),

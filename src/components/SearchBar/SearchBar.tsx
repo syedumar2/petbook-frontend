@@ -1,36 +1,104 @@
+import {
+  ListingMode,
+  PetFilters,
+  PetInfoPaginatedPublicResponse,
+  SearchFilters,
+  SearchKeys,
+  SortDirection,
+} from "@/types/petListing";
 import AdvancedSearchDropDown from "../ui/AdvancedSearchDropDown";
+import { SetStateAction, useState } from "react";
+import { toast } from "sonner";
+import { clsx } from "clsx";
 
-const SearchBar = () => {
+type SearchProps = {
+  mode: ListingMode;
+  setMode: React.Dispatch<SetStateAction<ListingMode>>;
+  isError: boolean;
+  data: PetInfoPaginatedPublicResponse | undefined;
+  error: Error | null;
+  isPending: boolean;
+  handlePageChange: (page: number) => void;
+  searchParams: Record<string, string>;
+  setSearchParams: React.Dispatch<SetStateAction<Record<string, string>>>;
+};
+
+const SearchBar = ({
+  mode,
+  setMode,
+  isError,
+  data,
+  error,
+  isPending,
+  handlePageChange,
+  searchParams,
+  setSearchParams,
+}: SearchProps) => {
+  const [searchField, setSearchField] = useState<SearchFilters>("name");
+  const [searchValue, setSearchValue] = useState<string>("");
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (searchField === null || searchValue === null) {
+      return toast.error("Please enter a search term");
+    }
+    setMode("search");
+    return setSearchParams(
+      searchValue.trim() ? { [searchField]: searchValue.trim() } : {}
+    );
+  };
+
   return (
-    <section class="w-full min-h-[257px] rounded-md  bg-center md:bg-[url('/images/searchBanner.png')]">
+    <section className="w-full min-h-[267px] rounded-md  bg-center md:bg-[url('/images/searchBanner.png')]">
       <h2 className="text-center py-8 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
         Looking for a dog or a cat near you?
       </h2>
       <section className="container mx-auto  px-8 py-4 flex flex-col space-y-4 bg-black/60 rounded-2xl h-fit ">
         <div className="flex items-center justify-between  rounded-xl px-1 py-2">
           {/* Title */}
-          <h2 className="text-white font-semibold text-lg">
-            Search By
-          </h2>
+          <h2 className="text-white font-semibold text-lg">Search By</h2>
 
           {/* Filter options */}
           <div className="flex items-center gap-4">
-            <button className="bg-red-700 text-white rounded-full px-5 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95 transition">
-              All
-            </button>
-            <button className="text-white border border-white/30 rounded-full px-5 py-2 text-sm font-medium shadow hover:bg-red-800 hover:border-red-700 active:scale-95 transition">
+            <button
+              className={clsx(
+                "text-white rounded-full px-5 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95 transition",
+                searchField === "name" ? "bg-red-700 " : ""
+              )}
+              onClick={() => setSearchField("name")}
+            >
               Name
             </button>
-            <button className="text-white border border-white/30 rounded-full px-5 py-2 text-sm font-medium shadow hover:bg-red-800 hover:border-red-700 active:scale-95 transition">
+            <button
+              className={clsx(
+                "text-white rounded-full px-5 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95 transition",
+                searchField === "type" ? "bg-red-700 " : ""
+              )}
+              onClick={() => setSearchField("type")}
+            >
               Type
             </button>
-            <button className="text-white border border-white/30 rounded-full px-5 py-2 text-sm font-medium shadow hover:bg-red-800 hover:border-red-700 active:scale-95 transition">
+            <button
+              className={clsx(
+                "text-white rounded-full px-5 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95 transition",
+                searchField === "breed" ? "bg-red-700 " : ""
+              )}
+              onClick={() => setSearchField("breed")}
+            >
               Breed
+            </button>
+               <button
+              className={clsx(
+                "text-white rounded-full px-5 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95 transition",
+                searchField === "location" ? "bg-red-700 " : ""
+              )}
+              onClick={() => setSearchField("location")}
+            >
+              Location
             </button>
           </div>
         </div>
 
-        <form className="flex w-full items-center">
+        <form className="flex w-full items-center" onSubmit={handleSubmit}>
           {/* icon + input wrapper */}
           <div className="flex flex-1">
             {/* icon */}
@@ -53,9 +121,11 @@ const SearchBar = () => {
             {/* input */}
             <input
               type="search"
-              placeholder="Type a breed, name, or city to start your search”"
+              placeholder="Type a breed, name, or city to start your search "
               aria-label="Search"
-              className="h-12 flex-1 border bg-white border-gray-300 border-l-0 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="h-12 flex-1 border bg-white border-gray-300 border-l-0 px-4 focus:outline-none focus:ring-2 focus:ring-red-500"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </div>
 
@@ -66,7 +136,7 @@ const SearchBar = () => {
           >
             Search
           </button>
-            <AdvancedSearchDropDown/>
+          <AdvancedSearchDropDown />
         </form>
       </section>
     </section>

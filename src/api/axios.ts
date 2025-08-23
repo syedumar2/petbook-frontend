@@ -7,10 +7,15 @@ import { authApi } from "./authApi";
 
 const axiosInstance = axios.create(
     {
-        baseURL: "http://localhost:8080/api", //TODO import the url from env file
+        baseURL: "http://localhost:8080/api/auth", //TODO import the url from env file
         withCredentials: true
     }
 );
+export const publicInstance = axios.create(
+    {
+        baseURL:"http://localhost:8080/api"
+    }
+)
 
 axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {

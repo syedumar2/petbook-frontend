@@ -7,96 +7,102 @@ import {
 } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 
-import { Button } from "../ui/button";
 import SortDropdown from "../ui/SortDropDown";
-const pets = [
-  {
-    petId: 1,
-    name: "Buddy",
-    type: "Dog",
-    breed: "Labrador",
-    location: "Bidar",
-    adopted: true,
-    owner: "John Doe",
-    description: "Buddy is a friendly and playful Labrador who loves being around people and other pets.",
-    imageUrl: "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg",
-  },
-  {
-    petId: 2,
-    name: "Mittens",
-    type: "Cat",
-    breed: "Siamese",
-    location: "Mumbai",
-    adopted: false,
-    owner: "N/A",
-    description: "Mittens is a curious Siamese cat who enjoys sunbathing and playing with toys.",
-    imageUrl: "https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg",
-  },
-  {
-    petId: 3,
-    name: "Max",
-    type: "Dog",
-    breed: "Beagle",
-    location: "Delhi",
-    adopted: false,
-    owner: "N/A",
-    description: "Max loves going for walks and has a playful and loving personality.",
-    imageUrl: "https://cdn.pixabay.com/photo/2016/02/19/11/19/beagle-1209282_1280.jpg",
-  },
-  {
-    petId: 4,
-    name: "Luna",
-    type: "Cat",
-    breed: "Persian",
-    location: "Bangalore",
-    adopted: true,
-    owner: "Sara K.",
-    description: "Luna is a calm Persian cat who enjoys cuddles and quiet naps.",
-    imageUrl: "https://cdn.pixabay.com/photo/2017/09/25/13/12/cat-2785383_1280.jpg",
-  },
-  {
-    petId: 5,
-    name: "Charlie",
-    type: "Dog",
-    breed: "Golden Retriever",
-    location: "Pune",
-    adopted: false,
-    owner: "N/A",
-    description: "Charlie is energetic and loves to play fetch and socialize with other dogs.",
-    imageUrl: "https://cdn.pixabay.com/photo/2016/02/19/11/19/golden-retriever-1209249_1280.jpg",
-  },
-  {
-    petId: 6,
-    name: "Cleo",
-    type: "Cat",
-    breed: "Maine Coon",
-    location: "Chennai",
-    adopted: true,
-    owner: "Alex P.",
-    description: "Cleo is a gentle Maine Coon who loves being petted and exploring her surroundings.",
-    imageUrl: "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg",
-  },
-];
+import { useFetchPets } from "@/hooks/useFetchPets";
+import Pagination from "../Pagination/Pagination";
+import { useState } from "react";
+import { ErrorPage } from "../ErrorPage/ErrorPage";
+import {
+  ListingMode,
+  PetFilters,
+  PetInfoPaginatedPublicResponse,
+  SortDirection,
+} from "@/types/petListing";
+import { EmptyPage } from "../ErrorPage/EmptyPage";
+import { Loading } from "../Loader/Loading";
+import { CircleX, CrossIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
+type GeneralPetListingProps = {
+  mode: ListingMode;
+  isError: boolean;
+  data: PetInfoPaginatedPublicResponse | undefined;
+  error: Error | null;
+  isPending: boolean;
+  handlePageChange: (page: number) => void;
+  setSortField: React.Dispatch<React.SetStateAction<keyof PetFilters>>;
+  sortField: keyof PetFilters;
+  sortDirection: SortDirection;
+  setSortDirection: React.Dispatch<React.SetStateAction<SortDirection>>;
+  searchValue: string;
+  setMode: React.Dispatch<React.SetStateAction<ListingMode>>;
+};
 
-const GeneralPetListing = () => {
-  return (
+const GeneralPetListing = ({
+  mode,
+  isError,
+  data,
+  error,
+  isPending,
+  handlePageChange,
+  setSortField,
+  sortField,
+  sortDirection,
+  setSortDirection,
+  searchValue,
+  setMode,
+}: GeneralPetListingProps) => {
+  return !isError ? (
     <section>
-         <div className="flex mx-auto px-6 pt-2 justify-between w-full">
-           <h3 className=" text-xl font-semibold">Showing results for: </h3>
-           <SortDropdown/>
-         </div>
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4 pb-12">
-        
-          {pets.map((pet, index) => (
-            <Link key={pet.petId} to={`/pets/${pet.petId}`}>
-              <Card key={index} className="border border-gray-500 rounded-2xl shadow hover:shadow-lg transition overflow-hidden w-[380px] h-[380px] pt-4">
+      <div className="flex mx-auto px-6 pt-4 justify-between w-full">
+        {mode === "search" ? (
+          <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl shadow-sm">
+            <h3 className="text-lg font-medium text-gray-800">
+              Showing results for:{" "}
+              <span className="font-semibold text-gray-900">{searchValue}</span>
+            </h3>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-500 hover:text-red-600 hover:bg-red-50 transition"
+              onClick={() => setMode("default")}
+            >
+              <CircleX size={18} />
+            </Button>
+          </div>
+        ) : (
+          <div></div>
+        )}
+        <SortDropdown
+          sortDirection={sortDirection}
+          sortField={sortField}
+          setSortDirection={setSortDirection}
+          setSortField={setSortField}
+        />
+      </div>
+      <section
+        className={
+          data?.data?.content
+            ? `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4 pb-12 justify-items-center`
+            : ``
+        }
+      >
+        {isPending ? (
+          <Loading />
+        ) : data?.data?.content ? (
+          data?.data?.content.map((pet, index) => (
+            <Link key={pet.id} to={`/pets/${pet.id}`}>
+              <Card
+                key={index}
+                className="border border-gray-500 rounded-2xl shadow hover:shadow-lg transition overflow-hidden w-[380px] h-[380px] pt-4"
+              >
                 {/* Image */}
                 <CardContent className="px-4 py-0">
                   <img
-                    src={pet.imageUrl}
+                    src={pet.imageUrls[0]}
                     alt={pet.name}
-                    className="w-full h-48 object-cover mb-2"
+                    className="w-full h-48 object-cover mb-2 rounded-lg"
                   />
                   {/* Card Info */}
                   <div className="ml-1">
@@ -108,43 +114,38 @@ const GeneralPetListing = () => {
                         {pet.type} - {pet.breed}
                       </CardDescription>
                     </CardHeader>
-                    <p className="text-gray-500 text-sm mt-1">Location: {pet.location}</p>
+                    <p className="text-gray-500 text-sm mt-1">
+                      Location: {pet.location}
+                    </p>
                     {pet.adopted && (
                       <span className="inline-block mt-2 px-2 py-1 text-xs font-semibold text-white bg-red-600 rounded-full">
                         Adopted
                       </span>
                     )}
-
-                    <p className="text-gray-500 text-sm mt-2">Owner: {pet.owner}</p>
+                    <p className="text-gray-500 text-sm mt-2">
+                      Owner: {pet.owner}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
             </Link>
-          ))}
-        </section>
-
-
-        <div className="flex justify-center items-center gap-3 my-6">
-      {/* Previous button */}
-      <Button className="hover:cursor-pointer" disabled variant={undefined} size={undefined}>
-        Previous
-      </Button>
-
-      {/* Page numbers */}
-      <div className="flex gap-2 ">
-        <Button className="hover:cursor-pointer bg-red-600 text-white" variant={undefined} size={undefined}>1</Button>
-        <Button className="hover:cursor-pointer bg-red-600 text-white" variant={undefined} size={undefined}>2</Button>
-        <Button className="hover:cursor-pointer bg-red-600 text-white" variant={undefined} size={undefined}>3</Button>
-        <span className="px-2 py-1 text-gray-500">...</span>
-        <Button className="hover:cursor-pointer bg-gray-200 text-gray-700" variant={undefined} size={undefined}>10</Button>
-      </div>
-
-      {/* Next button */}
-      <Button className="hover:cursor-pointer" variant={undefined} size={undefined}>Next</Button>
-    </div>
+          ))
+        ) : (
+          <EmptyPage />
+        )}
+      </section>
+      <Pagination
+        className={
+          data?.data ? `flex justify-center items-center gap-3 my-6` : `hidden`
+        }
+        currentPage={(data?.data?.pageNumber ?? 0) + 1}
+        totalPages={data?.data?.totalPages ?? 1}
+        onPageChange={(page) => handlePageChange(page - 1)}
+      />
     </section>
+  ) : (
+    <ErrorPage isError={isError} error={error} />
   );
 };
-
 
 export default GeneralPetListing;

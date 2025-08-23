@@ -6,11 +6,11 @@ import { AxiosError } from "axios";
 
 export interface AuthResponse {
     success: boolean;
-    message: string;
+    message?: string;
     token?: string;
 }
 
-function parseApiError(err: unknown, defaultMsg = "Something went wrong"): string {
+export function parseApiError(err: unknown, defaultMsg = "Something went wrong"): string {
     const error = err as AxiosError<{ message: string }>;
     if (error.response?.status === 403) {
         return "Forbidden: You don't have access";
@@ -40,11 +40,22 @@ export const authService = {
     async register(data: RegisterRequest): Promise<AuthResponse> {
         try {
             const res = await authApi.register(data);
-            const { success, data: payload } = res.data;
-
-            return { success, message: payload };
+            return { success: res.data.success, message: res.data.data };
         } catch (err) {
             return { success: false, message: parseApiError(err) };
+        }
+    },
+
+    async refresh(): Promise<AuthResponse> {
+        try {
+            const res = await authApi.refreshToken();
+            return {
+                success: res.data.success,
+                token: res.data.data.token
+            }
+
+        } catch (error) {
+            throw new Error;
         }
     },
 
@@ -61,7 +72,7 @@ export const authService = {
     async getUserInfo(): Promise<UserInfoResponse> {
         try {
             const res = await authApi.getUserInfo();
-            console.log("At authService",res);
+            console.log("At authService", res);
             return {
                 success: true,
                 message: res.data.message ?? "",

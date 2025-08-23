@@ -24,6 +24,12 @@ import UnapprovedPets from "./Admin/UnapprovedPetList";
 import ApprovedPets from "./Admin/ApprovedPetListing";
 import LoginForm from './Forms/LoginForm';
 
+import { Loading } from './Loader/Loading';
+import { ErrorPage } from './ErrorPage/ErrorPage';
+import { EmptyPage } from "./ErrorPage/EmptyPage";
+import { ImageCarousel } from './ImageCarousel/ImageCarousel';
+
+
 
 export {
   Header,
@@ -50,5 +56,9 @@ export {
   PetList,
   UnapprovedPets,
   ApprovedPets,
-  LoginForm
+  LoginForm,
+ImageCarousel,
+  Loading,ErrorPage as Error,
+  EmptyPage
+  
 };
