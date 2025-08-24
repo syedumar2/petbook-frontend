@@ -6,7 +6,7 @@ import {
   Loading,
 } from "@/components";
 import { useFetchPets } from "@/hooks/useFetchPets";
-import { ListingMode, PetFilters, SortDirection } from "@/types/petListing";
+import { FindPetByExampleRequest, ListingMode, PetFilters, SortDirection } from "@/types/petListing";
 import {  useState } from "react";
 
 
@@ -16,6 +16,7 @@ const PetListing = () => {
   const [sortField, setSortField] = useState<keyof PetFilters>("name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
   const [searchParams, setSearchParams] = useState<Record<string, string>>({});
+  const [advancedSearchBody, setAdvancedSearchBody] = useState<FindPetByExampleRequest>({});
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -28,6 +29,7 @@ const PetListing = () => {
     sortField,
     sortDirection,
     searchParams,
+    advancedSearchBody: advancedSearchBody,
   });
 
   return (
@@ -44,6 +46,8 @@ const PetListing = () => {
           handlePageChange={handlePageChange}
           searchParams={searchParams}
           setSearchParams={setSearchParams}
+          advancedSearchBody ={advancedSearchBody}
+          setAdvancedSearchBody ={setAdvancedSearchBody}
         />
 
         <GeneralPetListing

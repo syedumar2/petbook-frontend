@@ -71,6 +71,21 @@ const GeneralPetListing = ({
               <CircleX size={18} />
             </Button>
           </div>
+        ) : mode === "advancedSearch" ? (
+          <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl shadow-sm">
+            <h3 className="text-lg font-medium text-gray-800">
+              Showing Advanced Search results{" "}
+            </h3>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-500 hover:text-red-600 hover:bg-red-50 transition"
+              onClick={() => setMode("default")}
+            >
+              <CircleX size={18} />
+            </Button>
+          </div>
         ) : (
           <div></div>
         )}

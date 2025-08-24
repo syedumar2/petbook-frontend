@@ -7,7 +7,7 @@ export interface PageSortParam {
 export interface SearchPageSortParams extends SearchKeys, PageSortParam { }
 
 export type SortDirection = "asc" | "desc";
-export type ListingMode = "default" | "search";
+export type ListingMode = "default" | "search" |"advancedSearch";
 export type SearchFilters = "name" | "type" | "breed" | "location"
 export interface SearchKeys {
   name?: string | undefined;
@@ -80,4 +80,10 @@ export type PageData = {
   totalElements: number;
   totalPages: number;
   last: boolean;
+}
+
+export interface AutoCompleteParams  {
+  field: SearchFilters;
+  value: string;
+
 }

@@ -1,5 +1,5 @@
 
-import { FindPetByExampleRequest, PageSortParam, PetFilters, SearchPageSortParams } from "@/types/petListing";
+import { AutoCompleteParams, FindPetByExampleRequest, PageSortParam, PetFilters, SearchPageSortParams } from "@/types/petListing";
 import { publicInstance } from "./axios";
 
 export const publicApi = {
@@ -30,12 +30,27 @@ export const publicApi = {
             }
         })
     },
-    getPetsWithAdvancedSearch: (data: FindPetByExampleRequest) => {
-        return publicInstance.post("/pets/get", data);
+    getPetsWithAdvancedSearch: (data: FindPetByExampleRequest, params: PageSortParam) => {
+        return publicInstance.post("/pets/get", data,{
+            params : {
+                page: params.page ?? 0,
+                size: params.size ?? 20,
+                sortField: params.sortField ?? "name",
+                sortDirection: params.sortDirection ?? "asc",
+            }
+        });
     },
     getPetById: (id: number) => {
         return publicInstance.get(`/pets/getById/${id}`)
     },
+
+    getAutoComplete: (data: AutoCompleteParams) => {
+         return publicInstance.get("/pets/autocomplete", {
+            params: data
+         });
+    },
+
+
 
 
 

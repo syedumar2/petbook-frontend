@@ -1,50 +1,81 @@
 import { publicService } from "@/services/publicService";
-import { PageSortParam, PetInfoPaginatedPublicResponse } from "@/types/petListing";
+import {
+  FindPetByExampleRequest,
+  PageSortParam,
+  PetInfoPaginatedPublicResponse,
+} from "@/types/petListing";
 import { useQuery } from "@tanstack/react-query";
 
-
 interface UsePetsParams {
-    mode: "default" | "search";
-    page: number;
-    size?: number;
-    sortField: string;
-    sortDirection: "asc" | "desc";
-    searchParams?: Record<string, string | number | undefined>; // for name, breed, type, location
+  mode: "default" | "search" | "advancedSearch";
+  page: number;
+  size?: number;
+  sortField: string;
+  sortDirection: "asc" | "desc";
+  searchParams?: Record<string, string | number | undefined>; // for name, breed, type, location
+  advancedSearchBody?: FindPetByExampleRequest;
 }
+export const useFetchPets = ({
+  mode,
+  page,
+  size = 10,
+  sortField,
+  sortDirection,
+  searchParams = {},
+  advancedSearchBody,
+}: UsePetsParams) => {
+  return useQuery<PetInfoPaginatedPublicResponse, Error>({
+    queryKey: [
+      "pets",
+      mode,
+      page,
+      size,
+      sortField,
+      sortDirection,
+      searchParams,
+      advancedSearchBody,
+    ],
+queryFn: () => {
+  console.log("useFetchPets queryFn running. Mode:", mode);
 
-export const useFetchPets = (
-    { mode,
-        page,
-        size = 10,
-        sortField,
-        sortDirection,
-        searchParams = {},
-    }: UsePetsParams
-) => {
-    return useQuery<PetInfoPaginatedPublicResponse, Error>(
-        {
-            queryKey: ["pets", mode, page, size, sortField, sortDirection, searchParams],
-            queryFn: () =>
-                mode === "default" ?
-                    publicService.fetchPetsPaginatedSorted({
-                        page,
-                        size,
-                        sortField,
-                        sortDirection
-                    }) : publicService.petSearch({
-                        page,
-                        size,
-                        sortField,
-                        sortDirection,
-                        ...searchParams
+  if (mode === "default") {
+    return publicService.fetchPetsPaginatedSorted({
+      page,
+      size,
+      sortField,
+      sortDirection,
+    });
+  }
 
-                    }),
-            staleTime: 5 * 60 * 1000,
-            enabled: !!mode,
+  if (mode === "search") {
+    return publicService.petSearch({
+      page,
+      size,
+      sortField,
+      sortDirection,
+      ...searchParams,
+    });
+  }
 
+  if (mode === "advancedSearch") {
+    console.log("Inside advancedSearch, advancedSearchBody:", advancedSearchBody);
+    if (!advancedSearchBody) {
+      return Promise.reject(
+        new Error("advancedSearchBody is required for advanced search")
+      );
+    }
+    return publicService.petAdvancedSearch(advancedSearchBody, {
+      page,
+      size,
+      sortField,
+      sortDirection,
+    });
+  }
 
+  return Promise.reject(new Error("Invalid mode"));
+},
 
-        }
-    );
-
+    staleTime: 5 * 60 * 1000,
+    enabled: !!mode,
+  });
 };

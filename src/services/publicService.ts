@@ -1,5 +1,5 @@
 import { publicApi } from "@/api/publicApi";
-import { FindPetByExampleRequest, PageSortParam, PetFilters, PetInfoPaginatedPublicResponse, PetInfoResponse, PetInfoSearchResponse, SearchPageSortParams } from "@/types/petListing";
+import { AutoCompleteParams, FindPetByExampleRequest, PageSortParam, PetFilters, PetInfoPaginatedPublicResponse, PetInfoResponse, PetInfoSearchResponse, SearchPageSortParams } from "@/types/petListing";
 import { parseApiError } from "./authService";
 
 export const publicService = {
@@ -27,9 +27,10 @@ export const publicService = {
             return { success: false, message: parseApiError(error) };
         }
     },
-    async petAdvancedSearch(data: FindPetByExampleRequest): Promise<PetInfoSearchResponse> {
+    async petAdvancedSearch(data: FindPetByExampleRequest , params: PageSortParam): Promise<PetInfoPaginatedPublicResponse> {
         try {
-            const res = await publicApi.getPetsWithAdvancedSearch(data);
+            const res = await publicApi.getPetsWithAdvancedSearch(data,params);
+            console.log("data being passed",data)
             return {
                 success: res.data.success,
                 message: res.data.message,
@@ -39,8 +40,8 @@ export const publicService = {
             return { success: false, message: parseApiError(error) };
         }
     },
-    async petById(id:number): Promise<PetInfoResponse> {
-         try {
+    async petById(id: number): Promise<PetInfoResponse> {
+        try {
             const res = await publicApi.getPetById(id);
             return {
                 success: res.data.success,
@@ -49,6 +50,14 @@ export const publicService = {
             }
         } catch (error) {
             return { success: false, message: parseApiError(error) };
+        }
+    },
+    async searchSuggestions(data: AutoCompleteParams): Promise<string[]> {
+        try {
+            const res = await publicApi.getAutoComplete(data);
+            return res.data
+        } catch (error) {
+            return [];
         }
     }
 }
