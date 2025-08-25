@@ -18,9 +18,7 @@ const PetListing = () => {
   const [searchParams, setSearchParams] = useState<Record<string, string>>({});
   const [advancedSearchBody, setAdvancedSearchBody] = useState<FindPetByExampleRequest>({});
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page: number) => {setCurrentPage(page);};
 
   const { data, isError, error, isPending } = useFetchPets({
     mode,

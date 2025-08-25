@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { UpdateUserDialog } from "../DialogBoxes/UpdateUserDialog";
 
 const ProfileOverview = () => {
   const { user } = useAuth();
@@ -10,7 +10,7 @@ const ProfileOverview = () => {
 
       <div className="flex items-center gap-6 mb-6">
         <Avatar className={"size-18"}>
-          <AvatarImage src={user?.profileImageUrl} className={undefined} />
+          <AvatarImage src={ user?.profileImageUrl} className={undefined} />
           <AvatarFallback className="bg-cyan-700 p-2 text-2xl text-white">
             {user?.firstname.charAt(0)}
           </AvatarFallback>
@@ -41,16 +41,11 @@ const ProfileOverview = () => {
             value={user?.location}
             className="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
             readOnly
+
           />
         </div>{" "}
         <div className="flex justify-end mt-2">
-          <Button
-            className="bg-red-700 text-white rounded-full px-8 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95"
-            variant={undefined}
-            size={undefined}
-          >
-            Update Profile
-          </Button>
+          <UpdateUserDialog />
         </div>
       </div>
     </div>

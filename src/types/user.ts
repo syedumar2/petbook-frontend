@@ -12,6 +12,12 @@ export interface RegisterRequest {
     password: string;
     location: string;
 }
+export interface UserUpdateRequest {
+    firstname?: string;
+    lastname?: string;
+    email?: string;
+    location?: string;
+}
 
 export interface LoginResponse {
     accessToken: string;
@@ -32,7 +38,12 @@ export type UserInfo = {
     profileImageUrl: string;
     location: string;
 }
-export type Authority = "ADMIN" | "USER" 
+export type Authority = "ADMIN" | "USER"
 export type Role = {
-  authority: Authority;
+    authority: Authority;
 };
+
+export interface OpResult {
+    success: boolean;
+    message: string;
+}

@@ -8,7 +8,7 @@ const PetDetail = () => {
     <div>
       <Header />
       <Suspense fallback={<Loading/>}>
-        <PetDetailsComponent  />
+        <PetDetailsComponent />
       </Suspense>
       <Footer />
     </div>

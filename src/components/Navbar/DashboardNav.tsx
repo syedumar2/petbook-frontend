@@ -1,5 +1,4 @@
 import { MessageCircle, PawPrint, User } from "lucide-react";
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const DashboardNav = () => {

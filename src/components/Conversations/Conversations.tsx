@@ -8,7 +8,7 @@ const Conversations = () => {
       {/* Chat window */}
       <ChatMessageBox />
 
-      <div class="w-2/5 border-l-2 border-gray-200 px-5">
+      <div className="w-2/5 border-l-2 border-gray-200 px-5">
         {/* chat overview */}
         <ChatSideBar />
       </div>

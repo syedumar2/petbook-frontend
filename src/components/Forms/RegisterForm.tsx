@@ -161,8 +161,8 @@ const RegisterForm = () => {
           onChange={handleChange}
           disabled={loading}
         />
-        {errors.firstname && (
-          <p className="text-xs text-red-500 mt-2">{errors.firstname}</p>
+        {errors.email && (
+          <p className="text-xs text-red-500 mt-2">{errors.email}</p>
         )}
       </div>
 

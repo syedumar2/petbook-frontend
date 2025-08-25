@@ -1,7 +1,6 @@
 import { publicService } from "@/services/publicService";
 import {
   FindPetByExampleRequest,
-  PageSortParam,
   PetInfoPaginatedPublicResponse,
 } from "@/types/petListing";
 import { useQuery } from "@tanstack/react-query";
@@ -35,45 +34,45 @@ export const useFetchPets = ({
       searchParams,
       advancedSearchBody,
     ],
-queryFn: () => {
-  console.log("useFetchPets queryFn running. Mode:", mode);
+    queryFn: () => {
+      console.log("useFetchPets queryFn running. Mode:", mode);
 
-  if (mode === "default") {
-    return publicService.fetchPetsPaginatedSorted({
-      page,
-      size,
-      sortField,
-      sortDirection,
-    });
-  }
+      if (mode === "default") {
+        return publicService.fetchPetsPaginatedSorted({
+          page,
+          size,
+          sortField,
+          sortDirection,
+        });
+      }
 
-  if (mode === "search") {
-    return publicService.petSearch({
-      page,
-      size,
-      sortField,
-      sortDirection,
-      ...searchParams,
-    });
-  }
+      if (mode === "search") {
+        return publicService.petSearch({
+          page,
+          size,
+          sortField,
+          sortDirection,
+          ...searchParams,
+        });
+      }
 
-  if (mode === "advancedSearch") {
-    console.log("Inside advancedSearch, advancedSearchBody:", advancedSearchBody);
-    if (!advancedSearchBody) {
-      return Promise.reject(
-        new Error("advancedSearchBody is required for advanced search")
-      );
-    }
-    return publicService.petAdvancedSearch(advancedSearchBody, {
-      page,
-      size,
-      sortField,
-      sortDirection,
-    });
-  }
+      if (mode === "advancedSearch") {
+        console.log("Inside advancedSearch, advancedSearchBody:", advancedSearchBody);
+        if (!advancedSearchBody) {
+          return Promise.reject(
+            new Error("advancedSearchBody is required for advanced search")
+          );
+        }
+        return publicService.petAdvancedSearch(advancedSearchBody, {
+          page,
+          size,
+          sortField,
+          sortDirection,
+        });
+      }
 
-  return Promise.reject(new Error("Invalid mode"));
-},
+      return Promise.reject(new Error("Invalid mode"));
+    },
 
     staleTime: 5 * 60 * 1000,
     enabled: !!mode,

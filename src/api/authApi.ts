@@ -1,6 +1,7 @@
 // src/api/authApi.ts
+import { AddPetRequest, PageSortParam, UpdatePetRequest } from "@/types/petListing";
 import axiosInstance from "./axios";
-import { LoginRequest, RegisterRequest } from "@/types/user";
+import { LoginRequest, RegisterRequest, UserUpdateRequest } from "@/types/user";
 
 export const authApi = {
   login: (data: LoginRequest) =>
@@ -17,4 +18,68 @@ export const authApi = {
 
   getUserInfo: () =>
     axiosInstance.get("/user/me"),
+
+  updateUserInfo: (userData: UserUpdateRequest, imageFile?: File) => {
+    const formData = new FormData();
+
+    formData.append(
+      "userData", new Blob([JSON.stringify(userData)], { type: "application/json" })
+    );
+
+    if (imageFile) {
+      formData.append("imageUrl", imageFile);
+    }
+    return axiosInstance.patch("/user/me", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    })
+
+
+  },
+
+  getUserPets: (data: PageSortParam) => {
+    return axiosInstance.get("/user/me/pets", {
+      params: {
+        page: data.page ?? 0,
+        size: data.size ?? 20,
+        sortField: data.sortField ?? "name",
+        sortDirection: data.sortDirection ?? "asc",
+
+      }
+    });
+  },
+
+  addPetListing: (petData: AddPetRequest, imageFiles: File[]) => {
+    const formData = new FormData();
+    formData.append(
+      "petData", new Blob([JSON.stringify(petData)], { type: "application/json" })
+    );
+    imageFiles.forEach((file) => (
+      formData.append("images", file)
+    ));
+    return axiosInstance.post("/user/me/pets", formData, { headers: { "Content-Type": "multipart/form-data" } });
+
+  },
+
+  updatePetListing: (petData: UpdatePetRequest, petId: number, imageFiles?: File[]) => {
+    const formData = new FormData();
+    formData.append(
+      "petData", new Blob([JSON.stringify(petData)], { type: "application/json" })
+    );
+    if (imageFiles) {
+      imageFiles.forEach((file) => (
+        formData.append("images", file)
+      ));
+    }
+    return axiosInstance.put(`/user/me/pets/${petId}`, formData, { headers: { "Content-Type": "multipart/form-data" } });
+  },
+
+  deletePetListing: (petId: number) => {
+    return axiosInstance.delete(`/user/me/pets/${petId}`);
+  },
+
+  getUserPetListing: (petId:number) => {
+    return axiosInstance.get(`/user/me/pets/${petId}`);
+  }
+
+
 };

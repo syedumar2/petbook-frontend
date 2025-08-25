@@ -1,10 +1,15 @@
 import { createContext, useEffect, useState } from "react";
 import { authService, AuthResponse } from "@/services/authService";
-import { LoginRequest, RegisterRequest, UserInfo } from "@/types/user";
+import {
+  LoginRequest,
+  OpResult,
+  RegisterRequest,
+  UserInfo,
+  UserUpdateRequest,
+} from "@/types/user";
 import { clearTokens, getAccessToken, setAccessToken } from "./tokenStore";
 import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
-
 
 type AuthContextType = {
   user: UserInfo | null;
@@ -14,6 +19,10 @@ type AuthContextType = {
   isAuthenticated: boolean;
   loading: boolean;
   getUser: () => Promise<void>;
+  updateUser: (
+    userData: UserUpdateRequest,
+    imageFile?: File
+  ) => Promise<OpResult>;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -26,14 +35,14 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   );
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-   const location = useLocation();
+  const location = useLocation();
 
   const login = async (data: LoginRequest): Promise<AuthResponse> => {
     const res = await authService.login(data);
     if (res.success) {
       setIsAuthenticated(true);
 
-      await getUser(); // fetch profile after login
+      await getUser();
     }
     return res;
   };
@@ -63,6 +72,23 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
     }
   };
 
+  const updateUser = async (
+    userData: UserUpdateRequest,
+    imageFile?: File
+  ): Promise<OpResult> => {
+    const res = await authService.updateUserInfo(userData, imageFile);
+    if (res.success && res.data) {
+      return {
+        success: res.success,
+        message: res.message ?? "Operation completed.",
+      };
+    }
+    return {
+      success: res.success,
+      message: res.message ?? "Operation failed.",
+    };
+  };
+
   useEffect(() => {
     const rehydrate = async () => {
       try {
@@ -79,7 +105,11 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
       }
     };
 
-     if (location.pathname.startsWith("/profile") || location.pathname.startsWith("/admin")) rehydrate();
+    if (
+      location.pathname.startsWith("/profile") ||
+      location.pathname.startsWith("/admin")
+    )
+      rehydrate();
   }, [location.pathname]);
 
   return (
@@ -92,6 +122,7 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
         isAuthenticated,
         loading,
         getUser,
+        updateUser,
       }}
     >
       {children}

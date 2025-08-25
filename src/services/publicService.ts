@@ -1,5 +1,5 @@
 import { publicApi } from "@/api/publicApi";
-import { AutoCompleteParams, FindPetByExampleRequest, PageSortParam, PetFilters, PetInfoPaginatedPublicResponse, PetInfoResponse, PetInfoSearchResponse, SearchPageSortParams } from "@/types/petListing";
+import { AutoCompleteParams, FindPetByExampleRequest, PageSortParam, PetFilters, PetInfoPaginatedPublicResponse, PetInfoResponse, SearchPageSortParams } from "@/types/petListing";
 import { parseApiError } from "./authService";
 
 export const publicService = {

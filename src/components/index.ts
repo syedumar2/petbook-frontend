@@ -28,6 +28,8 @@ import { Loading } from './Loader/Loading';
 import { ErrorPage } from './ErrorPage/ErrorPage';
 import { EmptyPage } from "./ErrorPage/EmptyPage";
 import { ImageCarousel } from './ImageCarousel/ImageCarousel';
+import { UpdateUserDialog } from './DialogBoxes/UpdateUserDialog';
+
 
 
 
@@ -59,6 +61,7 @@ export {
   LoginForm,
 ImageCarousel,
   Loading,ErrorPage as Error,
-  EmptyPage
+  EmptyPage,
+  UpdateUserDialog,
   
 };

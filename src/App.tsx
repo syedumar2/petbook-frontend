@@ -26,6 +26,7 @@ import AdminRoutes from "./components/AdminRoutes";
 import * as path from "path";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Test from "./pages/Test";
+import { AddPetListingBox } from "./components/Forms/AddPetListingBox";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -49,7 +50,10 @@ const App = () => {
                   <Route index element={<ProfileOverview />} />{" "}
                   <Route path="pets" element={<UserPetList />} />
                   <Route path="pets/:petId" element={<PrivatePetDetails />} />
+                  <Route path="pets/add" element = {<AddPetListingBox/>}/>
                   <Route path="conversations" element={<Conversations />} />
+
+
                 </Route>
               </Route>
 

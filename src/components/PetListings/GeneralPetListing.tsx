@@ -22,6 +22,7 @@ import { EmptyPage } from "../ErrorPage/EmptyPage";
 import { Loading } from "../Loader/Loading";
 import { CircleX, CrossIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 type GeneralPetListingProps = {
   mode: ListingMode;
@@ -52,6 +53,7 @@ const GeneralPetListing = ({
   searchValue,
   setMode,
 }: GeneralPetListingProps) => {
+  const {user} = useAuth();
   return !isError ? (
     <section>
       <div className="flex mx-auto px-6 pt-4 justify-between w-full">
@@ -107,7 +109,7 @@ const GeneralPetListing = ({
           <Loading />
         ) : data?.data?.content ? (
           data?.data?.content.map((pet, index) => (
-            <Link key={pet.id} to={`/pets/${pet.id}`}>
+            <Link key={pet.id} to={user?.email === pet.owner ? `/profile/pets/${pet.id}`:`/pets/${pet.id}`}>
               <Card
                 key={index}
                 className="border border-gray-500 rounded-2xl shadow hover:shadow-lg transition overflow-hidden w-[380px] h-[380px] pt-4"
