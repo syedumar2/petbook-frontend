@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
-import { ImageCarousel } from "../ImageCarousel/ImageCarousel";
-import { Button } from "../ui/button";
-import { CircleX, Cross } from "lucide-react";
 
-type UploadImagesProps = {
+import { CircleX, Cross } from "lucide-react";
+import { ImageCarousel } from "@/components/ImageCarousel/ImageCarousel";
+import { Button } from "@/components/ui/button";
+
+type UpdatePetImageProps = {
   images: File[] | undefined;
   setImages: React.Dispatch<React.SetStateAction<File[] | undefined>>;
   errors: {
@@ -14,9 +15,15 @@ type UploadImagesProps = {
     location?: string;
     files?: string;
   };
+  currentPetImageUrls: string[];
 };
-const MAX_FILE_SIZE = 5 * 1024 * 1024; 
-export const UploadImages = ({ images, setImages, errors }: UploadImagesProps) => {
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+export const UpdatePetImage = ({
+  images,
+  setImages,
+  errors,
+  currentPetImageUrls,
+}: UpdatePetImageProps) => {
   const [imageURLs, setImageURLs] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -57,9 +64,11 @@ export const UploadImages = ({ images, setImages, errors }: UploadImagesProps) =
         <ImageCarousel
           images={
             images?.length === 0 || !images
-              ? [
-                  "https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png",
-                ]
+              ? currentPetImageUrls.length === 0 || !currentPetImageUrls
+                ? [
+                    "https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png",
+                  ]
+                : currentPetImageUrls
               : imageURLs
           }
           className="w-full my-8 "
@@ -72,15 +81,16 @@ export const UploadImages = ({ images, setImages, errors }: UploadImagesProps) =
                 type="button"
                 className="absolute top-0 right-0 bg-red-700 text-white rounded-full p-1"
                 onClick={() => handleRemoveImage(index)}
-                size={"xs"} variant={undefined}              >
+                size={"xs"}
+                variant={undefined}
+              >
                 <CircleX />
               </Button>
             </div>
           ))}
-
         </div>
       </div>
-      <div>
+      <div className="flex justify-center flex-col">
         <input
           type="file"
           multiple
@@ -93,7 +103,11 @@ export const UploadImages = ({ images, setImages, errors }: UploadImagesProps) =
           hover:file:bg-red-100"
           onChange={handleFileChange}
         />
-             {errors.files && (
+        <p className="text-xs text-red-500 mt-2">
+          Warning: Uploading new images will replace all your existing images.
+        </p>
+
+        {errors.files && (
           <p className="text-xs text-red-500 mt-2">{errors.files}</p>
         )}
       </div>

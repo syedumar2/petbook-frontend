@@ -1,4 +1,4 @@
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
 import { AddPetRequest } from "@/types/petListing";
 
 const PET_NAME_REGEX = /^[A-Za-z]+( [A-Za-z]+)?$/;
@@ -68,7 +67,7 @@ export const AddPetListingForm = ({
   return (
     <div className="space-y-4 px-8 pt-6 pb-8 mb-4 ">
       <div>
-        <Label htmlFor="name">Pet Name:</Label>
+        <Label htmlFor="name" className={undefined}>Pet Name:</Label>
         <Input
           name="name"
           className="mt-2"
@@ -83,7 +82,7 @@ export const AddPetListingForm = ({
         )}
       </div>
       <div>
-        <Label htmlFor="type">Type: </Label>
+        <Label htmlFor="type" className={undefined}>Type: </Label>
         <Select
           onValueChange={(value: string) =>
             setFormData({ ...formData, type: value })
@@ -106,7 +105,7 @@ export const AddPetListingForm = ({
         )}
       </div>
       <div>
-        <Label htmlFor="breed">Pet Breed:</Label>
+        <Label htmlFor="breed" className={undefined}>Pet Breed:</Label>
         <Input
           type="text"
           name="breed"
@@ -121,7 +120,7 @@ export const AddPetListingForm = ({
         )}
       </div>
       <div>
-        <Label htmlFor="description">Description:</Label>
+        <Label htmlFor="description" className={undefined}>Description:</Label>
         <Textarea
           type="text"
           name="description"
@@ -136,7 +135,7 @@ export const AddPetListingForm = ({
         )}
       </div>
       <div>
-        <Label htmlFor="location">Location:</Label>
+        <Label htmlFor="location" className={undefined}>Location:</Label>
         <Input
           type="text"
           name="location"

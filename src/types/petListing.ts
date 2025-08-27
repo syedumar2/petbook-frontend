@@ -87,7 +87,7 @@ export interface PrivatePetListing {
   type: string;
   breed: string;
   location: string;
-  adopted: boolean;
+  adopted?: boolean;
   owner: string;
   description: string | null;
   imageUrls?: Array<Record<string, string>>;

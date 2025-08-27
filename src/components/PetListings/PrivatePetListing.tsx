@@ -1,116 +1,129 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
-import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
 
-const userPets = [
-  {
-    id: 1,
-    name: "Buddy",
-    type: "Dog",
-    breed: "Labrador",
-    location: "Bidar",
-    adopted: true,
-    owner: "Syed Umar",
-    description: "Buddy is friendly and playful.",
-    approved: true,
-    approvedAt: "2025-08-10",
-    rejectedAt: null,
-    imageUrls: [
-      "https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg",
-    ],
-  },
-  {
-    id: 2,
-    name: "Mittens",
-    type: "Cat",
-    breed: "Siamese",
-    location: "Mumbai",
-    adopted: false,
-    owner: "Syed Umar",
-    description: "Mittens is curious and loves to play.",
-    approved: false,
-    approvedAt: null,
-    rejectedAt: "2025-08-12",
-    imageUrls: [
-      "https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg",
-    ],
-  },
-];
+import { usePrivatePets } from "@/hooks/usePrivatePets";
+import { EmptyPage } from "../ErrorPage/EmptyPage";
+import Pagination from "../Pagination/Pagination";
+import { Loading } from "../Loader/Loading";
+import SortDropdown from "../ui/SortDropDown";
+import { PetFilters, SortDirection } from "@/types/petListing";
 
 const PrivatePetListing = () => {
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const [sortField, setSortField] = useState<keyof PetFilters>("name");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+
+  const handlePageChange = (page: number) => setCurrentPage(page);
+
+  const { data, isPending, isError, error } = usePrivatePets({
+    mode: true,
+    params: {
+      page: currentPage,
+      size: 4,
+      sortField,
+      sortDirection,
+    },
+  });
   return (
-    <section>
-      <h3 className="ml-6 my-2 text-xl font-semibold">My Pets</h3>
+    <section className="flex flex-col ">
+      <div className="flex justify-between items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl shadow-sm">
+        <h2 className="text-2xl font-semibold mx-8 my-4">My Pets</h2>
+        <SortDropdown
+          sortDirection={sortDirection}
+          sortField={sortField}
+          setSortDirection={setSortDirection}
+          setSortField={setSortField}
+        />
+      </div>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4 pb-12">
-        {userPets.map((pet) => (
-          <Link key={pet.id} to={`/user/pets/${pet.id}`}>
-            <Card className="border border-gray-500 rounded-2xl shadow hover:shadow-lg transition overflow-hidden w-[380px] h-[420px] pt-4">
-              <CardContent className="px-4 py-0">
-                {/* Pet Image */}
-                <img
-                  src={pet.imageUrls[0]}
-                  alt={pet.name}
-                  className="w-full h-48 object-cover mb-2"
-                />
-                <div className="ml-1">
-                  <CardHeader className="p-0">
-                    <CardTitle className="text-xl font-semibold text-gray-800">
-                      {pet.name}
-                    </CardTitle>
-                    <CardDescription className="text-gray-600 text-sm">
-                      {pet.type} - {pet.breed}
-                    </CardDescription>
-                  </CardHeader>
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4 pb-12 justify-items-center">
+        {isPending ? (
+          <Loading />
+        ) : data?.data?.content ? (
+          data.data.content.map((pet) => (
+            <Link key={pet.id} to={`/profile/pets/${pet.id}`}>
+              <Card 
+                className="border border-gray-500 rounded-2xl shadow hover:shadow-lg transition overflow-hidden w-[380px] h-[410px] pt-4"
+              >
+                <CardContent className="px-4 py-0">
+                  <img
+                    src={
+                      pet.imageUrls && pet.imageUrls[0]
+                        ? Object.keys(pet.imageUrls[0])[0]
+                        : "/placeholder-image.png"
+                    }
+                    alt={pet.name}
+                    className="w-full h-48 object-cover mb-2 rounded-lg"
+                  />
 
-                  <p className="text-gray-500 text-sm mt-1">Location: {pet.location}</p>
-                  <p className="text-gray-500 text-sm mt-1">Owner: {pet.owner}</p>
+                  <div className="ml-1">
+                    <CardHeader className="p-0">
+                      <CardTitle className="text-xl font-semibold text-gray-800">
+                        {pet.name}
+                      </CardTitle>
+                      <CardDescription className="text-gray-600 text-sm">
+                        {pet.type} - {pet.breed}
+                      </CardDescription>
+                    </CardHeader>
 
-                  {pet.adopted && (
-                    <span className="inline-block mt-2 px-2 py-1 text-xs font-semibold text-white bg-red-600 rounded-full">
-                      Adopted
-                    </span>
-                  )}
+                    <p className="text-gray-500 text-sm mt-1">
+                      Location: {pet.location}
+                    </p>
+                    <p className="text-gray-500 text-sm mt-1">
+                      Owner: {pet.owner}
+                    </p>
 
-                  {/* Approval Status */}
-                  <p className="text-sm mt-2">
-                    Status:{" "}
-                    {pet.approved
-                      ? `Approved on ${pet.approvedAt}`
-                      : pet.rejectedAt
-                      ? `Rejected on ${pet.rejectedAt}`
-                      : "Pending"}
-                  </p>
+                    {pet.adopted && (
+                      <span className="inline-block mt-2 px-2 py-1 text-xs font-semibold text-white bg-red-600 rounded-full">
+                        Adopted
+                      </span>
+                    )}
+                    <p className="mt-2 text-sm">
+                      Status:{" "}
+                      {pet.approved ? (
+                        <span className="px-2 py-1 rounded-full bg-green-500 text-white font-semibold text-xs">
+                          Approved at {pet.approvedAt}
+                        </span>
+                      ) : pet.approvedAt?.length === 0 &&
+                        pet.rejectedAt?.length === 0 ? (
+                        <span className="px-2 py-1 rounded-full bg-gray-400 text-white font-semibold text-xs">
+                          No action taken
+                        </span>
+                      ) : (
+                        <span className="px-2 py-1 rounded-full bg-red-500 text-white font-semibold text-xs">
+                          Rejected at {pet.rejectedAt}
+                        </span>
+                      )}
+                    </p>
 
-                  <p className="text-gray-500 text-sm mt-1 truncate">{pet.description}</p>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+    
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))
+        ) : (
+          <EmptyPage />
+        )}
       </section>
 
-      {/* Pagination */}
-      <div className="flex justify-center items-center gap-3 my-6">
-        <Button className="hover:cursor-pointer" disabled variant={undefined} size={undefined}>
-          Previous
-        </Button>
-
-        <div className="flex gap-2">
-          <Button className="hover:cursor-pointer bg-red-600 text-white" variant={undefined} size={undefined}>1</Button>
-          <Button className="hover:cursor-pointer bg-gray-200 text-gray-700" variant={undefined} size={undefined}>2</Button>
-          <span className="px-2 py-1 text-gray-500">...</span>
-          <Button className="hover:cursor-pointer bg-gray-200 text-gray-700" variant={undefined} size={undefined}>10</Button>
-        </div>
-
-        <Button className="hover:cursor-pointer" variant={undefined} size={undefined}>Next</Button>
-      </div>
+      <Pagination
+        className={
+          data?.data ? "flex justify-center items-center gap-3 my-6" : "hidden"
+        }
+        currentPage={(data?.data?.pageNumber ?? 0) + 1}
+        totalPages={data?.data?.totalPages ?? 1}
+        onPageChange={(page) => handlePageChange(page - 1)}
+      />
     </section>
   );
 };

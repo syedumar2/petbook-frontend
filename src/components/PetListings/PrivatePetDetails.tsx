@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -57,7 +57,7 @@ const PrivatePetDetails = () => {
               </p>
 
               {data.data.adopted && (
-                <span className="inline-block mt-3 px-4 py-1 text-xs font-semibold text-white bg-red-600 rounded-full">
+                <span className="inline-block mt-3 px-4 py-1 text-xs font-semibold text-white bg-red-600 rounded-full w-fit">
                   Adopted
                 </span>
               )}
@@ -102,13 +102,13 @@ const PrivatePetDetails = () => {
                         className={"text-blue-800"}
                         inset={undefined}
                       >
-                        Update Post
+                        <Link to={`/profile/pets/update/${data?.data?.id}`}>Update Post</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className={"text-red-700"}
                         inset={undefined}
                       >
-                        Delete Post
+                        <Link to={`/profile/pets/delete/${data?.data?.id}`}>Delete Post</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className={"text-green-700"}

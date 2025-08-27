@@ -9,9 +9,8 @@ import PetDetailsComponent from "./PetListings/PetDetailsComponent";
 import UserNavbar from "./Navbar/UserNavbar";
 import DashboardNav from "./Navbar/DashboardNav";
 import ProfileOverview from "./Profile/ProfileOverview";
-import UserPetList from "./PetListings/UserPetList";
+import UserPetList from "./PetListings/PrivatePetListing";
 import Conversations from "./Conversations/Conversations";
-import PrivatePetListing from "./PetListings/PrivatePetListing";
 import PrivatePetDetails from "./PetListings/PrivatePetDetails";
 import ChatSideBar from "./Conversations/ChatSideBar";
 import ChatMessageBox from "./Conversations/ChatMessageBox";
@@ -48,7 +47,6 @@ export {
   UserPetList,
   Conversations,
   PrivatePetDetails,
-  PrivatePetListing,
   ChatSideBar,
   ChatMessageBox,
   ConversationsList,

@@ -23,10 +23,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import AdminRoutes from "./components/AdminRoutes";
-import * as path from "path";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Test from "./pages/Test";
-import { AddPetListingBox } from "./components/Forms/AddPetListingBox";
+import { AddPetListingBox } from "./components/Forms/AddForm/AddPetListingBox";
+import { UpdatePetListingBox } from "./components/Forms/UpdateForm/UpdatePetListingBox";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -43,17 +43,16 @@ const App = () => {
               <Route element={<Register />} path="/signup" />
               <Route element={<PetListing />} path="/pets" />
               <Route element={<PetDetail />} path="/pets/:petId" />
-              <Route element={<Test/>} path = "/test"/>
+              <Route element={<Test />} path="/test" />
 
               <Route element={<ProtectedRoute />} path="/profile">
                 <Route element={<UserDashboard />}>
                   <Route index element={<ProfileOverview />} />{" "}
                   <Route path="pets" element={<UserPetList />} />
                   <Route path="pets/:petId" element={<PrivatePetDetails />} />
-                  <Route path="pets/add" element = {<AddPetListingBox/>}/>
+                  <Route path="pets/add" element={<AddPetListingBox />} />
+                  <Route path="pets/update/:petId" element={<UpdatePetListingBox />} />
                   <Route path="conversations" element={<Conversations />} />
-
-
                 </Route>
               </Route>
 
@@ -74,3 +73,9 @@ const App = () => {
 };
 
 export default App;
+//TODO Organise component export structure for readable imports
+//TODO Build a search feature for User Pet listings
+//TODO Build a delete feature for deleting user posts
+//TODO Refactor ugly code into custom hooks for readability
+//TODO Start work on Conversations feature
+//TODO Add a gender field to pet listings

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const RegisterForm = () => {
+export const RegisterForm = () => {
   const { register } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<RegisterRequest>({
