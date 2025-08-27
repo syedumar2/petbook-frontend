@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
-import Navbar from "../Navbar/Navbar";
-import UserNavbar from "../Navbar/UserNavbar";
+import { UserNavbar, Navbar } from "../Navbar";
+
 
 const Header = () => {
   const { isAuthenticated } = useAuth();

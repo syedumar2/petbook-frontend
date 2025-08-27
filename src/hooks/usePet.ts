@@ -117,7 +117,7 @@ export const usePet = (options?: UsePetOptions) => {
             }
 
             if (res.success) {
-                queryClient.invalidateQueries({ queryKey: ["pets"], exact: false });
+                queryClient.invalidateQueries({ queryKey: ["userPets"], refetchType: "active" });
                 navigate("/profile/pets");
                 toast.success(res.message);
             } else {

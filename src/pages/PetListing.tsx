@@ -1,10 +1,5 @@
-import {
-  Header,
-  SearchBar,
-  GeneralPetListing,
-  Footer,
-  Loading,
-} from "@/components";
+
+import { Footer, GeneralPetListing, Header, SearchBar } from "@/components";
 import { useFetchPets } from "@/hooks/useFetchPets";
 import { FindPetByExampleRequest, ListingMode, PetFilters, SortDirection } from "@/types/petListing";
 import {  useState } from "react";

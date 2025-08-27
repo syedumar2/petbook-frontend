@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
-import { UpdateUserDialog } from "../DialogBoxes/UpdateUserDialog";
+import { UpdateUserDialog } from "@/components";
 
 const ProfileOverview = () => {
   const { user } = useAuth();

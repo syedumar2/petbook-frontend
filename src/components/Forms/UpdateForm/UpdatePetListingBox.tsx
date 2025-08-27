@@ -2,13 +2,11 @@ import { useFetchUserPetById } from "@/hooks/useFetchUserPetById";
 import { UpdatePetRequest } from "@/types/petListing";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { UpdatePetListingForm } from "./UpdatePetListingForm";
-import { UpdatePetImage } from "./UpdatePetImage";
-import { authService } from "@/services/authService";
+
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { usePet } from "@/hooks/usePet";
 import { LoadingOverlay } from "@/components/Overlays/LoadingOverlay";
+import { UpdatePetImage, UpdatePetListingForm } from "@/components";
 
 export const UpdatePetListingBox = () => {
   const { petId } = useParams();

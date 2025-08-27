@@ -110,20 +110,18 @@ const UnapprovedPets = () => {
                   <td className="p-3">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button className="bg-gray-700 text-white rounded-full text-sm font-medium shadow hover:bg-red-800 active:scale-95">
+                        <Button className="bg-gray-700 text-white rounded-full text-sm font-medium shadow hover:bg-red-800 active:scale-95" variant={undefined} size={undefined}>
                           Actions
                           <ChevronDown />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className={"bg-white"}>
                         <DropdownMenuItem
-                          onClick={() => alert(`Approved ${pet.name}`)}
-                        >
+                          onClick={() => alert(`Approved ${pet.name}`)} className={undefined} inset={undefined}                        >
                           ✅ Approve
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => alert(`Rejected ${pet.name}`)}
-                        >
+                          onClick={() => alert(`Rejected ${pet.name}`)} className={undefined} inset={undefined}                        >
                           ❌ Reject
                         </DropdownMenuItem>
                       </DropdownMenuContent>

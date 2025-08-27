@@ -1,4 +1,5 @@
-import { AdminDashboardNav, AdminNavbar, Footer } from "@/components";
+import { AdminNavbar, Footer } from "@/components";
+import AdminDashboardNav from "@/components/Navbar/Admin/AdminDashboardNav";
 import { Outlet } from "react-router-dom";
 
 

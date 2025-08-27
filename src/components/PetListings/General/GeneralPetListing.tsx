@@ -7,21 +7,21 @@ import {
 } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 
-import SortDropdown from "../ui/SortDropDown";
+import SortDropdown from "../../ui/SortDropDown";
 import { useFetchPets } from "@/hooks/useFetchPets";
-import Pagination from "../Pagination/Pagination";
+import Pagination from "../../Pagination/Pagination";
 import { useState } from "react";
-import { ErrorPage } from "../ErrorPage/ErrorPage";
+import { ErrorPage } from "../../ErrorPage/ErrorPage";
 import {
   ListingMode,
   PetFilters,
   PetInfoPaginatedPublicResponse,
   SortDirection,
 } from "@/types/petListing";
-import { EmptyPage } from "../ErrorPage/EmptyPage";
-import { Loading } from "../Loader/Loading";
+import { EmptyPage } from "../../ErrorPage/EmptyPage";
+import { Loading } from "../../Loader/Loading";
 import { CircleX, CrossIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
 type GeneralPetListingProps = {

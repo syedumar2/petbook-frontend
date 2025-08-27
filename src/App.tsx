@@ -9,16 +9,7 @@ import {
   UserDashboard,
 } from "./pages";
 
-import {
-  ProfileOverview,
-  Conversations,
-  UserPetList,
-  PrivatePetDetails,
-  UsersList,
-  PetList,
-  UnapprovedPets,
-  ApprovedPets,
-} from "./components";
+
 import AdminDashboard from "./pages/AdminDashboard";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoutes";
@@ -27,6 +18,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Test from "./pages/Test";
 import { AddPetListingBox } from "./components/Forms/AddForm/AddPetListingBox";
 import { UpdatePetListingBox } from "./components/Forms/UpdateForm/UpdatePetListingBox";
+import { ApprovedPets, Conversations, PetList, PrivatePetDetails, PrivatePetListing, ProfileOverview, UnapprovedPets, UsersList } from "./components";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -48,7 +40,7 @@ const App = () => {
               <Route element={<ProtectedRoute />} path="/profile">
                 <Route element={<UserDashboard />}>
                   <Route index element={<ProfileOverview />} />{" "}
-                  <Route path="pets" element={<UserPetList />} />
+                  <Route path="pets" element={<PrivatePetListing />} />
                   <Route path="pets/:petId" element={<PrivatePetDetails />} />
                   <Route path="pets/add" element={<AddPetListingBox />} />
                   <Route path="pets/update/:petId" element={<UpdatePetListingBox />} />

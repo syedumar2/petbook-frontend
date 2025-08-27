@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/card";
 
 import { usePrivatePets } from "@/hooks/usePrivatePets";
-import { EmptyPage } from "../ErrorPage/EmptyPage";
-import Pagination from "../Pagination/Pagination";
-import { Loading } from "../Loader/Loading";
-import SortDropdown from "../ui/SortDropDown";
+
 import { PetFilters, SortDirection } from "@/types/petListing";
+import { EmptyPage } from "@/components/ErrorPage";
+import { Loading } from "@/components/Loader/Loading";
+import Pagination from "@/components/Pagination/Pagination";
+import SortDropdown from "@/components/ui/SortDropDown";
 
 const PrivatePetListing = () => {
   const [currentPage, setCurrentPage] = useState(0);

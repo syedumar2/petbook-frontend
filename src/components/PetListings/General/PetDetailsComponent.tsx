@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useParams } from "react-router-dom";
 import { useFetchPetById } from "@/hooks/useFetchPetById";
-import { EmptyPage } from "../ErrorPage/EmptyPage";
-import { ImageCarousel } from "..";
+import { EmptyPage } from "../../ErrorPage/EmptyPage";
+import { ImageCarousel } from "../..";
 
 const PetDetailsComponent = () => {
   const { petId } = useParams();

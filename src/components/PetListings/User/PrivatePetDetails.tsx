@@ -1,4 +1,4 @@
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Link, useParams } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import {
@@ -8,13 +8,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useFetchUserPetById } from "@/hooks/useFetchUserPetById";
-import { EmptyPage } from "../ErrorPage/EmptyPage";
-import { ImageCarousel } from "../ImageCarousel/ImageCarousel";
-import { Card, CardContent, CardTitle } from "../ui/card";
+import { EmptyPage } from "../../ErrorPage/EmptyPage";
+import { ImageCarousel } from "../../ImageCarousel/ImageCarousel";
+import { Card, CardContent, CardTitle } from "../../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DeleteDialogBox } from "@/components/DialogBoxes";
+import { Dialog } from "@/components/ui/dialog";
+import { useState } from "react";
 
 const PrivatePetDetails = () => {
   const { petId } = useParams();
+  const[open,setOpen] = useState<boolean>(false);
   const { data, isError, isPending } = useFetchUserPetById(Number(petId));
 
   if (!data || data === null)
@@ -75,9 +79,9 @@ const PrivatePetDetails = () => {
               </p>
             </div>
 
-            <div className="flex flex-col gap-8">
-              <Card className="border rounded-2xl shadow-md p-6 h-fit">
-                <CardContent className="p-0 flex flex-col space-y-4">
+            <div className="flex flex-col items-start gap-8">
+              <Card className="border rounded-2xl shadow-md p-6 h-fit ">
+                <CardContent className="px-3 flex flex-col space-y-4">
                   <h2 className="text-xl font-semibold text-gray-900 mb-2">
                     Owner Details
                   </h2>
@@ -87,37 +91,41 @@ const PrivatePetDetails = () => {
                       {data.data.owner}
                     </p>
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <Button
-                        className="bg-gray-700 text-white rounded-full w-xs text-sm font-medium shadow hover:bg-red-800 active:scale-95"
-                        variant={undefined}
-                        size={undefined}
-                      >
-                        Actions <ChevronDown />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className={"w-xs bg-white"}>
-                      <DropdownMenuItem
-                        className={"text-blue-800"}
-                        inset={undefined}
-                      >
-                        <Link to={`/profile/pets/update/${data?.data?.id}`}>Update Post</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className={"text-red-700"}
-                        inset={undefined}
-                      >
-                        <Link to={`/profile/pets/delete/${data?.data?.id}`}>Delete Post</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className={"text-green-700"}
-                        inset={undefined}
-                      >
-                        Mark as Adopted
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+
+                  <Dialog open={open} onOpenChange={setOpen}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Button
+                          className="bg-gray-700 text-white rounded-full w-xs text-sm font-medium shadow hover:bg-red-800 active:scale-95"
+                          variant={undefined}
+                          size={undefined}
+                        >
+                          Actions <ChevronDown />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className={"w-xs bg-white"}>
+                        <DropdownMenuItem
+                          className={"text-blue-800"}
+                          inset={undefined}
+                        >
+                          <Link to={`/profile/pets/update/${data?.data?.id}`}>Update Post</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className={"text-red-700"}
+                          inset={undefined}
+                           onSelect={(e) => e.preventDefault()}
+                        >
+                          <DeleteDialogBox petId={Number(petId)} open={open} setOpen={setOpen}/>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className={"text-green-700"}
+                          inset={undefined}
+                        >
+                          Mark as Adopted
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </Dialog>
                 </CardContent>
               </Card>
 

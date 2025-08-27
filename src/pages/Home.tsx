@@ -1,17 +1,23 @@
-import { Header, Footer, HeroForOwners, Features,Hero } from "../components";
-import { catDog, catDogBg } from "../assets";
+import {
+  Header,
+  Footer,
+  Features,
+  HeroSection1,
+  HeroSection2,
+} from "../components";
+
 const Home = () => {
   return (
     <div>
       <Header />
       <main>
-        <Hero />
-        <HeroForOwners />
+        <HeroSection1 />
+        <HeroSection2 />
         <Features />
       </main>
       <Footer />
     </div>
   );
-}
+};
 
-export default Home
+export default Home;

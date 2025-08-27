@@ -1,10 +1,11 @@
 
-import { LoginForm } from '@/components';
-import { RegisterForm } from '@/components/Forms/RegisterForm';
-
-
+import LoginForm from './LoginForm';
+import { RegisterForm } from './RegisterForm';
 export {
     LoginForm,
-    RegisterForm,
-
+    RegisterForm
 }
+
+
+export * from "./AddForm";
+export * from "./UpdateForm";
