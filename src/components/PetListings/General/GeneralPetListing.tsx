@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom";
 
 import SortDropdown from "../../ui/SortDropDown";
-import { useFetchPets } from "@/hooks/useFetchPets";
+import { usePetsQuery } from "@/hooks/usePetsQuery";
 import Pagination from "../../Pagination/Pagination";
 import { useState } from "react";
 import { ErrorPage } from "../../ErrorPage/ErrorPage";

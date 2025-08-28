@@ -1,5 +1,5 @@
-import { Footer, Header, Loading, PetDetailsComponent } from "@/components";
-import { Suspense } from "react";
+import { Footer, Header, PetDetailsComponent } from "@/components";
+
 import { useParams } from "react-router-dom";
 
 const PetDetail = () => {
@@ -7,9 +7,9 @@ const PetDetail = () => {
   return (
     <div>
       <Header />
-      <Suspense fallback={<Loading/>}>
+
         <PetDetailsComponent />
-      </Suspense>
+
       <Footer />
     </div>
   );

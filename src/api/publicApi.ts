@@ -40,7 +40,7 @@ export const publicApi = {
             }
         });
     },
-    getPetById: (id: number) => {
+    getPetById: (id?: number) => {
         return publicInstance.get(`/pets/getById/${id}`)
     },
 

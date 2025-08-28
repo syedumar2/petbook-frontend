@@ -14,7 +14,7 @@ interface UsePetsParams {
   searchParams?: Record<string, string | number | undefined>; // for name, breed, type, location
   advancedSearchBody?: FindPetByExampleRequest;
 }
-export const useFetchPets = ({
+export const usePetsQuery = ({
   mode,
   page,
   size = 10,

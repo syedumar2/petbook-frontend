@@ -1,17 +1,14 @@
+import { EmptyPage } from "@/components/ErrorPage/EmptyPage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useConversationsQuery } from "@/hooks/useConversationsQuery";
-import { EmptyPage } from "../ErrorPage";
 import { useAuth } from "@/hooks/useAuth";
-
-type ConversationsListProps = {
-  setConversationId: React.Dispatch<React.SetStateAction<number | undefined>>;
-}
-
-
-const ConversationsList = ({setConversationId}: ConversationsListProps) => {
-  const { data } = useConversationsQuery();
+import { ConversationInfo } from "@/types/conversations";
+type PrivatePetListingConversationsProps = {
+  data: ConversationInfo[] | undefined;
+};
+export const PrivatePetListingConversations = ({
+  data,
+}: PrivatePetListingConversationsProps) => {
   const { user } = useAuth();
-  console.log(user);
   const myName = user?.firstname + " " + user?.lastname;
   const options: Intl.DateTimeFormatOptions = {
     month: "numeric", // "August"
@@ -21,22 +18,14 @@ const ConversationsList = ({setConversationId}: ConversationsListProps) => {
   };
 
   return (
-    <div className="flex flex-col w-2/5 border-r border-gray-200 overflow-y-auto min-h-screen">
-      <div className="border-b border-gray-200 py-4 px-2">
-        <input
-          type="text"
-          placeholder="🔍 Search By Conversation"
-          className="py-2 px-2 border border-gray-300  w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-      {!data || !data.data ? (
+    <>
+      {!data ? (
         <EmptyPage />
       ) : (
-        data.data.map((conversation, index) => (
+        data.map((conversation, index) => (
           <div
             key={conversation.id}
             className="flex flex-row py-4 px-2 justify-center items-center border-b border-gray-200 hover:bg-gray-50 transition relative"
-            onClick={()=>setConversationId(conversation.id)}
           >
             <div className="w-1/4 ">
               <p className="absolute top-5 right-4 text-xs text-gray-500">
@@ -67,8 +56,6 @@ const ConversationsList = ({setConversationId}: ConversationsListProps) => {
           </div>
         ))
       )}
-    </div>
+    </>
   );
 };
-
-export default ConversationsList;

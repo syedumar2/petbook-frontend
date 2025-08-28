@@ -7,18 +7,14 @@ import {
   Register,
   PetDetail,
   UserDashboard,
+  AdminDashboard,
 } from "./pages";
-
-
-import AdminDashboard from "./pages/AdminDashboard";
-import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoutes";
-import AdminRoutes from "./components/AdminRoutes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ProfileOverview, PrivatePetListing, PrivatePetDetails, AddPetListingBox, UpdatePetListingBox, Conversations, UsersList, PetList, UnapprovedPets, ApprovedPets } from "./components";
+import AdminRoutes from "./components/AdminRoutes";
+import ProtectedRoute from "./components/ProtectedRoutes";
+import { AuthProvider } from "./context/AuthContext";
 import Test from "./pages/Test";
-import { AddPetListingBox } from "./components/Forms/AddForm/AddPetListingBox";
-import { UpdatePetListingBox } from "./components/Forms/UpdateForm/UpdatePetListingBox";
-import { ApprovedPets, Conversations, PetList, PrivatePetDetails, PrivatePetListing, ProfileOverview, UnapprovedPets, UsersList } from "./components";
 
 const App = () => {
   const queryClient = new QueryClient();

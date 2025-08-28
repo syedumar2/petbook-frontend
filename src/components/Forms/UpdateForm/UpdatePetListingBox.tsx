@@ -1,4 +1,4 @@
-import { useFetchUserPetById } from "@/hooks/useFetchUserPetById";
+import { useUserPetByIdQuery } from "@/hooks/useUserPetByIdQuery";
 import { UpdatePetRequest } from "@/types/petListing";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ export const UpdatePetListingBox = () => {
   const queryClient = useQueryClient();
 
   // Fetch current pet data
-  const { data, isError, isPending } = useFetchUserPetById(Number(petId));
+  const { data, isError, isPending } = useUserPetByIdQuery(Number(petId));
 
   // Form state
   const [formData, setFormData] = useState<UpdatePetRequest>({

@@ -7,7 +7,7 @@ const ChatMessageBox = () => {
         {/* Sarah (adopter) */}
         <div className="flex justify-start mb-4">
           <Avatar className="size-10">
-            <AvatarImage />
+            <AvatarImage className={undefined} />
             <AvatarFallback className="bg-cyan-700 p-2 text-2xl text-white">
               S
             </AvatarFallback>
@@ -23,7 +23,7 @@ const ChatMessageBox = () => {
             Hi Sarah! Yes, Bella is still looking for a loving home 🐶
           </div>
           <Avatar className="size-10">
-            <AvatarImage />
+            <AvatarImage className={undefined} />
             <AvatarFallback className="bg-gray-700 p-2 text-2xl text-white">
               M
             </AvatarFallback>
@@ -33,7 +33,7 @@ const ChatMessageBox = () => {
         {/* Sarah */}
         <div className="flex justify-start mb-4">
           <Avatar className="size-10">
-            <AvatarImage />
+            <AvatarImage className={undefined} />
             <AvatarFallback className="bg-cyan-700 p-2 text-2xl text-white">
               S
             </AvatarFallback>
@@ -49,7 +49,7 @@ const ChatMessageBox = () => {
             Bella is 2 years old, very playful, friendly with kids, and vaccinated.
           </div>
           <Avatar className="size-10">
-            <AvatarImage />
+            <AvatarImage className={undefined} />
             <AvatarFallback className="bg-gray-700 p-2 text-2xl text-white">
               M
             </AvatarFallback>
@@ -59,7 +59,7 @@ const ChatMessageBox = () => {
         {/* Sarah */}
         <div className="flex justify-start mb-4">
           <Avatar className="size-10">
-            <AvatarImage />
+            <AvatarImage className={undefined} />
             <AvatarFallback className="bg-cyan-700 p-2 text-2xl text-white">
               S
             </AvatarFallback>
@@ -75,7 +75,7 @@ const ChatMessageBox = () => {
             Absolutely! Saturday afternoon works for me.
           </div>
           <Avatar className="size-10">
-            <AvatarImage />
+            <AvatarImage className={undefined} />
             <AvatarFallback className="bg-gray-700 p-2 text-2xl text-white">
               M
             </AvatarFallback>

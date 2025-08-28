@@ -1,6 +1,7 @@
 // src/services/authService.ts
 import { authApi } from "@/api/authApi";
 import { clearTokens, setAccessToken } from "@/context/tokenStore";
+import { ConversationResponse, ConversationsListResponse, MessageListInfoResponse } from "@/types/conversations";
 import { AddPetRequest, PageSortParam, PrivatePetInfoPaginatedResponse, PrivatePetInfoResponse, UpdatePetRequest } from "@/types/petListing";
 import { LoginRequest, RegisterRequest, UserInfoResponse, UserUpdateRequest } from "@/types/user";
 import { AxiosError } from "axios";
@@ -10,6 +11,10 @@ export interface AuthResponse {
     message?: string;
     token?: string;
 }
+
+/****************************************************/
+//ERROR HANDLING SERVICE
+/****************************************************/
 
 export function parseApiError(err: unknown, defaultMsg = "Something went wrong"): string {
     const error = err as AxiosError<{ message: string }>;
@@ -23,6 +28,11 @@ export function parseApiError(err: unknown, defaultMsg = "Something went wrong")
 }
 
 export const authService = {
+
+    /****************************************************/
+    //AUTH HANDLING SERVICES
+    /****************************************************/
+
     async login(data: LoginRequest): Promise<AuthResponse> {
         try {
             const res = await authApi.login(data);
@@ -87,7 +97,6 @@ export const authService = {
         }
     },
 
-
     async updateUserInfo(userData: UserUpdateRequest, imageFile?: File): Promise<UserInfoResponse> {
         try {
             const res = await authApi.updateUserInfo(userData, imageFile);
@@ -103,6 +112,103 @@ export const authService = {
             };
         }
     },
+
+    /****************************************************/
+    //CONVERSATION AND MESSAGING SERVICES
+    /****************************************************/
+
+    async getUserConversationsList(): Promise<ConversationsListResponse> {
+        try {
+            const res = await authApi.getUserConversations();
+
+            return {
+                success: true,
+                message: res.data.message ?? "",
+                data: res.data.data ?? null
+            }
+        } catch (err) {
+            return {
+                success: false,
+                message: parseApiError(err),
+            };
+        }
+    },
+
+
+    async startConversation(user1Id: number, user2Id: number, petId: number): Promise<ConversationResponse> {
+        try {
+            const res = await authApi.startConversation(user1Id, user2Id, petId);
+
+            return {
+                success: true,
+                message: res.data.message ?? "",
+                data: res.data.data ?? null
+            }
+        } catch (err) {
+            return {
+                success: false,
+                message: parseApiError(err),
+            };
+        }
+    },
+    async deleteConversation(conversationId: number): Promise<ConversationResponse> {
+        try {
+            const res = await authApi.deleteConversation(conversationId);
+
+            return {
+                success: true,
+                message: res.data.message ?? "",
+                data: res.data.data ?? null
+            }
+        } catch (err) {
+            return {
+                success: false,
+                message: parseApiError(err),
+            };
+        }
+    },
+
+    async getConversationMessages(conversationId: number): Promise<MessageListInfoResponse> {
+        try {
+            const res = await authApi.getMessagesFromConversation(conversationId);
+
+            return {
+                success: true,
+                message: res.data.message ?? "",
+                data: res.data.data ?? null
+            }
+        } catch (err) {
+            return {
+                success: false,
+                message: parseApiError(err),
+            };
+        }
+    },
+    async getConversationDetails(conversationId?: number): Promise<ConversationResponse> {
+        try {
+            const res = await authApi.getSingleConversation(conversationId);
+
+            return {
+                success: true,
+                message: res.data.message ?? "",
+                data: res.data.data ?? null
+            }
+        } catch (err) {
+            return {
+                success: false,
+                message: parseApiError(err),
+            };
+        }
+    },
+
+
+
+
+
+    /****************************************************/
+    //USER PET CRUD SERVICES
+    /****************************************************/
+
     async getUserPets(data: PageSortParam): Promise<PrivatePetInfoPaginatedResponse> {
         try {
             const res = await authApi.getUserPets(data);
@@ -164,6 +270,23 @@ export const authService = {
         } catch (error) {
             return { success: false, message: parseApiError(error) };
         }
-    }
+    },
+    async markPetAdoptionStatus(petId: number, adopted: boolean): Promise<PrivatePetInfoResponse> {
+        try {
+            const res = await authApi.markPetAdoptionStatus(petId, adopted);
+            return {
+                success: res.data.success,
+                message: res.data.message,
+                data: res.data.data,
+            }
+        } catch (error) {
+            return { success: false, message: parseApiError(error) };
+        }
+    },
+
+
+
+
+
 
 };

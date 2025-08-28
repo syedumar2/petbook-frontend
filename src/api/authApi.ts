@@ -4,6 +4,10 @@ import axiosInstance from "./axios";
 import { LoginRequest, RegisterRequest, UserUpdateRequest } from "@/types/user";
 
 export const authApi = {
+  /****************************************************/
+  //AUTH ACTIONS API
+  /****************************************************/
+
   login: (data: LoginRequest) =>
     axiosInstance.post("/login", data),
 
@@ -35,6 +39,12 @@ export const authApi = {
 
 
   },
+
+
+  /****************************************************/
+  //PRIVATE PET LISTINGS API
+  /****************************************************/
+
 
   getUserPets: (data: PageSortParam) => {
     return axiosInstance.get("/user/me/pets", {
@@ -77,9 +87,45 @@ export const authApi = {
     return axiosInstance.delete(`/user/me/pets/${petId}`);
   },
 
-  getUserPetListing: (petId:number) => {
+  getUserPetListing: (petId: number) => {
     return axiosInstance.get(`/user/me/pets/${petId}`);
-  }
+  },
+  markPetAdoptionStatus: (petId: number, adopted: boolean) => {
+    return axiosInstance.patch(`/user/me/pets/${petId}`, { adopted });
+  },
 
+
+
+  /****************************************************/
+  //CONVERSATIONS API
+  /****************************************************/
+
+
+
+  getUserConversations: () => {
+    return axiosInstance.get("/chat/getMyConversations");
+
+  },
+  getSingleConversation: (conversationId?: number) => {
+    return axiosInstance.get(`/chat/get/${conversationId}`);
+  },
+
+  startConversation: (user1Id: number, user2Id: number, petId: number) => {
+    return axiosInstance.post("/chat/start", {
+      params: {
+        user1Id: user1Id,
+        user2Id: user2Id,
+        petId: petId
+      }
+    })
+  },
+
+  deleteConversation: (conversationId: number) => {
+    return axiosInstance.delete(`/chat/delete/${conversationId}`)
+  },
+
+  getMessagesFromConversation: (conversationId: number) => {
+    return axiosInstance.get(`/chat/${conversationId}/messages`)
+  },
 
 };

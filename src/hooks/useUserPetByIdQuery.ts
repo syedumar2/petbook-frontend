@@ -2,7 +2,7 @@ import { authService } from "@/services/authService"
 import {  PrivatePetInfoResponse } from "@/types/petListing"
 import { useSuspenseQuery } from "@tanstack/react-query"
 
-export const useFetchUserPetById = (id: number) => {
+export const useUserPetByIdQuery = (id: number) => {
     return useSuspenseQuery<PrivatePetInfoResponse, Error>(
         {
             queryKey: ["pet", id],

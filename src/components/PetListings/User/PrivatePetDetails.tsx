@@ -7,19 +7,33 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useFetchUserPetById } from "@/hooks/useFetchUserPetById";
+import { useUserPetByIdQuery } from "@/hooks/useUserPetByIdQuery";
 import { EmptyPage } from "../../ErrorPage/EmptyPage";
 import { ImageCarousel } from "../../ImageCarousel/ImageCarousel";
 import { Card, CardContent, CardTitle } from "../../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DeleteDialogBox } from "@/components/DialogBoxes";
+import {
+  AdoptionConfirmation,
+  DeleteDialogBox,
+} from "@/components/DialogBoxes";
 import { Dialog } from "@/components/ui/dialog";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useConversationsQuery } from "@/hooks/useConversationsQuery";
+import { PrivatePetListingConversations } from "./PrivatePetListingConversations";
 
 const PrivatePetDetails = () => {
   const { petId } = useParams();
-  const[open,setOpen] = useState<boolean>(false);
-  const { data, isError, isPending } = useFetchUserPetById(Number(petId));
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [adoptionDialogOpen, setAdoptionDialogOpen] = useState<boolean>(false);
+
+  const { data, isError, isPending } = useUserPetByIdQuery(Number(petId));
+  const { data: conversations } = useConversationsQuery();
+
+  const petListingConversations = conversations.data?.filter((conv)=> (conv.petId === Number(petId)));
+
+
+
 
   if (!data || data === null)
     return <p className="text-center mt-10">Pet not found!</p>;
@@ -33,14 +47,14 @@ const PrivatePetDetails = () => {
   }
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-8">
+    <section className="h-[80vh] w-full mx-auto  ">
       {/* Pet Image */}
       {!data || !data.data ? (
         <EmptyPage />
       ) : (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left 2/3 → Pet details */}
+        <div className="flex justify-center my-18 gap-6">
+          <div className="w-1/2 gap-8">
+      
             <div className="lg:col-span-2 flex flex-col">
               <ImageCarousel
                 images={
@@ -79,8 +93,13 @@ const PrivatePetDetails = () => {
               </p>
             </div>
 
-            <div className="flex flex-col items-start gap-8">
-              <Card className="border rounded-2xl shadow-md p-6 h-fit ">
+          
+          </div>
+
+
+
+            <div className="flex flex-col items-start gap-8 max-w-full">
+              <Card className="border rounded-2xl shadow-md p-6 h-fit w-full ">
                 <CardContent className="px-3 flex flex-col space-y-4">
                   <h2 className="text-xl font-semibold text-gray-900 mb-2">
                     Owner Details
@@ -92,69 +111,75 @@ const PrivatePetDetails = () => {
                     </p>
                   </div>
 
-                  <Dialog open={open} onOpenChange={setOpen}>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <Button
-                          className="bg-gray-700 text-white rounded-full w-xs text-sm font-medium shadow hover:bg-red-800 active:scale-95"
-                          variant={undefined}
-                          size={undefined}
-                        >
-                          Actions <ChevronDown />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className={"w-xs bg-white"}>
-                        <DropdownMenuItem
-                          className={"text-blue-800"}
-                          inset={undefined}
-                        >
-                          <Link to={`/profile/pets/update/${data?.data?.id}`}>Update Post</Link>
-                        </DropdownMenuItem>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button
+                        className="bg-gray-700 text-white rounded-full w-xs text-sm font-medium shadow hover:bg-red-800 active:scale-95"
+                        variant={undefined}
+                        size={undefined}
+                      >
+                        Actions <ChevronDown />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className={"w-xs bg-white"}>
+                      <DropdownMenuItem
+                        className={"text-blue-800"}
+                        inset={undefined}
+                      >
+                        <Link to={`/profile/pets/update/${data?.data?.id}`}>
+                          Update Post
+                        </Link>
+                      </DropdownMenuItem>
+                      <Dialog
+                        open={deleteDialogOpen}
+                        onOpenChange={setDeleteDialogOpen}
+                      >
                         <DropdownMenuItem
                           className={"text-red-700"}
                           inset={undefined}
-                           onSelect={(e) => e.preventDefault()}
+                          onSelect={(e: Event) => e.preventDefault()}
                         >
-                          <DeleteDialogBox petId={Number(petId)} open={open} setOpen={setOpen}/>
+                          <DeleteDialogBox
+                            petId={Number(petId)}
+                            open={deleteDialogOpen}
+                            setOpen={setDeleteDialogOpen}
+                          />
                         </DropdownMenuItem>
+                      </Dialog>
+                      <Dialog
+                        open={adoptionDialogOpen}
+                        onOpenChange={setAdoptionDialogOpen}
+                      >
                         <DropdownMenuItem
                           className={"text-green-700"}
                           inset={undefined}
+                          onSelect={(e: Event) => e.preventDefault()}
                         >
-                          Mark as Adopted
+                          <AdoptionConfirmation
+                            open={adoptionDialogOpen}
+                            setOpen={setAdoptionDialogOpen}
+                            adoptionStatus={data.data?.adopted}
+                            petId={Number(petId)}
+                          />
                         </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </Dialog>
+                      </Dialog>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </CardContent>
               </Card>
 
-              <Card className="border rounded-2xl shadow-md p-6 h-fit ">
+              <Card className="border  rounded-2xl shadow-md p-6 h-fit w-full ">
                 <CardContent className="p-0 flex flex-col space-y-4">
                   <CardTitle className={undefined}>
                     Conversations related to this Post
                   </CardTitle>
                   {/* Conversation 1 */}
-                  <div className="flex items-center gap-3 py-8 px-2 bg-gray-200 rounded w-full h-16">
-                    <Avatar className={"size-10"}>
-                      <AvatarImage className={undefined} />
-                      <AvatarFallback className="bg-cyan-700 text-2xl text-white">
-                        J
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="w-full">
-                      <div className="text-lg font-semibold">John Doe</div>
-                      <span className="text-gray-500">
-                        For Pet Listing: *petName*
-                      </span>
-                    </div>
-                  </div>
+               <PrivatePetListingConversations data={petListingConversations}/>
                 </CardContent>
               </Card>
             </div>
-          </div>
           {/* Right 1/3 → Owner details */}
-        </>
+        </div>
       )}{" "}
     </section>
   );

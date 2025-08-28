@@ -40,7 +40,7 @@ export const publicService = {
             return { success: false, message: parseApiError(error) };
         }
     },
-    async petById(id: number): Promise<PetInfoResponse> {
+    async petById(id?: number): Promise<PetInfoResponse> {
         try {
             const res = await publicApi.getPetById(id);
             return {

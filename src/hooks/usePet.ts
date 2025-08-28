@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 
 
 interface UsePetOptions {
-    mode: "add" | "update" | "delete";
+    mode: "add" | "update" | "delete" | "adoption";
 }
 
 
@@ -31,6 +31,9 @@ const isUpdateRequest = (data: any): data is UpdatePetRequest => {
         typeof data.description === "string" &&
         typeof data.breed === "string" &&
         typeof data.adopted === "boolean");
+}
+const isBoolean = (val: unknown): val is boolean => {
+    return typeof val === "boolean";
 }
 
 
@@ -84,7 +87,8 @@ export const usePet = (options?: UsePetOptions) => {
     const submitPet = async (
         formData: AddPetRequest | UpdatePetRequest,
         images?: File[],
-        petId?: number
+        petId?: number,
+        adopted?: boolean,
     ): Promise<FormErrors | void> => {
         try {
             setLoading(true);
@@ -110,6 +114,10 @@ export const usePet = (options?: UsePetOptions) => {
             else if (options?.mode === "delete" && petId) {
                 res = await authService.deletePet(petId);
             }
+            else if (options?.mode === "adoption" && petId && isBoolean(adopted)) {
+                res = await authService.markPetAdoptionStatus(petId, adopted);
+                if (res.success) queryClient.invalidateQueries({ queryKey: ["pet", petId] });
+            }
 
             if (!res) {
                 toast.error("No option selected or invalid data");
@@ -117,7 +125,8 @@ export const usePet = (options?: UsePetOptions) => {
             }
 
             if (res.success) {
-                queryClient.invalidateQueries({ queryKey: ["userPets"], refetchType: "active" });
+                queryClient.invalidateQueries({ queryKey: ["userPets"], refetchType: "active" })
+
                 navigate("/profile/pets");
                 toast.success(res.message);
             } else {

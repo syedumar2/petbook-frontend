@@ -1,6 +1,6 @@
 
 import { Footer, GeneralPetListing, Header, SearchBar } from "@/components";
-import { useFetchPets } from "@/hooks/useFetchPets";
+import { usePetsQuery } from "@/hooks/usePetsQuery";
 import { FindPetByExampleRequest, ListingMode, PetFilters, SortDirection } from "@/types/petListing";
 import {  useState } from "react";
 
@@ -15,7 +15,7 @@ const PetListing = () => {
 
   const handlePageChange = (page: number) => {setCurrentPage(page);};
 
-  const { data, isError, error, isPending } = useFetchPets({
+  const { data, isError, error, isPending } = usePetsQuery({
     mode,
     page: currentPage,
     size: 4,

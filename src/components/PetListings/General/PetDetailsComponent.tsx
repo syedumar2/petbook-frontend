@@ -1,14 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "../../ui/button";
 import { useParams } from "react-router-dom";
-import { useFetchPetById } from "@/hooks/useFetchPetById";
+import { usePetByIdQuery } from "@/hooks/usePetByIdQuery";
 import { EmptyPage } from "../../ErrorPage/EmptyPage";
-import { ImageCarousel } from "../..";
+import { ImageCarousel, Loading } from "../..";
 
 const PetDetailsComponent = () => {
   const { petId } = useParams();
-  const { data, isError, error } = useFetchPetById(Number(petId));
-
+  const { data, isError, error, isFetching } = usePetByIdQuery(Number(petId));
+  if (isFetching) return <Loading />; 
   if (!data) return <p className="text-center mt-10">Pet not found!</p>;
 
   return (
