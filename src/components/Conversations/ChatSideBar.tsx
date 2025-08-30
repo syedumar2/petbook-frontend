@@ -9,22 +9,29 @@ import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useConversationQuery } from "@/hooks/useConversationQuery";
-import { useState } from "react";
 import { usePetByIdQuery } from "@/hooks/usePetByIdQuery";
-import { LoadingOverlay } from "../Overlays/LoadingOverlay";
+import { Loading } from "../Loader/Loading";
+import { PetListing } from "@/types/petListing";
+import { ConversationInfo } from "@/types/conversations";
 
-const ChatSideBar = ({ conversationId }: { conversationId?: number }) => {
-  const [fetch, setFetch] = useState<boolean>(false);
+const ChatSideBar = ({
+  conversationId,
+  setConversation,
+}: {
+  conversationId?: number;
+  setConversation?: React.Dispatch<
+    React.SetStateAction<ConversationInfo | undefined>
+  >;
+}) => {
+  const { data: conversation, isFetching: isFetchingConversation } =
+    useConversationQuery(!!conversationId, conversationId);
 
-  const { data: conversation,isFetching: isFetchingConversations } = useConversationQuery(
-    !!conversationId,
-    conversationId
+  const { data: pet, isFetching: isFetchingPets } = usePetByIdQuery(
+    conversation?.data?.petId,
+    { enabled: !!conversation?.data?.petId }
   );
 
-  const { data: pet, isFetching: isFetchingPets } = usePetByIdQuery(conversation?.data?.petId,{enabled:!!conversation?.data?.petId});
-
   const { user } = useAuth();
-  console.log(user);
   const myName = user?.firstname + " " + user?.lastname;
   const options: Intl.DateTimeFormatOptions = {
     day: "2-digit", // 22
@@ -35,10 +42,13 @@ const ChatSideBar = ({ conversationId }: { conversationId?: number }) => {
     hour12: true, // AM/PM
   };
 
-if(isFetchingConversations || isFetchingPets) return <LoadingOverlay message={"Fetching Conversation details"}/>
-    if (!conversationId || !conversation?.data)
+  if (isFetchingConversation || isFetchingPets) return <Loading />;
+  if (!conversationId || !conversation?.data)
     return <p>No conversation selected</p>;
   if (!conversation.data.petId || !pet?.data) return <p>Pet doesnt exist</p>;
+  if (conversation && conversation.data !== null) {
+    setConversation?.(conversation.data);
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -47,17 +57,23 @@ if(isFetchingConversations || isFetchingPets) return <LoadingOverlay message={"F
         <Avatar className="size-12">
           <AvatarImage className={undefined} />
           <AvatarFallback className="bg-cyan-700 p-2 text-2xl text-white">
-            M
+            {user?.email !== pet.data.owner
+              ? myName.charAt(0)
+              : conversation.data.user1Name === myName
+              ? conversation.data.user2Name.charAt(0)
+              : conversation.data.user1Name.charAt(0)}
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
           <span className="font-semibold text-xl">
             {" "}
-            {conversation.data.user1Name === myName
+            {user?.email !== pet.data.owner
+              ? "You"
+              : conversation.data.user1Name === myName
               ? conversation.data.user2Name
               : conversation.data.user1Name}
           </span>
-          <span className="text-gray-500 text-sm">Wants to Adopt</span>
+          <span className="text-gray-500 text-sm">Want to Adopt</span>
         </div>
       </section>
 

@@ -5,6 +5,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
+     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     /* File Layout */
     // "rootDir": "./src",
     // "outDir": "./dist",

@@ -2,16 +2,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useConversationsQuery } from "@/hooks/useConversationsQuery";
 import { EmptyPage } from "../ErrorPage";
 import { useAuth } from "@/hooks/useAuth";
+import { ConversationInfo } from "@/types/conversations";
 
 type ConversationsListProps = {
   setConversationId: React.Dispatch<React.SetStateAction<number | undefined>>;
-}
+};
 
-
-const ConversationsList = ({setConversationId}: ConversationsListProps) => {
+const ConversationsList = ({ setConversationId }: ConversationsListProps) => {
   const { data } = useConversationsQuery();
   const { user } = useAuth();
-  console.log(user);
+
+
   const myName = user?.firstname + " " + user?.lastname;
   const options: Intl.DateTimeFormatOptions = {
     month: "numeric", // "August"
@@ -36,7 +37,9 @@ const ConversationsList = ({setConversationId}: ConversationsListProps) => {
           <div
             key={conversation.id}
             className="flex flex-row py-4 px-2 justify-center items-center border-b border-gray-200 hover:bg-gray-50 transition relative"
-            onClick={()=>setConversationId(conversation.id)}
+            onClick={() => {
+              setConversationId(conversation.id);
+            }}
           >
             <div className="w-1/4 ">
               <p className="absolute top-5 right-4 text-xs text-gray-500">
@@ -50,7 +53,7 @@ const ConversationsList = ({setConversationId}: ConversationsListProps) => {
                 <AvatarFallback className="bg-cyan-700 p-2 text-2xl text-white">
                   {conversation.user1Name === myName
                     ? conversation.user2Name.charAt(0)
-                    : conversation.user2Name.charAt(0)}
+                    : conversation.user1Name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
             </div>

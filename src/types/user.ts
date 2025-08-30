@@ -29,6 +29,7 @@ export interface UserInfoResponse {
     data?: UserInfo | null;
 }
 export type UserInfo = {
+    id: number;
     email: string;
 
     firstname: string;

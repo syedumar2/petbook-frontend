@@ -168,8 +168,12 @@ export const authService = {
         }
     },
 
-    async getConversationMessages(conversationId: number): Promise<MessageListInfoResponse> {
+    async getConversationMessages(conversationId?: number): Promise<MessageListInfoResponse> {
         try {
+            if(!conversationId) return {
+                success: false,
+                message: "No conversationId provided Cannot run api call"
+            }
             const res = await authApi.getMessagesFromConversation(conversationId);
 
             return {

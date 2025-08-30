@@ -43,7 +43,7 @@ export const UpdateUserDialog = () => {
   const LNAME_REGEX = /^[A-Za-z][A-Za-z'-]{1,}$/;
   const EMAIL_REGEX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/;
   const LOCATION_REGEX = /^([A-Za-z]+( [A-Za-z]+)+),.*([A-Za-z]+( [A-Za-z]+)+)/;
-  //TODO: Centralise the regex
+  //TODO (LOW): Centralise the regex
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
