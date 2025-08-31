@@ -137,6 +137,7 @@ export const authService = {
 
     async startConversation(user1Id: number, user2Id: number, petId: number): Promise<ConversationResponse> {
         try {
+            console.log(user1Id,user2Id,petId)
             const res = await authApi.startConversation(user1Id, user2Id, petId);
 
             return {

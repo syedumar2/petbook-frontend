@@ -3,15 +3,16 @@ import { useConversationsQuery } from "@/hooks/useConversationsQuery";
 import { EmptyPage } from "../ErrorPage";
 import { useAuth } from "@/hooks/useAuth";
 import { ConversationInfo } from "@/types/conversations";
+import EmptyChat from "../ErrorPage/EmptyChat";
 
 type ConversationsListProps = {
   setConversationId: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 const ConversationsList = ({ setConversationId }: ConversationsListProps) => {
+  //gets conversations and sets id of selected conversation
   const { data } = useConversationsQuery();
   const { user } = useAuth();
-
 
   const myName = user?.firstname + " " + user?.lastname;
   const options: Intl.DateTimeFormatOptions = {
@@ -23,15 +24,9 @@ const ConversationsList = ({ setConversationId }: ConversationsListProps) => {
 
   return (
     <div className="flex flex-col w-2/5 border-r border-gray-200 overflow-y-auto min-h-screen">
-      <div className="border-b border-gray-200 py-4 px-2">
-        <input
-          type="text"
-          placeholder="🔍 Search By Conversation"
-          className="py-2 px-2 border border-gray-300  w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
+    
       {!data || !data.data ? (
-        <EmptyPage />
+      <EmptyChat/>
       ) : (
         data.data.map((conversation, index) => (
           <div

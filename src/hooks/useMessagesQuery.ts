@@ -17,4 +17,3 @@ export const useMessagesQuery = (conversationId?: number) => {
 
     )
 }
-//TODO revisit later

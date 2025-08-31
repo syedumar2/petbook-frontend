@@ -1,11 +1,11 @@
 
 import { AdoptionConfirmation } from './AdoptionConfirmation';
 import { UpdateUserDialog } from './UpdateUserDialog';
-import DeleteDialogBox from './DeleteDialogBox';
+import DeletePetListingDialogBox from './DeletePetListingDialogBox';
 
 
 export{
     AdoptionConfirmation,
     UpdateUserDialog,
-    DeleteDialogBox
+    DeletePetListingDialogBox as DeleteDialogBox
 }

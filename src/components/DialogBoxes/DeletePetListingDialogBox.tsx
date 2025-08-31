@@ -16,7 +16,11 @@ type DeleteDialogBoxProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const DeleteDialogBox = ({ petId, open, setOpen }: DeleteDialogBoxProps) => {
+const DeletePetListingDialogBox = ({
+  petId,
+  open,
+  setOpen,
+}: DeleteDialogBoxProps) => {
   const { loading, submitPet } = usePet({ mode: "delete" });
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -55,4 +59,4 @@ const DeleteDialogBox = ({ petId, open, setOpen }: DeleteDialogBoxProps) => {
   );
 };
 
-export default DeleteDialogBox;
+export default DeletePetListingDialogBox;

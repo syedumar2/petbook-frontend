@@ -11,8 +11,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { useConversationQuery } from "@/hooks/useConversationQuery";
 import { usePetByIdQuery } from "@/hooks/usePetByIdQuery";
 import { Loading } from "../Loader/Loading";
-import { PetListing } from "@/types/petListing";
 import { ConversationInfo } from "@/types/conversations";
+import { Dialog } from "@radix-ui/react-dialog";
+import { EndConversationDialog } from "../DialogBoxes/EndConversationDialog";
+import { SetStateAction, useState } from "react";
+import EmptySidebar from "../ErrorPage/EmptySideBar";
 
 const ChatSideBar = ({
   conversationId,
@@ -23,6 +26,7 @@ const ChatSideBar = ({
     React.SetStateAction<ConversationInfo | undefined>
   >;
 }) => {
+  //gets conversationId from list component and sets Conversation state to Conversation obj with given id
   const { data: conversation, isFetching: isFetchingConversation } =
     useConversationQuery(!!conversationId, conversationId);
 
@@ -32,6 +36,8 @@ const ChatSideBar = ({
   );
 
   const { user } = useAuth();
+  const [endConversationDialogOpen, setEndConversationDialogOpen] =
+    useState<boolean>(false);
   const myName = user?.firstname + " " + user?.lastname;
   const options: Intl.DateTimeFormatOptions = {
     day: "2-digit", // 22
@@ -43,12 +49,15 @@ const ChatSideBar = ({
   };
 
   if (isFetchingConversation || isFetchingPets) return <Loading />;
-  if (!conversationId || !conversation?.data)
-    return <p>No conversation selected</p>;
-  if (!conversation.data.petId || !pet?.data) return <p>Pet doesnt exist</p>;
-  if (conversation && conversation.data !== null) {
-    setConversation?.(conversation.data);
-  }
+if (!conversationId || !conversation?.data)
+  return <EmptySidebar type="no-convo" />;
+
+if (!conversation.data.petId || !pet?.data)
+  return <EmptySidebar type="no-pet" />;
+if(conversation !== null || conversation){
+  setConversation?.(conversation.data);
+}
+
 
   return (
     <div className="flex flex-col gap-4">
@@ -127,12 +136,18 @@ const ChatSideBar = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-40 bg-white border border-gray-200 shadow-lg rounded-md">
-          <DropdownMenuItem
-            className="text-red-700 font-medium cursor-pointer hover:bg-red-50"
-            inset={undefined}
+          <Dialog
+            open={endConversationDialogOpen}
+            onOpenChange={setEndConversationDialogOpen}
           >
-            End Conversation
-          </DropdownMenuItem>
+    
+              <EndConversationDialog
+                open={endConversationDialogOpen}
+                setOpen={setEndConversationDialogOpen}
+                conversationId={conversationId}
+              />
+   
+          </Dialog>
           <DropdownMenuItem
             className="text-green-700 font-medium cursor-pointer hover:bg-green-50"
             inset={undefined}

@@ -11,14 +11,12 @@ import { useUserPetByIdQuery } from "@/hooks/useUserPetByIdQuery";
 import { EmptyPage } from "../../ErrorPage/EmptyPage";
 import { ImageCarousel } from "../../ImageCarousel/ImageCarousel";
 import { Card, CardContent, CardTitle } from "../../ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   AdoptionConfirmation,
   DeleteDialogBox,
 } from "@/components/DialogBoxes";
 import { Dialog } from "@/components/ui/dialog";
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import { useConversationsQuery } from "@/hooks/useConversationsQuery";
 import { PrivatePetListingConversations } from "./PrivatePetListingConversations";
 

@@ -1,15 +1,50 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "../../ui/button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { usePetByIdQuery } from "@/hooks/usePetByIdQuery";
 import { EmptyPage } from "../../ErrorPage/EmptyPage";
 import { ImageCarousel, Loading } from "../..";
+import { useAuth } from "@/hooks/useAuth";
+import { authService } from "@/services/authService";
+import { toast } from "sonner";
+import { useState } from "react";
+import {  useQueryClient } from '@tanstack/react-query';
 
 const PetDetailsComponent = () => {
+  const queryClient = useQueryClient();
   const { petId } = useParams();
+  const { user } = useAuth();
   const { data, isError, error, isFetching } = usePetByIdQuery(Number(petId));
-  if (isFetching) return <Loading />; 
+  const navigate = useNavigate();
+  const [ignore, setIgnore] = useState<boolean>(false);
+  if (isFetching) return <Loading />;
   if (!data) return <p className="text-center mt-10">Pet not found!</p>;
+
+  const startConversation = async () => {
+    if (!petId || !user || !data.data?.ownerId || ignore) return;
+    setIgnore(true);
+    const res = await authService.startConversation(
+      user.id,
+      data.data.ownerId,
+      Number(petId)
+    );
+    if (res.success) {
+       queryClient.invalidateQueries({
+        queryKey: ["conversations"],
+        refetchType: "active",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["conversation"],
+        refetchType: "active",
+      });
+      navigate("/profile/conversations");
+      setIgnore(false);
+    } else {
+      toast.error(res.message);
+      setIgnore(false);
+      
+    }
+  };
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-10">
@@ -56,12 +91,12 @@ const PetDetailsComponent = () => {
               </div>
 
               <Button
-                asChild
                 className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-4 py-2 mt-4 w-full"
                 variant={undefined}
                 size={undefined}
+                onClick={startConversation}
               >
-                <a href="/login">Chat with Owner</a>
+                Chat with Owner
               </Button>
             </CardContent>
           </Card>

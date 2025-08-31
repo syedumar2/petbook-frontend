@@ -43,4 +43,8 @@ export interface MessageInfo{
   sentAt: string; 
 }
 
+export interface PresencePayload{
+  userId: number;
+  online: boolean;
+}
 

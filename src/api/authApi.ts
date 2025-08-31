@@ -111,7 +111,7 @@ export const authApi = {
   },
 
   startConversation: (user1Id: number, user2Id: number, petId: number) => {
-    return axiosInstance.post("/chat/start", {
+    return axiosInstance.post("/chat/start",null, {
       params: {
         user1Id: user1Id,
         user2Id: user2Id,

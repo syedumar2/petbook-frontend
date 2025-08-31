@@ -1,6 +1,8 @@
+import { PresencePayload } from "./conversations";
+
 export interface ChatEvent {
     type: EventType,
-    payload: ChatMessageResponse | MarkReadResponse | TypingIndicator | null | undefined;
+    payload: ChatMessageResponse | MarkReadResponse | TypingIndicator | PresencePayload | null | undefined;
 }
 
 export enum EventType {

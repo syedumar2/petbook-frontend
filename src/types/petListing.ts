@@ -78,6 +78,7 @@ export interface PetListing {
   imageUrls: string[];
   adopted: boolean;
   owner: string;
+  ownerId?: number;
   description: string | null;
 }
 
