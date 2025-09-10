@@ -91,7 +91,9 @@ const App = () => {
 
 export default App;
 
-//TODO Create a fix for the unread messages notification problem
+
+
+//TODO quickly build notifications page with clear all and clear single notification function
 //TODO Complete admin panel
 // TODO (Day 5 | MEDIUM): Apply UI customizations to static pages and make it responsive
 

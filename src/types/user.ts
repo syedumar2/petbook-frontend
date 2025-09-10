@@ -54,6 +54,11 @@ export interface NotificationsResponse {
     message?: string;
     data?: NotificationPayload[] | null;
 }
+
+export interface NotificationDeletedResponse {
+    success: boolean;
+    message: string;
+}
 export interface NotificationResponse {
     success: boolean;
     message?: string;
@@ -73,6 +78,8 @@ export type NotificationPayload = {
     read: boolean;
     createdAt: string;
 };
-
+export interface NotificationDeleteRequest {
+    ids: number[];
+}
 
 //TODO Bug where if i send anything to an offline user nothing shows up

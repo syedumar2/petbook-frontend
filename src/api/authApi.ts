@@ -2,6 +2,7 @@
 import { AddPetRequest, PageSortParam, UpdatePetRequest } from "@/types/petListing";
 import axiosInstance from "./axios";
 import { LoginRequest, RegisterRequest, UserUpdateRequest } from "@/types/user";
+import { NotificationDeleteRequest } from './../types/user';
 
 export const authApi = {
   /****************************************************/
@@ -146,5 +147,9 @@ export const authApi = {
 
   markNotificationRead: (notificationId: number) => {
     return axiosInstance.get(`notifications/${notificationId}`)
+  },
+
+  deleteNotifications: (body: NotificationDeleteRequest) => {
+    return axiosInstance.delete("/notifications",body)
   }
 };

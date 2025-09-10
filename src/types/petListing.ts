@@ -69,6 +69,8 @@ export interface UpdatePetRequest {
   adopted?: boolean;
 }
 
+
+
 // ==========================
 // Listing Modes
 // ==========================

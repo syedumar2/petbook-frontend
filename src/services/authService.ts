@@ -3,7 +3,7 @@ import { authApi } from "@/api/authApi";
 import { clearTokens, setAccessToken } from "@/context/tokenStore";
 import { ConversationResponse, ConversationsListResponse, MessageListInfoResponse } from "@/types/conversations";
 import { AddPetRequest, PageSortParam, PrivatePetInfoPaginatedResponse, PrivatePetInfoResponse, UpdatePetRequest } from "@/types/petListing";
-import { LoginRequest, NotificationPayload, NotificationResponse, NotificationsResponse, RegisterRequest, UserInfoResponse, UserUpdateRequest } from "@/types/user";
+import { LoginRequest, NotificationDeletedResponse, NotificationPayload, NotificationResponse, NotificationsResponse, RegisterRequest, UserInfoResponse, UserUpdateRequest } from "@/types/user";
 import { AxiosError } from "axios";
 
 export interface AuthResponse {
@@ -297,13 +297,12 @@ export const authService = {
     async getUnreadNotifications(): Promise<NotificationsResponse> {
         try {
             const res = await authApi.getUserUnreadNotifications();
-            console.log(res.data)
             return {
                 success: res.data.success,
                 message: res.data.message,
                 data: res.data.data,
             }
-            
+
         } catch (error) {
             return { success: false, message: parseApiError(error) };
         }
@@ -312,24 +311,30 @@ export const authService = {
     async getAllUserNotifications(): Promise<NotificationsResponse> {
         try {
             const res = await authApi.getAllUserNotifications();
-            console.log(res.data)
             return {
                 success: res.data.success,
                 message: res.data.message,
                 data: res.data.data,
             }
-            
+
         } catch (error) {
             return { success: false, message: parseApiError(error) };
         }
 
     },
+    async deleteUserNotifications(): Promise<NotificationDeletedResponse> {
+        try {
+            const res = await authApi.getAllUserNotifications();
+            console.log(res.data)
+            return {
+                success: res.data.success,
+                message: res.data.message,
+            }
 
-
-
-
-
-
+        } catch (error) {
+            return { success: false, message: parseApiError(error) };
+        }
+    },
 
     async markNotificationRead(notificationId: number): Promise<NotificationResponse> {
         try {
