@@ -167,13 +167,14 @@ const PrivatePetDetails = () => {
               </Card>
 
               <Card className="border  rounded-2xl shadow-md p-6 h-fit w-full ">
-                <CardContent className="p-0 flex flex-col space-y-4">
+                <CardContent className="p-0 flex flex-col space-y-4 ">
                   <CardTitle className={undefined}>
                     Conversations related to this Post
                   </CardTitle>
                   {/* Conversation 1 */}
-               <PrivatePetListingConversations data={petListingConversations}/>
-                </CardContent>
+                  {petListingConversations && petListingConversations?.length> 0 ?
+               <PrivatePetListingConversations data={petListingConversations}/> : <p className="font bold text-center p-2"><span>No Conversations available</span></p>
+                }</CardContent>
               </Card>
             </div>
           {/* Right 1/3 → Owner details */}

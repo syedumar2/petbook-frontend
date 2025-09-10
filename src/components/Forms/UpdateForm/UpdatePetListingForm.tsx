@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { UpdatePetRequest } from "@/types/petListing";
+import { PetGender, UpdatePetRequest } from "@/types/petListing";
 
 const PET_NAME_REGEX = /^[A-Za-z]+( [A-Za-z]+)?$/;
 const PET_BREED = /^[A-Za-z]+( [A-Za-z]+)?$/;
@@ -25,6 +25,7 @@ type PetListingFormProps = {
     description?: string;
     location?: string;
     adopted?: string;
+    gender?: string;
   };
   setErrors: React.Dispatch<
     React.SetStateAction<{
@@ -34,6 +35,7 @@ type PetListingFormProps = {
       description?: string;
       location?: string;
       adopted?: string;
+      gender?: string;
     }>
   >;
   loading: boolean;
@@ -68,7 +70,7 @@ export const UpdatePetListingForm = ({
   };
 
   return (
-    <div className="space-y-4 px-8 pt-6 pb-8 mb-4 ">
+    <div className="space-y-4 px-8 pt-6 pb-8 mb-4 flex flex-col">
       <div>
         <Label htmlFor="name" className={undefined}>
           Pet Name:
@@ -113,9 +115,10 @@ export const UpdatePetListingForm = ({
             <p className="text-xs text-red-500 mt-2">{errors.type}</p>
           )}
         </div>
+
         <div>
           <Label htmlFor="adopted" className={undefined}>
-            Type:{" "}
+            Adopted:{" "}
           </Label>
           <Select
             value={formData.adopted ? "Yes" : "No"}
@@ -123,7 +126,7 @@ export const UpdatePetListingForm = ({
               setFormData({ ...formData, adopted: value === "Yes" })
             }
           >
-            <SelectTrigger className="w-[180px] mt-2" disabled={loading}>
+            <SelectTrigger className="w-[205px] mt-2" disabled={loading}>
               <SelectValue placeholder="Pet Type" />
             </SelectTrigger>
             <SelectContent className={"bg-white"}>
@@ -140,23 +143,55 @@ export const UpdatePetListingForm = ({
           )}
         </div>
       </div>
-      <div>
-        <Label htmlFor="breed" className={undefined}>
-          Pet Breed:
-        </Label>
-        <Input
-          type="text"
-          name="breed"
-          className="mt-2"
-          placeholder="German Shepherd"
-          value={formData.breed}
-          onChange={handleChange}
-          disabled={loading}
-        />
-        {errors.breed && (
-          <p className="text-xs text-red-500 mt-2">{errors.breed}</p>
-        )}
+      <div className="flex justify-between w-full gap-6">
+        {/* Gender */}
+        <div className="flex-1">
+          <Label htmlFor="gender" className={undefined}>
+            Gender:
+          </Label>
+          <Select
+            value={formData.gender}
+            onValueChange={(value: PetGender) =>
+              setFormData({ ...formData, gender: value })
+            }
+          >
+            <SelectTrigger className="w-full mt-2" disabled={loading}>
+              <SelectValue placeholder="Pet Gender" />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              <SelectItem value={PetGender.Male} className={undefined}>
+                Male
+              </SelectItem>
+              <SelectItem value={PetGender.Female} className={undefined}>
+                Female
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.gender && (
+            <p className="text-xs text-red-500 mt-2">{errors.gender}</p>
+          )}
+        </div>
+
+        {/* Breed */}
+        <div className="flex-1">
+          <Label htmlFor="breed" className={undefined}>
+            Breed:
+          </Label>
+          <Input
+            type="text"
+            name="breed"
+            className="mt-2"
+            placeholder="German Shepherd"
+            value={formData.breed}
+            onChange={handleChange}
+            disabled={loading}
+          />
+          {errors.breed && (
+            <p className="text-xs text-red-500 mt-2">{errors.breed}</p>
+          )}
+        </div>
       </div>
+
       <div>
         <Label htmlFor="description" className={undefined}>
           Description:

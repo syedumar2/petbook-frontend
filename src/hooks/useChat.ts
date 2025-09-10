@@ -1,22 +1,23 @@
 import { getAccessToken } from "@/context/tokenStore";
+import { useWebSocketClient } from "@/context/WebSocketContext";
 import { PresencePayload } from "@/types/conversations";
 import { ChatEvent, ChatMessageResponse, EventType, MarkReadResponse } from "@/types/sockets";
-import { Client, IMessage } from '@stomp/stompjs';
+import { IMessage } from '@stomp/stompjs';
 
-import { useCallback, useEffect, useReducer, useRef } from "react";
-import SockJS from "sockjs-client";
+import { useCallback, useEffect, useReducer } from "react";
+
 
 
 
 
 interface ChatState {
     messages: ChatMessageResponse[];
-    presence: Map<number, PresencePayload>;
+    presence: PresencePayload;
 }
 
 const initialState: ChatState = {
     messages: [],
-    presence: new Map,
+    presence: {},
 };
 
 function reducer(state: ChatState, action: ChatEvent): ChatState {
@@ -39,21 +40,20 @@ function reducer(state: ChatState, action: ChatEvent): ChatState {
 
             const presenceIndicatorPayload = action.payload as PresencePayload;
             console.log(presenceIndicatorPayload);
-            const newPresence = new Map(state.presence);
-            newPresence.set(presenceIndicatorPayload.userId, presenceIndicatorPayload)
             return {
                 ...state,
-                presence: newPresence,
+                presence: presenceIndicatorPayload,
 
             }
         }
         case EventType.USER_DISCONNECTED: {
-            const payload = action.payload as PresencePayload;
-            console.log(payload);
+            const presenceIndicatorPayload = action.payload as PresencePayload;
+            console.log(presenceIndicatorPayload);
+            return {
+                ...state,
+                presence: presenceIndicatorPayload,
 
-            const newPresence = new Map(state.presence);
-            newPresence.set(payload.userId, { ...payload, online: false });
-            return { ...state, presence: newPresence };
+            }
         }
 
 
@@ -64,45 +64,46 @@ function reducer(state: ChatState, action: ChatEvent): ChatState {
 
 export function useChat(conversationId: number | undefined, userId: number | undefined) {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const stompClientRef = useRef<Client | null>(null);
+    const client = useWebSocketClient();
 
     useEffect(() => {
-        const token = getAccessToken();
-        if (!conversationId || !token) return;
+        if (!conversationId || !client) return;
 
-        const stompClient = new Client({
-            webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
-            connectHeaders: { Authorization: "Bearer " + token },
-            debug: (str) => console.log(str),
-            onConnect: () => {
+        let sub: any;
 
+        const handleSubscribe = () => {
+            const token = getAccessToken();
+            if (!token) return;
 
-                stompClient.subscribe(`/topic/conversation/${conversationId}`, (msg: IMessage) => {
+            sub = client.subscribe(
+                `/topic/conversation/${conversationId}`,
+                (msg: IMessage) => {
                     const event: ChatEvent = JSON.parse(msg.body);
                     dispatch(event);
-                });
+                }
+            );
+        };
 
+        // Case 1: client is already connected → subscribe immediately
+        if (client.connected) {
+            handleSubscribe();
+        }
 
-
-
-
-            },
-            onStompError: (frame) => {
-                console.error("STOMP error:", frame);
-            },
-        });
-
-        stompClientRef.current = stompClient;
-        stompClient.activate();
+        // Case 2: client not yet connected → wait for connect event
+        client.onConnect = () => {
+            handleSubscribe();
+        };
 
         return () => {
-            stompClient.deactivate();
-            stompClientRef.current = null;
+            if (sub) {
+                sub.unsubscribe();
+            }
         };
-    }, [conversationId]);
+    }, [conversationId, client]);
+
 
     function sendMessage(content: string, receiverId: number, senderId: number, conversationId: number) {
-        if (!stompClientRef.current || !conversationId || !senderId || !receiverId || !content) return;
+        if (!client || !conversationId || !senderId || !receiverId || !content) return;
 
         const messagePayload = {
             EventType: EventType.MESSAGE_SENT,
@@ -115,7 +116,7 @@ export function useChat(conversationId: number | undefined, userId: number | und
         };
 
 
-        stompClientRef.current.publish({
+        client.publish({
             destination: "/app/chat.sendMessage",
             body: JSON.stringify(messagePayload),
         });
@@ -124,14 +125,14 @@ export function useChat(conversationId: number | undefined, userId: number | und
 
 
     const markRead = useCallback((userId: number, conversationId: number) => {
-        if (!stompClientRef.current || !conversationId || !userId) return;
+        if (!client || !conversationId || !userId) return;
 
         const messagePayload = {
             EventType: EventType.MESSAGE_READ,
             payload: { userId, conversationId },
         };
 
-        stompClientRef.current.publish({
+        client.publish({
             destination: "/app/chat.markRead",
             body: JSON.stringify(messagePayload),
         });

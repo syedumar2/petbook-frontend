@@ -30,17 +30,23 @@ export interface PetFilters {
   breed?: string;
   location?: string;
   adopted?: boolean;
+  gender?: PetGender;
 }
 
 export interface FindPetByExampleRequest {
   name?: string;
   type?: string;
   breed?: string;
+  gender?: string; 
   location?: string;
   adopted?: boolean;
   ownerEmail?: string;
 }
-
+export enum PetGender {
+  Male = "MALE",
+  Female = "FEMALE",
+  None = ""
+}
 // ==========================
 // Pet Requests
 // ==========================
@@ -48,6 +54,7 @@ export interface AddPetRequest {
   name: string;
   type: string;
   breed?: string;
+  gender?: PetGender ;
   description?: string;
   location: string;
 }
@@ -56,6 +63,7 @@ export interface UpdatePetRequest {
   name?: string;
   type?: string;
   breed?: string;
+  gender?: PetGender;
   description?: string;
   location?: string;
   adopted?: boolean;
@@ -75,6 +83,7 @@ export interface PetListing {
   type: string;
   breed: string;
   location: string;
+  gender: PetGender;
   imageUrls: string[];
   adopted: boolean;
   owner: string;
@@ -88,6 +97,7 @@ export interface PrivatePetListing {
   type: string;
   breed: string;
   location: string;
+  gender: PetGender;
   adopted?: boolean;
   owner: string;
   description: string | null;

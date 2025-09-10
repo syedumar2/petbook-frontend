@@ -19,6 +19,7 @@ const PetDetailsComponent = () => {
   const [ignore, setIgnore] = useState<boolean>(false);
   if (isFetching) return <Loading />;
   if (!data) return <p className="text-center mt-10">Pet not found!</p>;
+  console.log(data.data?.description)
 
   const startConversation = async () => {
     if (!petId || !user || !data.data?.ownerId || ignore) return;
@@ -62,12 +63,15 @@ const PetDetailsComponent = () => {
             <p className="text-gray-600 text-lg mt-1">
               {data.data.type} - {data.data.breed}
             </p>
+             <p className="text-gray-500 mt-1 text-sm">
+              Gender: {data.data.gender.charAt(0) + data.data.gender.slice(1).toLocaleLowerCase() }
+            </p>
             <p className="text-gray-500 mt-1 text-sm">
               Location: {data.data.location}
             </p>
 
             {data.data.adopted && (
-              <span className="inline-block mt-3 px-4 py-1 text-xs font-semibold text-white bg-red-600 rounded-full">
+              <span className="inline-block mt-3 px-4 py-1 text-xs font-semibold text-white bg-red-600 rounded-full w-fit">
                 Adopted
               </span>
             )}
@@ -94,7 +98,7 @@ const PetDetailsComponent = () => {
                 className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-4 py-2 mt-4 w-full"
                 variant={undefined}
                 size={undefined}
-                onClick={startConversation}
+                onClick={()=>startConversation()}
               >
                 Chat with Owner
               </Button>

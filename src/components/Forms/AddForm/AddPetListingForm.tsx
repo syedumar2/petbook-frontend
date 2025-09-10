@@ -8,11 +8,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AddPetRequest } from "@/types/petListing";
+import { AddPetRequest, PetGender } from "@/types/petListing";
 
 const PET_NAME_REGEX = /^[A-Za-z]+( [A-Za-z]+)?$/;
 const PET_BREED = /^[A-Za-z]+( [A-Za-z]+)?$/;
-const LOCATION_REGEX = /^[A-Za-z]+(?:[ .'-][A-Za-z]+)*,\s*[A-Za-z]+(?:[ .'-][A-Za-z]+)*$/;
+const LOCATION_REGEX =
+  /^[A-Za-z]+(?:[ .'-][A-Za-z]+)*,\s*[A-Za-z]+(?:[ .'-][A-Za-z]+)*$/;
 
 type PetListingFormProps = {
   formData: AddPetRequest;
@@ -23,6 +24,7 @@ type PetListingFormProps = {
     breed?: string;
     description?: string;
     location?: string;
+    gender?: string;
   };
   setErrors: React.Dispatch<
     React.SetStateAction<{
@@ -31,6 +33,7 @@ type PetListingFormProps = {
       breed?: string;
       description?: string;
       location?: string;
+      gender?: string;
     }>
   >;
   loading: boolean;
@@ -67,7 +70,9 @@ export const AddPetListingForm = ({
   return (
     <div className="space-y-4 px-8 pt-6 pb-8 mb-4 ">
       <div>
-        <Label htmlFor="name" className={undefined}>Pet Name:</Label>
+        <Label htmlFor="name" className={undefined}>
+          Pet Name:
+        </Label>
         <Input
           name="name"
           className="mt-2"
@@ -81,14 +86,16 @@ export const AddPetListingForm = ({
           <p className="text-xs text-red-500 mt-2">{errors.name}</p>
         )}
       </div>
-      <div>
-        <Label htmlFor="type" className={undefined}>Type: </Label>
+      <div className="flex items-center justify-between">
+        <Label htmlFor="type" className={undefined}>
+          Type:{" "}
+        </Label>
         <Select
           onValueChange={(value: string) =>
             setFormData({ ...formData, type: value })
           }
         >
-          <SelectTrigger className="w-[180px] mt-2" disabled={loading}>
+          <SelectTrigger className="w-[160px] mt-2" disabled={loading}>
             <SelectValue placeholder="Pet Type" />
           </SelectTrigger>
           <SelectContent className={"bg-white"}>
@@ -103,9 +110,35 @@ export const AddPetListingForm = ({
         {errors.type && (
           <p className="text-xs text-red-500 mt-2">{errors.type}</p>
         )}
+
+        <Label htmlFor="gender" className={undefined}>
+          Gender:{" "}
+        </Label>
+        <Select
+          onValueChange={(value: PetGender) =>
+            setFormData({ ...formData, gender: value })
+          }
+        >
+          <SelectTrigger className="w-[160px] mt-2" disabled={loading}>
+            <SelectValue placeholder="Pet Gender" />
+          </SelectTrigger>
+          <SelectContent className={"bg-white"}>
+            <SelectItem value={PetGender.Male} className={undefined}>
+              Male
+            </SelectItem>
+            <SelectItem value={PetGender.Female} className={undefined}>
+              Female
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        {errors.gender && (
+          <p className="text-xs text-red-500 mt-2">{errors.gender}</p>
+        )}
       </div>
       <div>
-        <Label htmlFor="breed" className={undefined}>Pet Breed:</Label>
+        <Label htmlFor="breed" className={undefined}>
+          Pet Breed:
+        </Label>
         <Input
           type="text"
           name="breed"
@@ -120,7 +153,9 @@ export const AddPetListingForm = ({
         )}
       </div>
       <div>
-        <Label htmlFor="description" className={undefined}>Description:</Label>
+        <Label htmlFor="description" className={undefined}>
+          Description:
+        </Label>
         <Textarea
           type="text"
           name="description"
@@ -135,7 +170,9 @@ export const AddPetListingForm = ({
         )}
       </div>
       <div>
-        <Label htmlFor="location" className={undefined}>Location:</Label>
+        <Label htmlFor="location" className={undefined}>
+          Location:
+        </Label>
         <Input
           type="text"
           name="location"
@@ -162,4 +199,3 @@ export const AddPetListingForm = ({
     </div>
   );
 };
-

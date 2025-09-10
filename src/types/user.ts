@@ -48,3 +48,31 @@ export interface OpResult {
     success: boolean;
     message: string;
 }
+
+export interface NotificationsResponse {
+    success: boolean;
+    message?: string;
+    data?: NotificationPayload[] | null;
+}
+export interface NotificationResponse {
+    success: boolean;
+    message?: string;
+    data?: NotificationPayload | null;
+}
+export type NotificationPayload = {
+    id: number;
+    message: string;
+    type: | "WELCOME"
+    | "PET_APPROVED"
+    | "PET_REJECTED"
+    | "PET_UPDATED"
+    | "PET_DELETED"
+    | "CONVERSATION_STARTED"
+    | "CONVERSATION_DELETED"
+    | "NEW_MESSAGES";
+    read: boolean;
+    createdAt: string;
+};
+
+
+//TODO Bug where if i send anything to an offline user nothing shows up

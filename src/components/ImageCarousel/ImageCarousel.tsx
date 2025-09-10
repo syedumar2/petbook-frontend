@@ -25,7 +25,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps) => {
   return (
     <div className={className}>
       <Carousel className="relative">
-        <CarouselContent>
+        <CarouselContent className={undefined}>
           {images.map((img, index) => (
             <CarouselItem key={index} className="basis-full">
               <div className="flex justify-center">
@@ -39,7 +39,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps) => {
                     />
                   </DialogTrigger>
                   <DialogTitle className="hidden"></DialogTitle>
-                  <DialogContent className="flex justify-center items-center bg-gray-500/50">
+                  <DialogContent className="flex justify-center items-center bg-gray-950/40">
                     <img src={currentImage} />
                   </DialogContent>
                 </Dialog>

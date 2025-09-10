@@ -72,6 +72,13 @@ export default function SortDropdown({
           >
             <span>Adopted</span>
           </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex justify-between items-center"
+            inset={undefined}
+            onClick={() => setSortField("gender")}
+          >
+            <span>Gender</span>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button

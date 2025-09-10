@@ -36,10 +36,13 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const location = useLocation();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  
 
   const login = async (data: LoginRequest): Promise<AuthResponse> => {
     const res = await authService.login(data);
     if (res.success) {
+      setIsLoggingOut(false);
       setIsAuthenticated(true);
 
       await getUser();
@@ -56,6 +59,7 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   };
 
   const logout = async () => {
+     setIsLoggingOut(true);
     await authService.logout();
     clearTokens();
     setIsAuthenticated(false);
@@ -90,11 +94,12 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   };
 
   useEffect(() => {
+    if (isLoggingOut) return;
     const rehydrate = async () => {
       try {
         const res = await authService.refresh(); // calls /auth/refresh
         if (res.success && res.token) {
-          setAccessToken(res.token);
+          setAccessToken(res.token);  
           setIsAuthenticated(true);
           await getUser();
         }
@@ -107,10 +112,11 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
 
     if (
       location.pathname.startsWith("/profile") ||
-      location.pathname.startsWith("/admin")
+      location.pathname.startsWith("/admin") ||
+      location.pathname.startsWith("/pets")
     )
       rehydrate();
-  }, [location.pathname]);
+  }, [location.pathname, isLoggingOut]);
 
   return (
     <AuthContext.Provider

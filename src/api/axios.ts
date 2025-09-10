@@ -1,5 +1,4 @@
-import { getAccessToken, setAccessToken, clearTokens } from "@/context/tokenStore";
-import { authService } from "@/services/authService";
+import { clearTokens, getAccessToken, setAccessToken } from "@/context/tokenStore";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { toast } from "sonner";
 import { authApi } from "./authApi";

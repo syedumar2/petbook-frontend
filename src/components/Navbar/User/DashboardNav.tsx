@@ -1,4 +1,4 @@
-import { MessageCircle, PawPrint, User } from "lucide-react";
+import { Bell, MessageCircle, PawPrint, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const DashboardNav = () => {
@@ -47,6 +47,20 @@ const DashboardNav = () => {
         >
           <MessageCircle />
           My Conversations
+        </Link>
+
+        <Link
+          to="/profile/notifications"
+          className={`flex items-center gap-2 text-sm py-3 mr-8 no-underline text-teal-dark 
+            border-b-2 ${
+              location.pathname === "/profile/notifications"
+                ? "border-teal-dark"
+                : "border-transparent"
+            } 
+            hover:border-teal-dark hover:text-teal-dark transition-colors`}
+        >
+          <Bell />
+          My Notifications
         </Link>
       </div>
     </nav>

@@ -1,5 +1,5 @@
 
-import { AutoCompleteParams, FindPetByExampleRequest, PageSortParam, PetFilters, SearchPageSortParams } from "@/types/petListing";
+import { AutoCompleteParams, FindPetByExampleRequest, PageSortParam, SearchPageSortParams } from "@/types/petListing";
 import { publicInstance } from "./axios";
 
 export const publicApi = {

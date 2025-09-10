@@ -10,7 +10,7 @@ export const useMessagesQuery = (conversationId?: number) => {
             queryKey: ["msgs", conversationId],
             queryFn: () => authService.getConversationMessages(conversationId),
             staleTime: Infinity,
-            refetchOnMount: false,
+            refetchOnMount: true,
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
         }

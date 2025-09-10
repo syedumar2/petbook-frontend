@@ -111,7 +111,7 @@ export const authApi = {
   },
 
   startConversation: (user1Id: number, user2Id: number, petId: number) => {
-    return axiosInstance.post("/chat/start",null, {
+    return axiosInstance.post("/chat/start", null, {
       params: {
         user1Id: user1Id,
         user2Id: user2Id,
@@ -128,4 +128,23 @@ export const authApi = {
     return axiosInstance.get(`/chat/${conversationId}/messages`)
   },
 
+
+
+
+  /****************************************************/
+  //NOTIFICATIONS API
+  /****************************************************/
+  getUserUnreadNotifications: () => {
+    return axiosInstance.get("/notifications");
+  },
+
+  getAllUserNotifications: () => {
+    return axiosInstance.get("/notifications/all");
+
+  },
+
+
+  markNotificationRead: (notificationId: number) => {
+    return axiosInstance.get(`notifications/${notificationId}`)
+  }
 };

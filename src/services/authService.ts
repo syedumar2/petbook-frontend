@@ -3,7 +3,7 @@ import { authApi } from "@/api/authApi";
 import { clearTokens, setAccessToken } from "@/context/tokenStore";
 import { ConversationResponse, ConversationsListResponse, MessageListInfoResponse } from "@/types/conversations";
 import { AddPetRequest, PageSortParam, PrivatePetInfoPaginatedResponse, PrivatePetInfoResponse, UpdatePetRequest } from "@/types/petListing";
-import { LoginRequest, RegisterRequest, UserInfoResponse, UserUpdateRequest } from "@/types/user";
+import { LoginRequest, NotificationPayload, NotificationResponse, NotificationsResponse, RegisterRequest, UserInfoResponse, UserUpdateRequest } from "@/types/user";
 import { AxiosError } from "axios";
 
 export interface AuthResponse {
@@ -137,7 +137,6 @@ export const authService = {
 
     async startConversation(user1Id: number, user2Id: number, petId: number): Promise<ConversationResponse> {
         try {
-            console.log(user1Id,user2Id,petId)
             const res = await authApi.startConversation(user1Id, user2Id, petId);
 
             return {
@@ -171,7 +170,7 @@ export const authService = {
 
     async getConversationMessages(conversationId?: number): Promise<MessageListInfoResponse> {
         try {
-            if(!conversationId) return {
+            if (!conversationId) return {
                 success: false,
                 message: "No conversationId provided Cannot run api call"
             }
@@ -291,7 +290,60 @@ export const authService = {
 
 
 
+    /****************************************************/
+    //NOTIFICATIONS CRUD SERVICES
+    /****************************************************/
 
+    async getUnreadNotifications(): Promise<NotificationsResponse> {
+        try {
+            const res = await authApi.getUserUnreadNotifications();
+            console.log(res.data)
+            return {
+                success: res.data.success,
+                message: res.data.message,
+                data: res.data.data,
+            }
+            
+        } catch (error) {
+            return { success: false, message: parseApiError(error) };
+        }
+
+    },
+    async getAllUserNotifications(): Promise<NotificationsResponse> {
+        try {
+            const res = await authApi.getAllUserNotifications();
+            console.log(res.data)
+            return {
+                success: res.data.success,
+                message: res.data.message,
+                data: res.data.data,
+            }
+            
+        } catch (error) {
+            return { success: false, message: parseApiError(error) };
+        }
+
+    },
+
+
+
+
+
+
+
+    async markNotificationRead(notificationId: number): Promise<NotificationResponse> {
+        try {
+            const res = await authApi.markNotificationRead(notificationId);
+            console.log(res);
+            return {
+                success: res.data.success,
+                message: res.data.message,
+                data: res.data.data,
+            }
+        } catch (error) {
+            return { success: false, message: parseApiError(error) };
+        }
+    }
 
 
 };

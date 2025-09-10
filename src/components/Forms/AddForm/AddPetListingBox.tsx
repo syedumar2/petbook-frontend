@@ -1,4 +1,4 @@
-import { AddPetRequest } from "@/types/petListing";
+import { AddPetRequest, PetGender } from "@/types/petListing";
 import { useState } from "react";
 import { AddPetListingForm } from "./AddPetListingForm";
 
@@ -14,6 +14,7 @@ export type FormErrors = {
   location?: string;
   files?: string;
   adopted?:string;
+  gender?:string;
 };
 
 export const AddPetListingBox = () => {
@@ -23,6 +24,7 @@ export const AddPetListingBox = () => {
     breed: "",
     description: "",
     location: "",
+    gender: PetGender.None
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -36,7 +38,8 @@ export const AddPetListingBox = () => {
     !errors.location &&
     !errors.description &&
     !errors.files &&
-    !errors.type;
+    !errors.type &&
+    !errors.gender;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

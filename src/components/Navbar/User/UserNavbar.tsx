@@ -1,8 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { LogOut, MessageCircle, Plus } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { LogOut, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import UserDisplay from "./UserDisplay";
-import { useAuth } from "@/hooks/useAuth";
+
+import { Notifications } from "@/components/Notifications/Notifications";
 
 const UserNavbar = () => {
   const { logout } = useAuth();
@@ -39,22 +40,14 @@ const UserNavbar = () => {
           {/* Right Section */}
           <div className="hidden md:flex items-center space-x-2">
             <section className="flex justify-between gap-8 items-center">
+              <Notifications />
               <Link to={"/profile/conversations"}>
                 <MessageCircle />
               </Link>
               <div className="w-1/4 md:w-auto md:flex text-right">
                 <UserDisplay />
               </div>
-              <Link
-              to={"/profile/pets/add"}>
-                <Button
-                  className="bg-red-700 text-white rounded-full px-8 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95"
-                  variant={undefined}
-                  size={undefined}
-                >
-                  <Plus /> Add Pet
-                </Button>
-              </Link>
+
               <LogOut onClick={() => logout()} />
             </section>
           </div>
@@ -65,3 +58,5 @@ const UserNavbar = () => {
 };
 
 export default UserNavbar;
+//TODO Create rest api connections and services to fetch notifications on login and a wshook to fetch notifications in real time
+//TODO in the process fix the presence indicators, we need to publish new completed map everytime a new connection is established to all sockets

@@ -5,17 +5,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useConversationQuery } from "@/hooks/useConversationQuery";
 import { usePetByIdQuery } from "@/hooks/usePetByIdQuery";
-import { Loading } from "../Loader/Loading";
 import { ConversationInfo } from "@/types/conversations";
 import { Dialog } from "@radix-ui/react-dialog";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 import { EndConversationDialog } from "../DialogBoxes/EndConversationDialog";
-import { SetStateAction, useState } from "react";
 import EmptySidebar from "../ErrorPage/EmptySideBar";
+import { Loading } from "../Loader/Loading";
+import { Button } from "../ui/button";
 
 const ChatSideBar = ({
   conversationId,
@@ -49,15 +49,14 @@ const ChatSideBar = ({
   };
 
   if (isFetchingConversation || isFetchingPets) return <Loading />;
-if (!conversationId || !conversation?.data)
-  return <EmptySidebar type="no-convo" />;
+  if (!conversationId || !conversation?.data)
+    return <EmptySidebar type="no-convo" />;
 
-if (!conversation.data.petId || !pet?.data)
-  return <EmptySidebar type="no-pet" />;
-if(conversation !== null || conversation){
-  setConversation?.(conversation.data);
-}
-
+  if (!conversation.data.petId || !pet?.data)
+    return <EmptySidebar type="no-pet" />;
+  if (conversation !== null || conversation) {
+    setConversation?.(conversation.data);
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -140,13 +139,11 @@ if(conversation !== null || conversation){
             open={endConversationDialogOpen}
             onOpenChange={setEndConversationDialogOpen}
           >
-    
-              <EndConversationDialog
-                open={endConversationDialogOpen}
-                setOpen={setEndConversationDialogOpen}
-                conversationId={conversationId}
-              />
-   
+            <EndConversationDialog
+              open={endConversationDialogOpen}
+              setOpen={setEndConversationDialogOpen}
+              conversationId={conversationId}
+            />
           </Dialog>
           <DropdownMenuItem
             className="text-green-700 font-medium cursor-pointer hover:bg-green-50"

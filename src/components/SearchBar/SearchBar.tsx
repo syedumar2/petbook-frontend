@@ -1,11 +1,9 @@
 import {
   FindPetByExampleRequest,
   ListingMode,
-  PetFilters,
   PetInfoPaginatedPublicResponse,
   SearchFilters,
-  SearchKeys,
-  SortDirection,
+
 } from "@/types/petListing";
 import AdvancedSearchDropDown from "../ui/AdvancedSearchDropDown";
 import { SetStateAction, useState } from "react";

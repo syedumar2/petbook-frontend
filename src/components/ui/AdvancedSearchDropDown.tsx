@@ -12,7 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FindPetByExampleRequest, ListingMode } from "@/types/petListing";
+import {
+  FindPetByExampleRequest,
+  ListingMode,
+  PetGender,
+} from "@/types/petListing";
 import { SetStateAction, useState } from "react";
 
 type AdvancedSearchDropdownProps = {
@@ -35,6 +39,7 @@ export default function AdvancedSearchDropdown({
     breed: "",
     type: "",
     location: "",
+    gender: undefined,
     adopted: false,
     ownerEmail: "",
   });
@@ -44,6 +49,7 @@ export default function AdvancedSearchDropdown({
     const filteredBody = Object.fromEntries(
       Object.entries(formData).filter(([key, value]) => value !== "")
     ) as FindPetByExampleRequest;
+    console.log("Advanced Search formData", formData);
     setMode("advancedSearch");
     setAdvancedSearchBody(filteredBody);
   };
@@ -60,7 +66,7 @@ export default function AdvancedSearchDropdown({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-64 p-4 space-y-3 bg-white">
+      <DropdownMenuContent className="w-84 p-4 space-y-3 bg-white">
         <form onSubmit={handleSubmit} className="space-y-2">
           {/* Name Input */}
           <div className="flex flex-col">
@@ -94,6 +100,29 @@ export default function AdvancedSearchDropdown({
                 </SelectItem>
                 <SelectItem value="Cat" className={undefined}>
                   Cat
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Gender Select */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium mb-1">Gender</label>
+            <Select
+              value={formData.gender}
+              onValueChange={(value: PetGender) => {
+                setFormData((prev) => ({ ...prev, gender: value }));
+              }}
+            >
+              <SelectTrigger className={undefined}>
+                <SelectValue placeholder="Select Pet Gender" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem value={PetGender.Male} className={undefined}>
+                  Male
+                </SelectItem>
+                <SelectItem value={PetGender.Female} className={undefined}>
+                  Female
                 </SelectItem>
               </SelectContent>
             </Select>

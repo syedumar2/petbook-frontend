@@ -8,9 +8,7 @@ import {
 import { Link } from "react-router-dom";
 
 import SortDropdown from "../../ui/SortDropDown";
-import { usePetsQuery } from "@/hooks/usePetsQuery";
 import Pagination from "../../Pagination/Pagination";
-import { useState } from "react";
 import { ErrorPage } from "../../ErrorPage/ErrorPage";
 import {
   ListingMode,
@@ -20,7 +18,7 @@ import {
 } from "@/types/petListing";
 import { EmptyPage } from "../../ErrorPage/EmptyPage";
 import { Loading } from "../../Loader/Loading";
-import { CircleX, CrossIcon } from "lucide-react";
+import { CircleX } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -53,7 +51,7 @@ const GeneralPetListing = ({
   searchValue,
   setMode,
 }: GeneralPetListingProps) => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   return !isError ? (
     <section>
       <div className="flex mx-auto px-6 pt-4 justify-between w-full">
@@ -101,7 +99,7 @@ const GeneralPetListing = ({
       <section
         className={
           data?.data?.content
-            ? `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4 pb-12 justify-items-center`
+            ? `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4  justify-items-center`
             : ``
         }
       >
@@ -109,38 +107,64 @@ const GeneralPetListing = ({
           <Loading />
         ) : data?.data?.content ? (
           data?.data?.content.map((pet, index) => (
-            <Link key={pet.id} to={user?.email === pet.owner ? `/profile/pets/${pet.id}`:`/pets/${pet.id}`}>
+            <Link
+              key={pet.id}
+              to={
+                user?.email === pet.owner
+                  ? `/profile/pets/${pet.id}`
+                  : `/pets/${pet.id}`
+              }
+            >
               <Card
                 key={index}
-                className="border border-gray-500 rounded-2xl shadow hover:shadow-lg transition overflow-hidden w-[380px] h-[380px] pt-4"
+                className="border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden w-[380px] h-[410px] bg-white"
               >
                 {/* Image */}
-                <CardContent className="px-4 py-0">
+                <div className="relative">
                   <img
                     src={pet.imageUrls[0]}
                     alt={pet.name}
-                    className="w-full h-48 object-cover mb-2 rounded-lg"
+                    className="w-full h-48 object-cover"
                   />
-                  {/* Card Info */}
-                  <div className="ml-1">
-                    <CardHeader className="p-0">
-                      <CardTitle className="text-xl font-semibold text-gray-800">
-                        {pet.name}
-                      </CardTitle>
-                      <CardDescription className="text-gray-600 text-sm">
-                        {pet.type} - {pet.breed}
-                      </CardDescription>
-                    </CardHeader>
-                    <p className="text-gray-500 text-sm mt-1">
-                      Location: {pet.location}
+                  {pet.adopted && (
+                    <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+                      Adopted
+                    </span>
+                  )}
+                </div>
+
+                <CardContent className="p-4">
+                  {/* Pet Info */}
+                  <CardHeader className="p-0 mb-2">
+                    <CardTitle className="text-xl font-bold text-gray-800 truncate">
+                      {pet.name}
+                    </CardTitle>
+                    <CardDescription className="text-gray-600 text-sm leading-relaxed">
+                      <span className="font-medium">{pet.type}</span> <br />
+                      {pet.breed ?? (
+                        <span className="italic text-gray-400">
+                          Breed not defined
+                        </span>
+                      )}{" "}
+                      <br />
+                      {pet.gender
+                        ? pet.gender.charAt(0) +
+                          pet.gender.slice(1).toLowerCase()
+                        : "Unknown"}
+                    </CardDescription>
+                  </CardHeader>
+
+                  {/* Location & Owner */}
+                  <div className="flex flex-col gap-1 text-sm text-gray-500">
+                    <p>
+                      <span className="font-medium text-gray-700">
+                        Location:
+                      </span>{" "}
+                      {pet.location}
                     </p>
-                    {pet.adopted && (
-                      <span className="inline-block mt-2 px-2 py-1 text-xs font-semibold text-white bg-red-600 rounded-full">
-                        Adopted
-                      </span>
-                    )}
-                    <p className="text-gray-500 text-sm mt-2">
-                      Owner: {pet.owner}
+                    <p>
+                      <span className="font-medium text-gray-700">Owner:</span>{" "}
+                      {pet.owner}
                     </p>
                   </div>
                 </CardContent>

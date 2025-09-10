@@ -50,7 +50,8 @@ const ChatMessageBox = ({ conversation }: ChatMessageBoxProps) => {
 
   const { data: prevMessages } = useMessagesQuery(conversation?.id);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!content.trim()) {
       toast.error("Please enter a message");
       return;
@@ -71,12 +72,6 @@ const ChatMessageBox = ({ conversation }: ChatMessageBoxProps) => {
     prevMessages !== null &&
     prevMessages !== undefined &&
     prevMessages.data.length > 0;
-
-  console.log("Before",state.presence);
-  useEffect(() => {
-    console.log("Updated presence:", state.presence);
-}, [state.presence]);
-
 
   return (
     <div className="w-full h-screen flex flex-col bg-gray-50">
@@ -103,7 +98,7 @@ const ChatMessageBox = ({ conversation }: ChatMessageBoxProps) => {
                       {msg.senderName.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  {state.presence.get(msg.senderId)?.online ? (
+                  {state.presence[msg.senderId] ? (
                     <div className="absolute bottom-7 right-3 h-2.5 w-2.5 rounded-full border-2  bg-green-500" />
                   ) : (
                     ""
@@ -150,7 +145,7 @@ const ChatMessageBox = ({ conversation }: ChatMessageBoxProps) => {
                       {msg.senderName.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  {state.presence.get(msg.senderId)?.online ? (
+                  {state.presence[msg.senderId] ? (
                     <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2  bg-green-500" />
                   ) : (
                     ""
@@ -188,7 +183,7 @@ const ChatMessageBox = ({ conversation }: ChatMessageBoxProps) => {
       </div>
 
       {/* Input always visible */}
-      <div className="w-full flex items-center gap-2 bg-gray-100 px-2 py-4 border-t">
+      <form className="w-full flex items-center gap-2 bg-gray-100 px-2 py-4 border-t">
         <Input
           className="flex items-center h-10 w-full rounded px-3 text-sm"
           type="text"
@@ -199,7 +194,7 @@ const ChatMessageBox = ({ conversation }: ChatMessageBoxProps) => {
           }
         />
         <Button
-          type="button"
+          type="submit"
           onClick={handleSubmit}
           className="bg-black text-white"
           size={"lg"}
@@ -208,7 +203,7 @@ const ChatMessageBox = ({ conversation }: ChatMessageBoxProps) => {
         >
           <Send />
         </Button>
-      </div>
+      </form>
     </div>
   );
 };
