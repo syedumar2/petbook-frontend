@@ -3,7 +3,7 @@ import { authApi } from "@/api/authApi";
 import { clearTokens, setAccessToken } from "@/context/tokenStore";
 import { ConversationResponse, ConversationsListResponse, MessageListInfoResponse } from "@/types/conversations";
 import { AddPetRequest, PageSortParam, PrivatePetInfoPaginatedResponse, PrivatePetInfoResponse, UpdatePetRequest } from "@/types/petListing";
-import { LoginRequest, NotificationDeletedResponse, NotificationPayload, NotificationResponse, NotificationsResponse, RegisterRequest, UserInfoResponse, UserUpdateRequest } from "@/types/user";
+import { LoginRequest, NotificationDeletedResponse, NotificationDeleteRequest, NotificationPayload, NotificationResponse, NotificationsResponse, RegisterRequest, UserInfoResponse, UserUpdateRequest } from "@/types/user";
 import { AxiosError } from "axios";
 
 export interface AuthResponse {
@@ -322,9 +322,9 @@ export const authService = {
         }
 
     },
-    async deleteUserNotifications(): Promise<NotificationDeletedResponse> {
+    async deleteUserNotifications(body: NotificationDeleteRequest): Promise<NotificationDeletedResponse> {
         try {
-            const res = await authApi.getAllUserNotifications();
+            const res = await authApi.deleteNotifications(body);
             console.log(res.data)
             return {
                 success: res.data.success,

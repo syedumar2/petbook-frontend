@@ -14,7 +14,9 @@ const PetDetailsComponent = () => {
   const queryClient = useQueryClient();
   const { petId } = useParams();
   const { user } = useAuth();
+
   const { data, isError, error, isFetching } = usePetByIdQuery(Number(petId));
+
   const navigate = useNavigate();
   const [ignore, setIgnore] = useState<boolean>(false);
   if (isFetching) return <Loading />;
@@ -84,7 +86,7 @@ const PetDetailsComponent = () => {
           {/* Right 1/3 → Owner details */}
           <Card className="border rounded-2xl shadow-md p-6 h-fit">
             <CardContent className="p-0 flex flex-col space-y-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2 ">
                 Owner Details
               </h2>
 

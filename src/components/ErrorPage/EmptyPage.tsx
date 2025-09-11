@@ -1,4 +1,4 @@
-import { OctagonAlert, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { Link } from "react-router-dom";
 
 

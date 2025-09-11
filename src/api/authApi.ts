@@ -150,6 +150,6 @@ export const authApi = {
   },
 
   deleteNotifications: (body: NotificationDeleteRequest) => {
-    return axiosInstance.delete("/notifications",body)
+    return axiosInstance.delete("/notifications", { data: body })
   }
 };
