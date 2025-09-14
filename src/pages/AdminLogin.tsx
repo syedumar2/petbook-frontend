@@ -1,11 +1,12 @@
 import { LoginForm } from "@/components";
+import AdminLoginForm from "@/components/Forms/AdminLoginForm";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const AdminLogin = () => {
   return (
     <section className="container mx-auto">
-      <div className="flex justify-center px-6 py-42  ">
-        <div className="w-full max-w-4xl  xl:w-3/4 lg:w-11/12 flex p-0.5 border-2 rounded-2xl border-red-600">
+      <div className="flex justify-center px-6 my-12  ">
+        <div className="w-full xl:w-3/4 lg:w-11/12 flex p-0.5 border-2 rounded-2xl border-red-600">
           <div className="w-full h-auto bg-gray-100 hidden lg:block lg:w-1/2 bg-cover rounded-l-lg">
             <h3 className=" flex justify-center items-center h-11/12">
               <Link to="/">
@@ -18,9 +19,9 @@ const Login = () => {
 
           {/* Right Side Form */}
           <div className="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
-            <h3 className="pt-4 text-2xl text-center">Log In</h3>
+            <h3 className="pt-4 text-2xl text-center">Admin</h3>
 
-            <LoginForm />
+            <AdminLoginForm />
           </div>
         </div>
       </div>
@@ -28,4 +29,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

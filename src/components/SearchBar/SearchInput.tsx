@@ -9,7 +9,7 @@ type SearchInputProps = {
   setSearchValue: React.Dispatch<SetStateAction<string>>;
 };
 
-export const SearchInput = ({
+export const  SearchInput = ({
   searchField,
   searchValue,
   setSearchValue,

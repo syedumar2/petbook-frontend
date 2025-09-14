@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import {
   Check,
+  CheckCheck,
   CircleAlert,
   MessageCircle,
   MessageCircleX,
@@ -18,9 +19,8 @@ import {
 import { JSX, useState } from "react";
 import { toast } from "sonner";
 import { ErrorPage } from "../ErrorPage";
-import EmptyNotificationsBar from "../ErrorPage/EmptyNotificationsBar";
-import { Loading } from "../Loader/Loading";
 import { EmptyNotificationsPage } from "../ErrorPage/EmptyNotificationsPage";
+import { Loading } from "../Loader/Loading";
 
 const NotificationsPage = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -219,7 +219,7 @@ const NotificationsPage = () => {
               : "hidden"
           }
         >
-          Select All
+          <CheckCheck />
         </button>
         <button
           onClick={() => deleteBulkNotifications()}
@@ -237,5 +237,5 @@ const NotificationsPage = () => {
 };
 
 export default NotificationsPage;
-//TODO Build delete function for messages and improve styling
-//TODO start admin panel after this
+//TODO start admin panel PRONTO
+//TODO show unread messages badge on chat icon in navbar and conversations. do this while making responsive

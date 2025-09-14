@@ -11,7 +11,7 @@ const Footer = () => {
               href="#"
               className="flex items-center text-gray-700 hover:text-gray-900"
             >
-              <span className="font-bold text-2xl">PetBook</span>
+              <span className="text-center w-full md:text-start font-bold text-2xl ">PetBook</span>
             </a>  
       </div>
 
@@ -28,9 +28,9 @@ const Footer = () => {
       <div className="col-span-6 text-center md:text-left md:col-span-3">
         <p className="mb-2 text-lg font-medium">Social</p>
         <ul className="space-y-1">
-          <li><a href="#" className="hover:text-red-600">GitHub</a></li>
-          <li><a href="#" className="hover:text-red-600">LinkedIn</a></li>
-          <li><a href="#" className="hover:text-red-600">Email</a></li>
+          <li><a href="https://github.com/syedumar2" className="hover:text-red-600">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/syed-umar-152b0a221" className="hover:text-red-600">LinkedIn</a></li>
+          <li><a href="mailto:to.syedumar@gmail.com" className="hover:text-red-600">Email</a></li>
         </ul>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Check, MessageCircle, PawPrint, User, X } from "lucide-react";
+import { Check, CircleX, MessageCircle, PawPrint, User, Users, X } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -19,14 +19,14 @@ const AdminDashboardNav = () => {
             hover:border-teal-dark hover:text-teal-dark transition-colors`}
         >
           <User />
-         User List
+          User List
         </Link>
 
         <Link
           to="/admin/pets"
           className={`flex items-center gap-2 text-sm py-3 mr-8 no-underline text-teal-dark 
             border-b-2 ${
-              location.pathname === ("/admin/pets")
+              location.pathname === "/admin/pets"
                 ? "border-red-700"
                 : "border-transparent"
             } 
@@ -35,8 +35,8 @@ const AdminDashboardNav = () => {
           <PawPrint />
           All Pet Listings
         </Link>
-        
-             <Link
+
+        <Link
           to="/admin/pets/unapproved"
           className={`flex items-center gap-2 text-sm py-3 mr-8 no-underline text-teal-dark 
             border-b-2 ${
@@ -46,11 +46,11 @@ const AdminDashboardNav = () => {
             } 
             hover:border-red-700 hover:text-red-700 transition-colors`}
         >
-          <X/>
+          <X />
           Unapproved Pets
         </Link>
 
-             <Link
+        <Link
           to="/admin/pets/approved"
           className={`flex items-center gap-2 text-sm py-3 mr-8 no-underline text-teal-dark 
             border-b-2 ${
@@ -60,16 +60,23 @@ const AdminDashboardNav = () => {
             } 
             hover:border-red-700 hover:text-red-700 transition-colors`}
         >
-          <Check/>
+          <Check />
           Approved Pets
         </Link>
+        <Link
+          to="/admin/users/blacklisted"
+          className={`flex items-center gap-2 text-sm py-3 mr-8 no-underline text-teal-dark 
+    border-b-2 ${
+      location.pathname.includes("/admin/users/blacklisted")
+        ? "border-red-700"
+        : "border-transparent"
+    } 
+    hover:border-red-700 hover:text-red-700 transition-colors`}
+        >
+          <CircleX /> {/* choose a fitting icon */}
+          Blacklisted Users
+        </Link>
 
-
-    
-
-    
-
-    
       </div>
     </nav>
   );

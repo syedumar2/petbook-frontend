@@ -21,6 +21,7 @@ import { Loading } from "../../Loader/Loading";
 import { CircleX } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { motion, Variants } from "framer-motion";
 
 type GeneralPetListingProps = {
   mode: ListingMode;
@@ -52,9 +53,29 @@ const GeneralPetListing = ({
   setMode,
 }: GeneralPetListingProps) => {
   const { user } = useAuth();
+
+  // Variants for stagger animation
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: 0.15 },
+    },
+  };
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
+    show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: "easeOut" } },
+  };
+
   return !isError ? (
     <section>
-      <div className="flex mx-auto px-6 pt-4 justify-between w-full">
+      {/* Top bar (search results + sort dropdown) */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="flex mx-auto px-6 pt-4 justify-between w-full"
+      >
         {mode === "search" ? (
           <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl shadow-sm">
             <h3 className="text-lg font-medium text-gray-800">
@@ -74,7 +95,7 @@ const GeneralPetListing = ({
         ) : mode === "advancedSearch" ? (
           <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl shadow-sm">
             <h3 className="text-lg font-medium text-gray-800">
-              Showing Advanced Search results{" "}
+              Showing Advanced Search results
             </h3>
 
             <Button
@@ -89,17 +110,23 @@ const GeneralPetListing = ({
         ) : (
           <div></div>
         )}
+
         <SortDropdown
           sortDirection={sortDirection}
           sortField={sortField}
           setSortDirection={setSortDirection}
           setSortField={setSortField}
         />
-      </div>
-      <section
+      </motion.div>
+
+      {/* Cards grid */}
+      <motion.section
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
         className={
           data?.data?.content
-            ? `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4  justify-items-center`
+            ? `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-4 justify-items-center`
             : ``
         }
       >
@@ -107,82 +134,88 @@ const GeneralPetListing = ({
           <Loading />
         ) : data?.data?.content ? (
           data?.data?.content.map((pet, index) => (
-            <Link
-              key={pet.id}
-              to={
-                user?.email === pet.owner
-                  ? `/profile/pets/${pet.id}`
-                  : `/pets/${pet.id}`
-              }
-            >
-              <Card
-                key={index}
-                className="border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden w-[380px] h-[410px] bg-white"
+            <motion.div key={pet.id} variants={cardVariants} whileHover={{ scale: 1.03 }}>
+              <Link
+                to={
+                  user?.email === pet.owner
+                    ? `/profile/pets/${pet.id}`
+                    : `/pets/${pet.id}`
+                }
               >
-                {/* Image */}
-                <div className="relative">
-                  <img
-                    src={pet.imageUrls[0]}
-                    alt={pet.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  {pet.adopted && (
-                    <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
-                      Adopted
-                    </span>
-                  )}
-                </div>
-
-                <CardContent className="p-4">
-                  {/* Pet Info */}
-                  <CardHeader className="p-0 mb-2">
-                    <CardTitle className="text-xl font-bold text-gray-800 truncate">
-                      {pet.name}
-                    </CardTitle>
-                    <CardDescription className="text-gray-600 text-sm leading-relaxed">
-                      <span className="font-medium">{pet.type}</span> <br />
-                      {pet.breed ?? (
-                        <span className="italic text-gray-400">
-                          Breed not defined
-                        </span>
-                      )}{" "}
-                      <br />
-                      {pet.gender
-                        ? pet.gender.charAt(0) +
-                          pet.gender.slice(1).toLowerCase()
-                        : "Unknown"}
-                    </CardDescription>
-                  </CardHeader>
-
-                  {/* Location & Owner */}
-                  <div className="flex flex-col gap-1 text-sm text-gray-500">
-                    <p>
-                      <span className="font-medium text-gray-700">
-                        Location:
-                      </span>{" "}
-                      {pet.location}
-                    </p>
-                    <p>
-                      <span className="font-medium text-gray-700">Owner:</span>{" "}
-                      {pet.owner}
-                    </p>
+                <Card className="border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden w-[380px] h-[410px] bg-white">
+                  {/* Image */}
+                  <div className="relative">
+                    <img
+                      src={pet.imageUrls[0]}
+                      alt={pet.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    {pet.adopted && (
+                      <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+                        Adopted
+                      </span>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
-            </Link>
+
+                  <CardContent className="p-4">
+                    {/* Pet Info */}
+                    <CardHeader className="p-0 mb-2">
+                      <CardTitle className="text-xl font-bold text-gray-800 truncate">
+                        {pet.name}
+                      </CardTitle>
+                      <CardDescription className="text-gray-600 text-sm leading-relaxed">
+                        <span className="font-medium">{pet.type}</span> <br />
+                        {pet.breed ?? (
+                          <span className="italic text-gray-400">
+                            Breed not defined
+                          </span>
+                        )}{" "}
+                        <br />
+                        {pet.gender
+                          ? pet.gender.charAt(0) +
+                            pet.gender.slice(1).toLowerCase()
+                          : "Unknown"}
+                      </CardDescription>
+                    </CardHeader>
+
+                    {/* Location & Owner */}
+                    <div className="flex flex-col gap-1 text-sm text-gray-500">
+                      <p>
+                        <span className="font-medium text-gray-700">
+                          Location:
+                        </span>{" "}
+                        {pet.location}
+                      </p>
+                      <p>
+                        <span className="font-medium text-gray-700">Owner:</span>{" "}
+                        {pet.owner}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </motion.div>
           ))
         ) : (
           <EmptyPage />
         )}
-      </section>
-      <Pagination
-        className={
-          data?.data ? `flex justify-center items-center gap-3 my-6` : `hidden`
-        }
-        currentPage={(data?.data?.pageNumber ?? 0) + 1}
-        totalPages={data?.data?.totalPages ?? 1}
-        onPageChange={(page) => handlePageChange(page - 1)}
-      />
+      </motion.section>
+
+      {/* Pagination */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.4 }}
+      >
+        <Pagination
+          className={
+            data?.data ? `flex justify-center items-center gap-3 my-8` : `hidden`
+          }
+          currentPage={(data?.data?.pageNumber ?? 0) + 1}
+          totalPages={data?.data?.totalPages ?? 1}
+          onPageChange={(page) => handlePageChange(page - 1)}
+        />
+      </motion.div>
     </section>
   ) : (
     <ErrorPage isError={isError} error={error} />

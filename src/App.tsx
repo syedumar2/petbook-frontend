@@ -30,13 +30,16 @@ import AdoptionInfoPage from "./pages/AdoptionInfo";
 import AboutMe from "./pages/AboutMe";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import NotificationsPage from "./components/Notifications/NotificationsPage";
+import AdminLogin from "./pages/AdminLogin";
+import BlackListedUser from "./components/Admin/Users/BlackListedUser";
+import NonBlackListedUser from "./components/Admin/Users/NonBlackListedUser";
 
 const App = () => {
   const queryClient = new QueryClient();
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Toaster />
+        <Toaster position="top-center" />
 
         <BrowserRouter>
           <AuthProvider>
@@ -44,6 +47,7 @@ const App = () => {
               <Routes>
                 <Route element={<Home />} path="/" />
                 <Route element={<Login />} path="/login" />
+                <Route element={<AdminLogin />} path="/adminLogin" />
                 <Route element={<Register />} path="/signup" />
                 <Route element={<PetListing />} path="/pets" />
                 <Route element={<PetDetail />} path="/pets/:petId" />
@@ -78,6 +82,10 @@ const App = () => {
                       path="pets/unapproved"
                     />
                     <Route element={<ApprovedPets />} path="pets/approved" />
+                    <Route
+                      element={<BlackListedUser />}
+                      path="users/blacklisted"
+                    />
                   </Route>
                 </Route>
               </Routes>
@@ -91,12 +99,8 @@ const App = () => {
 
 export default App;
 
-
-
-//TODO quickly build notifications page with clear all and clear single notification function
 //TODO Complete admin panel
 // TODO (Day 5 | MEDIUM): Apply UI customizations to static pages and make it responsive
-
 //   - Style Adoption FAQ + About Me pages
 //   - Ensure consistent layout, fonts, and spacing
 

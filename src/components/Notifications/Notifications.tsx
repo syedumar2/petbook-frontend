@@ -423,5 +423,4 @@ export const Notifications = () => {
     </div>
   );
 };
-//TODO: Unread Messages needs different markAsRead function Body
 //BUG:  getting 2 notification count instead of getting 1 Solution here is to turn off strict mode becuz useEffects run twice

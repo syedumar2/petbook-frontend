@@ -39,7 +39,7 @@ export default function AdvancedSearchDropdown({
     breed: "",
     type: "",
     location: "",
-    gender: undefined,
+    gender: PetGender.None,
     adopted: false,
     ownerEmail: "",
   });
@@ -58,7 +58,7 @@ export default function AdvancedSearchDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="ml-4 inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white bg-red-700 rounded-lg shadow-md hover:bg-red-800 transition"
+          className="w-full md:w-fit my-2 inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white bg-red-700 rounded-lg shadow-md hover:bg-red-800 transition md:ml-4"
           variant={undefined}
           size={undefined}
         >

@@ -1,52 +1,91 @@
+import { motion, Variants } from "framer-motion";
+import {
+  CheckCircle,
+  PlusCircle,
+  MessageSquare,
+  MapPin,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 
+const parentVariants: Variants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.25,
+    },
+  },
+};
+
+const childVariants: Variants = {
+  initial: { opacity: 0, y: 20 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const features = [
+  {
+    icon: CheckCircle,
+    title: "Adopt with Ease",
+    desc: "Browse verified cats and dogs, view their details, and find your perfect match in just a few clicks.",
+  },
+  {
+    icon: PlusCircle,
+    title: "List Your Pets",
+    desc: "Have a pet that needs a new home? Post them on PetBook and connect with caring adopters.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Chat Instantly",
+    desc: "Message adopters and pet owners in real-time, ask questions, and stay connected throughout the adoption process.",
+  },
+  {
+    icon: Users,
+    title: "Direct Connections",
+    desc: "Connect directly with adopters and pet owners — no middlemen or hidden charges.",
+  },
+  {
+    icon: MapPin,
+    title: "Location-Based Search",
+    desc: "Find pets near you using our smart location-based search system.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Verified Photos",
+    desc: "Photo verification ensures genuine listings and reduces fraud.",
+  },
+];
 
 const Features = () => {
   return (
-   <section className="py-20 px-2">
-  
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {/* Card 1 */}
-      <div className="flex flex-col items-center text-center p-6 space-y-4 hover:shadow-lg transition">
-        <div className="bg-red-100 p-4 rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <h3 className="text-xl font-bold">Adopt with Ease</h3>
-        <p className="text-gray-600">
-          Browse verified cats and dogs, view their details, and find your perfect match in just a few clicks.
-        </p>
-      </div>
+    <section className="py-14 px-2 bg-gray-100/30">
+      <motion.div
+        variants={parentVariants}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.4 }}
+        className="grid grid-cols-1 md:grid-cols-3 gap-8"
+      >
+        {features.map(({ icon: Icon, title, desc }) => (
+          <motion.div
+            key={title}
+            variants={childVariants}
+            className="feature-box"
+          >
+            <div className="bg-red-100 p-4 rounded-full w-fit">
+              <Icon className="h-8 w-8 text-red-600" />
+            </div>
+            <h3 className="text-xl font-bold">{title}</h3>
+            <p className="text-gray-600">{desc}</p>
+          </motion.div>
+        ))}
+      </motion.div>
+    </section>
+  );
+};
 
-      {/* Card 2 */}
-      <div className="flex flex-col items-center text-center p-6 space-y-4 hover:shadow-lg transition">
-        <div className="bg-red-100 p-4 rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-        </div>
-        <h3 className="text-xl font-bold">List Your Pets</h3>
-        <p className="text-gray-600">
-          Have a pet that needs a new home? Post them on PetBook and connect with caring adopters.
-        </p>
-      </div>
-
-      {/* Card 3 */}
-      <div className="flex flex-col items-center text-center p-6 space-y-4 hover:shadow-lg transition">
-        <div className="bg-red-100 p-4 rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h6m-6 4h8" />
-          </svg>
-        </div>
-        <h3 className="text-xl font-bold">Chat Instantly</h3>
-        <p className="text-gray-600">
-          Message adopters and pet owners in real-time, ask questions, and stay connected throughout the adoption process.
-        </p>
-      </div>
-    </div>
-  
-</section>
-  )
-}
-
-export default Features
+export default Features;

@@ -1,70 +1,40 @@
+import Pagination from "@/components/Pagination/Pagination";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-
-const mockPets = [
-  {
-    id: 1,
-    name: "Buddy",
-    type: "Dog",
-    breed: "Labrador Retriever",
-    location: "Bangalore",
-    imageUrls: [
-      "https://placedog.net/500?id=1",
-      "https://placedog.net/500?id=2",
-    ],
-    adopted: false,
-    owner: "Alice Johnson",
-    description: "Friendly and energetic Labrador looking for a loving home.",
-    approved: true,
-    approvedAt: "2025-08-10T09:30:00",
-    rejectedAt: null,
-  },
-  {
-    id: 2,
-    name: "Whiskers",
-    type: "Cat",
-    breed: "Persian",
-    location: "Mumbai",
-    imageUrls: [
-      "https://placekitten.com/500/500",
-      "https://placekitten.com/501/500",
-    ],
-    adopted: true,
-    owner: "Bob Smith",
-    description: "Calm and affectionate Persian cat, already adopted.",
-    approved: true,
-    approvedAt: "2025-07-20T15:00:00",
-    rejectedAt: null,
-  },
-  {
-    id: 3,
-    name: "Rocky",
-    type: "Dog",
-    breed: "German Shepherd",
-    location: "Delhi",
-    imageUrls: [
-      "https://placedog.net/500?id=3",
-      "https://placedog.net/500?id=4",
-    ],
-    adopted: false,
-    owner: "Charlie Brown",
-    description:
-      "Alert and loyal German Shepherd, ideal for security and companionship.",
-    approved: false,
-    approvedAt: null,
-    rejectedAt: "2025-08-05T11:45:00",
-  },
-];
+import useAdminPets from "@/hooks/useAdminPets";
+import { PetFilters, SortDirection } from "@/types/petListing";
+import { useState } from "react";
 
 const PetList = () => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [sortField, setSortField] = useState<keyof PetFilters>("name");
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+
+  const {
+    data: pets,
+    isError,
+    error,
+    isPending,
+  } = useAdminPets({
+    page: currentPage,
+    size: 10,
+    sortField,
+    sortDirection,
+  });
+
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 p-6">
       {/* Page Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">All Pets</h1>
+        <h1 className="text-2xl font-bold ml-4">All Pets</h1>
         <div className="relative w-64">
           <input
             type="search"
@@ -92,7 +62,7 @@ const PetList = () => {
             </tr>
           </thead>
           <tbody>
-            {mockPets.map((pet, index) => (
+            {pets?.data?.content.map((pet, index) => (
               <tr
                 key={pet.id}
                 className={`border-b ${
@@ -102,7 +72,11 @@ const PetList = () => {
                 <td className="p-3 text-gray-600">{pet.id}</td>
                 <td className="p-3">
                   <img
-                    src={pet.imageUrls[0]}
+                    src={
+                      pet.imageUrls && pet.imageUrls[0]
+                        ? Object.keys(pet.imageUrls[0])[0]
+                        : "/placeholder-image.png"
+                    }
                     alt={`${pet.name}`}
                     className="w-10 h-10 rounded-full object-cover border border-gray-300"
                   />
@@ -153,22 +127,26 @@ const PetList = () => {
                       <tbody>
                         <tr className="border-t hover:bg-gray-50">
                           <td className="px-6 py-4 text-gray-800">
-                            {new Date(pet.approvedAt).toLocaleString("en-GB", {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "2-digit",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }) || "—"}
+                            {(pet.approvedAt &&
+                              new Date(pet.approvedAt).toLocaleString("en-GB", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })) ||
+                              "—"}
                           </td>
                           <td className="px-6 py-4 text-gray-800">
-                            {new Date(pet.rejectedAt).toLocaleString("en-GB", {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "2-digit",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }) || "—"}
+                            {(pet.rejectedAt &&
+                              new Date(pet.rejectedAt).toLocaleString("en-GB", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })) ||
+                              "—"}
                           </td>
                         </tr>
                       </tbody>
@@ -180,6 +158,18 @@ const PetList = () => {
           </tbody>
         </table>
       </div>
+      {pets?.data && (
+        <Pagination
+          className={
+            pets?.data
+              ? `flex justify-center items-center gap-3 my-6`
+              : `hidden`
+          }
+          currentPage={(pets?.data.pageNumber ?? 0) + 1}
+          totalPages={pets?.data.totalPages ?? 1}
+          onPageChange={(page) => handlePageChange(page - 1)}
+        />
+      )}
     </div>
   );
 };

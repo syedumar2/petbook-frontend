@@ -5,18 +5,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { PetFilters, SortDirection } from "@/types/petListing";
+import { SortDirection } from "@/types/petListing";
 import { ChevronUp } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
+import { UserSortFilters } from "../Admin/Users/UsersList";
 
 type SortDropdownProps = {
   sortDirection: SortDirection;
   setSortDirection: Dispatch<SetStateAction<SortDirection>>;
-  sortField: keyof PetFilters ;
-  setSortField: Dispatch<SetStateAction<keyof PetFilters>>;
+  sortField: "blacklistedAt" | "role" | "firstname";
+  setSortField: Dispatch<
+    SetStateAction<"blacklistedAt" | "role" | "firstname">
+  >;
 };
 
-export default function SortDropdown({
+export default function UserListSortDropDown({
   sortDirection,
   sortField,
   setSortDirection,
@@ -37,47 +40,24 @@ export default function SortDropdown({
           <DropdownMenuItem
             className="flex justify-between items-center"
             inset={undefined}
-            onClick={() => setSortField("name")}
+            onClick={() => setSortField("firstname")}
           >
             <span>Name</span>
           </DropdownMenuItem>
-
           <DropdownMenuItem
             className="flex justify-between items-center"
             inset={undefined}
-            onClick={() => setSortField("breed")}
+            onClick={() => setSortField("role")}
           >
-            <span>Breed</span>
+            <span>Role</span>
           </DropdownMenuItem>
 
           <DropdownMenuItem
             className="flex justify-between items-center"
             inset={undefined}
-            onClick={() => setSortField("type")}
+            onClick={() => setSortField("blacklistedAt")}
           >
-            <span>Type</span>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            className="flex justify-between items-center"
-            inset={undefined}
-            onClick={() => setSortField("location")}
-          >
-            <span>Location</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex justify-between items-center"
-            inset={undefined}
-            onClick={() => setSortField("location")}
-          >
-            <span>Adopted</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex justify-between items-center"
-            inset={undefined}
-            onClick={() => setSortField("gender")}
-          >
-            <span>Gender</span>
+            <span>Blacklisted at</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

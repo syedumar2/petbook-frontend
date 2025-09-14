@@ -13,7 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 const UserDisplay = () => {
   const { user } = useAuth();
   return (
-    <div className="hidden md:flex md:items-center gap-2 ml-2">
+    <div className="flex items-center gap-2 ml-2">
       <div>
         <Avatar className={"size-9"}>
           <AvatarImage

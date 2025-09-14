@@ -107,6 +107,7 @@ export interface PrivatePetListing {
   approved?: boolean;
   approvedAt?: string;
   rejectedAt?: string;
+  createdAt? : string;
 }
 
 // ==========================

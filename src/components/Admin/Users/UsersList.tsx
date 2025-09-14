@@ -1,57 +1,117 @@
+import Pagination from "@/components/Pagination/Pagination";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import UserListSortDropDown from "@/components/ui/UserListSortDropDown";
+import useUsersQuery from "@/hooks/useUsersQuery";
+import { adminService } from "@/services/adminService";
+import { SortDirection } from "@/types/petListing";
+import { useQueryClient } from "@tanstack/react-query";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
-const mockUsers = [
-  {
-    id: 1,
-    firstname: "Alice",
-    lastname: "Johnson",
-    email: "alice@example.com",
-    location: "Bangalore",
-    profileImageUrl: "https://i.pravatar.cc/150?img=1",
-    role: "ADMIN",
-    createdAt: "2025-08-01T10:30:00",
-  },
-  {
-    id: 2,
-    firstname: "Bob",
-    lastname: "Smith",
-    email: "bob@example.com",
-    location: "Mumbai",
-    profileImageUrl: "https://i.pravatar.cc/150?img=2",
-    role: "USER",
-    createdAt: "2025-07-28T14:15:00",
-  },
-  {
-    id: 3,
-    firstname: "Charlie",
-    lastname: "Brown",
-    email: "charlie@example.com",
-    location: "Delhi",
-    profileImageUrl: "https://i.pravatar.cc/150?img=3",
-    role: "USER",
-    createdAt: "2025-07-15T09:00:00",
-  },
-];
-
+export type UserSortFilters = "createdAt" | "firstname" | "role";
 const UsersList = () => {
+  const queryClient = useQueryClient();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [sortField, setSortField] = useState<UserSortFilters>("createdAt");
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+  const handleWhitelist = async (userId: number) => {
+    const res = await adminService.whiteListUser(userId);
+    if (res.success) {
+      queryClient.invalidateQueries({
+        queryKey: ["blacklisted-users"],
+      });
+      toast.success(res.message);
+    } else {
+      toast.error(res.message);
+    }
+    return;
+  };
+  const [blacklistDialogopen, setBlacklistDialogOpen] = useState(false);
+  const [blackListData, setBlackListData] = useState<{
+    userId: number;
+    reason: string;
+  }>({
+    userId: 0,
+    reason: "",
+  });
+
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const {
+    data: users,
+    isPending,
+    isError,
+    error,
+  } = useUsersQuery({
+    page: currentPage,
+    size: 10,
+    sortField,
+    sortDirection,
+  });
+  const handleBlacklist = async (
+    e: React.FormEvent,
+    data: { userId: number; reason: string }
+  ) => {
+    e.preventDefault();
+
+    if (!data.reason) {
+      toast.error("Enter a reason for blacklisting");
+      return;
+    }
+
+    if (!data.userId) {
+      toast.error("Invalid user id");
+      return;
+    }
+
+    const res = await adminService.blackListUser(data.userId, data.reason);
+
+    if (res.success) {
+      toast.success(res.message);
+      setBlacklistDialogOpen(false);
+      setBlackListData({ userId: 0, reason: "" });
+    } else {
+      toast.error(res.message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 p-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Users</h1>
-        <div className="relative w-64">
-          <input
-            type="search"
-            placeholder="Search users..."
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-700"
+      <div className="flex flex-col item-start gap-6 justify-between mb-6">
+        <div className="flex w-full items-center justify-between py-2 ">
+          <h1 className="text-2xl ml-4 font-bold">Users</h1>
+          <UserListSortDropDown
+            sortDirection={sortDirection}
+            sortField={sortField}
+            setSortDirection={setSortDirection}
+            setSortField={setSortField}
           />
-          <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
         </div>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto rounded-lg shadow">
-        <table className="w-full bg-white border border-gray-200 rounded-lg">
-          <thead className="bg-gray-100 text-gray-700 text-sm uppercase tracking-wider sticky top-0">
+        <table className="w-full bg-white border border-gray-700 rounded-lg">
+          <thead className="bg-gray-700 text-gray-100 text-sm uppercase tracking-wider sticky top-0">
             <tr>
               <th className="p-3 text-left">ID</th>
               <th className="p-3 text-left">Profile</th>
@@ -60,10 +120,11 @@ const UsersList = () => {
               <th className="p-3 text-left">Location</th>
               <th className="p-3 text-left">Role</th>
               <th className="p-3 text-left">Created At</th>
+              <th className="p-3 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {mockUsers.map((user, index) => (
+            {users?.data?.content.map((user, index) => (
               <tr
                 key={user.id}
                 className={`border-b ${
@@ -73,7 +134,10 @@ const UsersList = () => {
                 <td className="p-3 text-gray-600">{user.id}</td>
                 <td className="p-3">
                   <img
-                    src={user.profileImageUrl}
+                    src={
+                      user.profileImageUrl ??
+                      "https://www.svgrepo.com/show/109737/profile-user.svg"
+                    }
                     alt={`${user.firstname} ${user.lastname}`}
                     className="w-10 h-10 rounded-full object-cover border border-gray-300"
                   />
@@ -99,13 +163,125 @@ const UsersList = () => {
                     year: "numeric",
                   })}
                 </td>
+                <td className="p-3 text-gray-600">
+                  <Dialog
+                    open={blacklistDialogopen}
+                    onOpenChange={setBlacklistDialogOpen}
+                  >
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          className="bg-gray-700 text-white rounded-full text-sm font-medium shadow hover:bg-red-800 active:scale-95"
+                          variant={undefined}
+                          size={undefined}
+                        >
+                          Actions
+                          <ChevronDown />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="bg-white">
+                        <DropdownMenuItem
+                          className={undefined}
+                          inset={undefined}
+                          onClick={() => handleWhitelist(user.id)}
+                        >
+                          ✅ Whitelist
+                        </DropdownMenuItem>
+                        <DialogTrigger asChild>
+                          <DropdownMenuItem
+                            className={undefined}
+                            inset={undefined}
+                          >
+                            ❌ Blacklist
+                          </DropdownMenuItem>
+                        </DialogTrigger>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <DialogContent className="bg-white p-6 rounded-2xl shadow-lg">
+                      <DialogHeader className={"mb-0"}>
+                        <DialogTitle className="text-lg font-semibold text-gray-800">
+                          Blacklist User:{" "}
+                          <span className="font-bold text-red-600">
+                            {user.firstname} {user.lastname}
+                          </span>
+                        </DialogTitle>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Please provide a reason for blacklisting this user.
+                        </p>
+                      </DialogHeader>
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          setBlackListData((prev) => {
+                            const updated = { ...prev, userId: user.id };
+                            handleBlacklist(e, updated); // pass the updated object
+                            return updated;
+                          });
+                        }}
+                      >
+                        <div className="grid gap-3 pb-3">
+                          <Label
+                            htmlFor="reason"
+                            className="text-sm font-medium text-gray-700"
+                          >
+                            Reason
+                          </Label>
+                          <Textarea
+                            id="reason"
+                            name="reason"
+                            value={blackListData?.reason || ""}
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) =>
+                              setBlackListData((prev) => ({
+                                ...prev,
+                                reason: e.target.value,
+                              }))
+                            }
+                            placeholder="Enter reason for ban"
+                            className="min-h-[100px] rounded-lg border-gray-300 "
+                          />
+                        </div>
+
+                        <DialogFooter className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            className="rounded-lg"
+                            onClick={() => setBlacklistDialogOpen(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            type="submit"
+                            className="bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                          >
+                            Confirm
+                          </Button>
+                        </DialogFooter>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {users?.data && (
+        <Pagination
+          className={
+            users?.data
+              ? `flex justify-center items-center gap-3 my-6`
+              : `hidden`
+          }
+          currentPage={(users?.data.pageNumber ?? 0) + 1}
+          totalPages={users?.data.totalPages ?? 1}
+          onPageChange={(page) => handlePageChange(page - 1)}
+        />
+      )}
     </div>
   );
 };
 
 export default UsersList;
+//TODO IMplement search functionality in the future
