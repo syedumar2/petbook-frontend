@@ -1,38 +1,37 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
 import {
-  Home,
-  Login,
-  PetListing,
-  Register,
-  PetDetail,
-  UserDashboard,
-  AdminDashboard,
-} from "./pages";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  ProfileOverview,
-  PrivatePetListing,
-  PrivatePetDetails,
   AddPetListingBox,
-  UpdatePetListingBox,
-  Conversations,
-  UsersList,
-  PetList,
-  UnapprovedPets,
   ApprovedPets,
+  Conversations,
+  PetList,
+  PrivatePetDetails,
+  PrivatePetListing,
+  ProfileOverview,
+  UnapprovedPets,
+  UpdatePetListingBox,
+  UsersList,
 } from "./components";
+import BlackListedUser from "./components/Admin/Users/BlackListedUser";
 import AdminRoutes from "./components/AdminRoutes";
+import NotificationsPage from "./components/Notifications/NotificationsPage";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import { AuthProvider } from "./context/AuthContext";
-import Test from "./pages/Test";
-import AdoptionInfoPage from "./pages/AdoptionInfo";
-import AboutMe from "./pages/AboutMe";
 import { WebSocketProvider } from "./context/WebSocketContext";
-import NotificationsPage from "./components/Notifications/NotificationsPage";
+import {
+  AdminDashboard,
+  Home,
+  Login,
+  PetDetail,
+  PetListing,
+  Register,
+  UserDashboard,
+} from "./pages";
+import AboutMe from "./pages/AboutMe";
 import AdminLogin from "./pages/AdminLogin";
-import BlackListedUser from "./components/Admin/Users/BlackListedUser";
-import NonBlackListedUser from "./components/Admin/Users/NonBlackListedUser";
+import AdoptionInfoPage from "./pages/AdoptionInfo";
+import Test from "./pages/Test";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -41,7 +40,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <Toaster position="top-center" />
 
-        <BrowserRouter>
+        <HashRouter>
           <AuthProvider>
             <WebSocketProvider>
               <Routes>
@@ -91,7 +90,7 @@ const App = () => {
               </Routes>
             </WebSocketProvider>
           </AuthProvider>
-        </BrowserRouter>
+        </HashRouter>
       </QueryClientProvider>
     </>
   );
