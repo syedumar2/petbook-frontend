@@ -4,16 +4,18 @@ import { toast } from "sonner";
 import { authApi } from "./authApi";
 
 
+
+const apiUrl:string = import.meta.env.VITE_API_URL;
 const axiosInstance = axios.create(
     {
-        baseURL: "http://localhost:8080/api/auth", //TODO import the url from env file
+        baseURL: `${apiUrl}/api/auth`,
         withCredentials: true
     }
 );
 
 export const axiosAdminInstance = axios.create(
     {
-        baseURL: "http://localhost:8080/api/admin",
+        baseURL: `${apiUrl}/api/admin`,
         withCredentials: true
     }
 )
@@ -71,7 +73,7 @@ axiosAdminInstance.interceptors.response.use(
 
 export const publicInstance = axios.create(
     {
-        baseURL:"http://localhost:8080/api"
+        baseURL:`${apiUrl}/api`
     }
 )
 

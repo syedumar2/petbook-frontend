@@ -99,11 +99,7 @@ const App = () => {
 
 export default App;
 
-//TODO Complete admin panel
-// TODO (Day 5 | MEDIUM): Apply UI customizations to static pages and make it responsive
-//   - Style Adoption FAQ + About Me pages
-//   - Ensure consistent layout, fonts, and spacing
-
+//TODO make conversations page responsive
 //TODO
 // --Backend: clean up database and prepare for deployment
 //TODO: In the future replace the multi hook setup with a useReducer as it better fits this use case. Altho current setup still works
