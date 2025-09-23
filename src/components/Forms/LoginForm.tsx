@@ -1,4 +1,3 @@
-
 import { useAuth } from "@/hooks/useAuth";
 import { LoginRequest } from "@/types/user";
 
@@ -59,7 +58,7 @@ const LoginForm = () => {
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
   return (
@@ -128,11 +127,12 @@ const LoginForm = () => {
       {/* Sign In Button */}
       <div className="mb-6 text-center">
         <button
-          className="w-full px-4 py-2 font-medium tracking-wide text-white bg-red-700 rounded-full hover:bg-red-800 focus:outline-none focus:shadow-outline"
+          className="w-full px-4 py-2 font-medium tracking-wide text-white bg-red-700 rounded-full hover:bg-red-800 focus:outline-none focus:shadow-outline 
+               disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={loading || !isFormValid}
         >
-          Sign In
+          {loading ? "Signing In..." : "Sign In"}
         </button>
       </div>
 

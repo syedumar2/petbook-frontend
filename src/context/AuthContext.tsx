@@ -37,14 +37,12 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const location = useLocation();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  
 
   const login = async (data: LoginRequest): Promise<AuthResponse> => {
     const res = await authService.login(data);
     if (res.success) {
       setIsLoggingOut(false);
       setIsAuthenticated(true);
-
       await getUser();
     }
     return res;
@@ -59,18 +57,17 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   };
 
   const logout = async () => {
-     setIsLoggingOut(true);
+    setIsLoggingOut(true);
     await authService.logout();
     clearTokens();
     setIsAuthenticated(false);
     setUser(null);
     toast.message("Logged out successfully");
-    window.location.href = "/login";
+    window.location.hash = "/login"; // Updated for HashRouter
   };
 
   const getUser = async () => {
     const res = await authService.getUserInfo();
-
     if (res.success && res.data) {
       setUser(res.data);
     }
@@ -93,33 +90,37 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
     };
   };
 
-useEffect(() => {
-  if (isLoggingOut) return;
-
-  const rehydrate = async () => {
-    try {
-      const res = await authService.refresh(); // calls /auth/refresh
-      if (res.success && res.token) {
-        setAccessToken(res.token);
-        setIsAuthenticated(true);
-        await getUser();
+  useEffect(() => {
+    if (isLoggingOut) return;
+    const rehydrate = async () => {
+      try {
+        const res = await authService.refresh(); // calls /auth/refresh
+        if (res.success && res.token) {
+          setAccessToken(res.token);
+          setIsAuthenticated(true);
+          await getUser();
+        }
+      } catch (err) {
+        setLoading(false);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  const path = location.hash.replace("#", ""); // remove #
-  if (
-    path.startsWith("/profile") ||
-    path.startsWith("/admin") ||
-    path.startsWith("/pets")
-  ) {
-    rehydrate();
-  }
-}, [location.hash, isLoggingOut]);
+    // Normalize paths for HashRouter (remove leading '/#')
+    console.log("the location pathname is",location.pathname)
+        console.log("the location hash is",location.hash)
+
+  
+    if (
+      location.pathname.startsWith("/profile") ||
+      location.pathname.startsWith("/admin") ||
+      location.pathname.startsWith("/pets")
+    ) {
+      console.log("i was triggered")
+      rehydrate();
+    }
+  }, [location.pathname, isLoggingOut]);
 
   return (
     <AuthContext.Provider

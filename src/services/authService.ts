@@ -60,6 +60,7 @@ export const authService = {
     async refresh(): Promise<AuthResponse> {
         try {
             const res = await authApi.refreshToken();
+            console.log("refreshing",res)
             return {
                 success: res.data.success,
                 token: res.data.data.token
