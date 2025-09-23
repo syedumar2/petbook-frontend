@@ -6,7 +6,7 @@ import path from "path"
 
 export default defineConfig({
   plugins: [react(),tailwindcss()],
-  base: "/petbook-frontend",
+  base: "/petbook-frontend/",
   server:{
     port:3000
   },
