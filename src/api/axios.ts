@@ -5,7 +5,7 @@ import { authApi } from "./authApi";
 
 
 
-const apiUrl:string = import.meta.env.VITE_API_URL;
+export const apiUrl:string = import.meta.env.VITE_API_URL;
 const axiosInstance = axios.create(
     {
         baseURL: `${apiUrl}/api/auth`,

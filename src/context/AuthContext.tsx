@@ -93,30 +93,33 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
     };
   };
 
-  useEffect(() => {
-    if (isLoggingOut) return;
-    const rehydrate = async () => {
-      try {
-        const res = await authService.refresh(); // calls /auth/refresh
-        if (res.success && res.token) {
-          setAccessToken(res.token);  
-          setIsAuthenticated(true);
-          await getUser();
-        }
-      } catch (err) {
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  if (isLoggingOut) return;
 
-    if (
-      location.pathname.startsWith("/profile") ||
-      location.pathname.startsWith("/admin") ||
-      location.pathname.startsWith("/pets")
-    )
-      rehydrate();
-  }, [location.pathname, isLoggingOut]);
+  const rehydrate = async () => {
+    try {
+      const res = await authService.refresh(); // calls /auth/refresh
+      if (res.success && res.token) {
+        setAccessToken(res.token);
+        setIsAuthenticated(true);
+        await getUser();
+      }
+    } catch (err) {
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const path = location.hash.replace("#", ""); // remove #
+  if (
+    path.startsWith("/profile") ||
+    path.startsWith("/admin") ||
+    path.startsWith("/pets")
+  ) {
+    rehydrate();
+  }
+}, [location.hash, isLoggingOut]);
 
   return (
     <AuthContext.Provider

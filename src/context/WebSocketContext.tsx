@@ -3,6 +3,7 @@ import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { getAccessToken } from "@/context/tokenStore";
 import { useAuth } from "@/hooks/useAuth";
+import { apiUrl } from "@/api/axios";
 
 interface WebSocketContextType {
   client: Client | null;
@@ -26,7 +27,7 @@ export const WebSocketProvider = ({ children }: { children?: React.ReactNode }) 
     const stompClient = new Client({
       webSocketFactory: () => {
         console.log("[WebSocketProvider] Creating SockJS connection");
-        return new SockJS("http://localhost:8080/ws");
+        return new SockJS(`${apiUrl}/ws`);
       },
       connectHeaders: { Authorization: `Bearer ${token}` },
       debug: (str) => console.log("[STOMP Debug]", str),
