@@ -63,7 +63,7 @@ const SearchBar = ({
     >
       {/* Background Image */}
       <img
-        src="/images/searchBanner.png"
+        src={`${import.meta.env.BASE_URL}images/searchBanner.png`}
         alt="Search Banner"
         className="absolute inset-0 w-full h-full object-contain rounded-md"
       />

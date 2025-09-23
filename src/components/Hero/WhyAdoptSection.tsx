@@ -34,7 +34,8 @@ const WhyAdoptSection = () => {
           initial={{ opacity: 0, y:50 }} // start hidden & left
           animate={isInView ? { opacity: 1, y: 0 } : {}} // animate when visible
           transition={{ duration: 0.8, ease: "easeOut" }}
-          src="/images/whyAdopt.png"
+          src={`${import.meta.env.BASE_URL}images/whyAdopt.png`}
+
           alt="Illustration showing user flow"
           className="mx-auto hidden max-w-md md:block bg-none"
         />
