@@ -13,9 +13,10 @@ import { Dialog } from "@radix-ui/react-dialog";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { EndConversationDialog } from "../DialogBoxes/EndConversationDialog";
-import EmptySidebar from "../ErrorPage/EmptySideBar";
+
 import { Loading } from "../Loader/Loading";
 import { Button } from "../ui/button";
+import EmptySidebar from "../ErrorPage/EmptySidebar";
 
 const ChatSideBar = ({
   conversationId,
