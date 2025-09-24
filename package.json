@@ -1,6 +1,5 @@
 {
   "name": "petbook-frontend",
-  "homepage": "https://syedumar2.github.io/petbook-frontend/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,8 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy" : "npm run build",
-    "deploy":"gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -33,7 +32,6 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.12",
-    "gh-pages": "^6.3.0",
     "lucide-react": "^0.539.0",
     "radix-ui": "^1.4.3",
     "react": "^19.1.1",
