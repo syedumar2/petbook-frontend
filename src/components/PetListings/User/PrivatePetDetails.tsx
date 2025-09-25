@@ -29,7 +29,7 @@ const PrivatePetDetails = () => {
   const { data: conversations } = useConversationsQuery();
 
   const petListingConversations = conversations.data?.filter((conv)=> (conv.petId === Number(petId)));
-
+console.log(data.data?.imageUrls)
 
 
 
@@ -45,7 +45,7 @@ const PrivatePetDetails = () => {
   }
 
   return (
-    <section className="h-[80vh] w-full mx-auto  ">
+    <section className="w-full mx-auto h-full ">
       {/* Pet Image */}
       {!data || !data.data ? (
         <EmptyPage />
@@ -53,7 +53,7 @@ const PrivatePetDetails = () => {
         <div className="flex justify-center my-18 gap-6">
           <div className="w-1/2 gap-8">
       
-            <div className="lg:col-span-2 flex flex-col">
+            <div className="lg:col-span-2 flex flex-col ">
               <ImageCarousel
                 images={
                   data.data.imageUrls && data.data.imageUrls.length > 0

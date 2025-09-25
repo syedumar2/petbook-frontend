@@ -146,7 +146,7 @@ const GeneralPetListing = ({
                   {/* Image */}
                   <div className="relative">
                     <img
-                      src={pet.imageUrls[0]}
+                      src={pet.imageUrl}
                       alt={pet.name}
                       className="w-full h-48 object-cover"
                     />

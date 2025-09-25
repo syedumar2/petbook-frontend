@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 type ImageCarouselProps = {
-  images: string[];
+  images?: string[] | null | undefined;
   className?: string;
 };
 
@@ -26,7 +26,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps) => {
     <div className={className}>
       <Carousel className="relative">
         <CarouselContent className={undefined}>
-          {images.map((img, index) => (
+          {images && images.map((img, index) => (
             <CarouselItem key={index} className="basis-full">
               <div className="flex justify-center">
                 <Dialog>

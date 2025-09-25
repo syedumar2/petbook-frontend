@@ -86,7 +86,8 @@ export interface PetListing {
   breed: string;
   location: string;
   gender: PetGender;
-  imageUrls: string[];
+  imageUrl?: string;
+  imageUrls?: string[];
   adopted: boolean;
   owner: string;
   ownerId?: number;

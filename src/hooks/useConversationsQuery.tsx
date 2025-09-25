@@ -6,6 +6,6 @@ export const useConversationsQuery = () => {
   return useSuspenseQuery<ConversationsListResponse, Error>({
     queryKey: ["conversations"],
     queryFn: () => authService.getUserConversationsList(),
-    refetchOnMount: true,
+    staleTime: 5 * 60 * 1000,
   });
 };

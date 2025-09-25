@@ -41,13 +41,13 @@ const UserDisplay = () => {
             <Link to={"/profile"}>Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem className={undefined} inset={undefined}>
-            My Pets
+             <Link to={"/profile/pets"}>My Pets</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className={undefined} inset={undefined}>
-            Team
+              <DropdownMenuItem className={undefined} inset={undefined}>
+             <Link to={"/profile/conversations"}>Conversations</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className={undefined} inset={undefined}>
-            Settings
+              <DropdownMenuItem className={undefined} inset={undefined}>
+             <Link to={"/profile/notifications"}>Manage Notifications</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

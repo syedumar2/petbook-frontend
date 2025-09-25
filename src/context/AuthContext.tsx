@@ -94,33 +94,19 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
     if (isLoggingOut) return;
     const rehydrate = async () => {
       try {
-        const res = await authService.refresh(); // calls /auth/refresh
+        const res = await authService.refresh();
         if (res.success && res.token) {
           setAccessToken(res.token);
           setIsAuthenticated(true);
           await getUser();
         }
       } catch (err) {
-        setLoading(false);
       } finally {
         setLoading(false);
       }
     };
-
-    // Normalize paths for HashRouter (remove leading '/#')
-    console.log("the location pathname is",location.pathname)
-        console.log("the location hash is",location.hash)
-
-  
-    if (
-      location.pathname.startsWith("/profile") ||
-      location.pathname.startsWith("/admin") ||
-      location.pathname.startsWith("/pets")
-    ) {
-      console.log("i was triggered")
-      rehydrate();
-    }
-  }, [location.pathname, isLoggingOut]);
+    rehydrate();
+  }, []);
 
   return (
     <AuthContext.Provider
