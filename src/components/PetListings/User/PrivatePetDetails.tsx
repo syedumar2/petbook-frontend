@@ -38,8 +38,10 @@ console.log(data.data?.imageUrls)
   const parsedImageUrls: string[] = [];
   if (data.data?.imageUrls) {
     for (const url of data.data?.imageUrls) {
-      for (const key of Object.keys(url)) {
-        parsedImageUrls.push(key);
+      console.log(url)
+      for (const value of Object.values(url)) {
+
+        parsedImageUrls.push(value);
       }
     }
   }

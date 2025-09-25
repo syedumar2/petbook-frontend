@@ -37,7 +37,7 @@ export interface FindPetByExampleRequest {
   name?: string;
   type?: string;
   breed?: string;
-  gender?: string; 
+  gender?: string;
   location?: string;
   adopted?: boolean;
   ownerEmail?: string;
@@ -54,7 +54,7 @@ export interface AddPetRequest {
   name: string;
   type: string;
   breed?: string;
-  gender?: PetGender ;
+  gender?: PetGender;
   description?: string;
   location: string;
 }
@@ -105,10 +105,11 @@ export interface PrivatePetListing {
   owner: string;
   description: string | null;
   imageUrls?: Array<Record<string, string>>;
+  imageUrl?: string;
   approved?: boolean;
   approvedAt?: string;
   rejectedAt?: string;
-  createdAt? : string;
+  createdAt?: string;
 }
 
 // ==========================

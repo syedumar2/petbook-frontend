@@ -37,6 +37,7 @@ const PrivatePetListing = () => {
       sortDirection,
     },
   });
+  console.log(data?.data)
   return (
     <section className="flex flex-col ">
       <div className="flex justify-between items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl shadow-sm">
@@ -63,8 +64,8 @@ const PrivatePetListing = () => {
                 <div className="relative">
                   <img
                     src={
-                      pet.imageUrls && pet.imageUrls[0]
-                        ? Object.keys(pet.imageUrls[0])[0]
+                      pet?.imageUrl
+                        ? pet.imageUrl
                         : "/placeholder-image.png"
                     }
                     alt={pet.name}
