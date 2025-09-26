@@ -39,15 +39,14 @@ export const UpdateUserDialog = () => {
   const handleClick = () => {
     inputRef.current?.click();
   };
+
   const FNAME_REGEX = /^[A-Za-z][A-Za-z'-]{1,}$/;
   const LNAME_REGEX = /^[A-Za-z][A-Za-z'-]{1,}$/;
   const EMAIL_REGEX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/;
-  const LOCATION_REGEX = /^([A-Za-z]+( [A-Za-z]+)+),.*([A-Za-z]+( [A-Za-z]+)+)/;
-  //TODO (LOW): Centralise the regex
+const LOCATION_REGEX = /^[A-Za-z]+(?: [A-Za-z]+)*,\s*[A-Za-z]+(?: [A-Za-z]+)*$/;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setFormData({ ...formData, [name]: value });
 
     if (name === "email") {
@@ -55,17 +54,17 @@ export const UpdateUserDialog = () => {
         ...prev,
         email: EMAIL_REGEX.test(value) ? "" : "Enter a valid email",
       }));
-    } else if (name == "firstname") {
+    } else if (name === "firstname") {
       setErrors((prev) => ({
         ...prev,
         firstname: FNAME_REGEX.test(value) ? "" : "Enter a Valid First Name",
       }));
-    } else if (name == "lastname") {
+    } else if (name === "lastname") {
       setErrors((prev) => ({
         ...prev,
         lastname: LNAME_REGEX.test(value) ? "" : "Enter a Valid Last Name",
       }));
-    } else if (name == "location") {
+    } else if (name === "location") {
       setErrors((prev) => ({
         ...prev,
         location: LOCATION_REGEX.test(value) ? "" : "Enter a Valid Location",
@@ -88,7 +87,7 @@ export const UpdateUserDialog = () => {
       if (res.success) {
         toast.success(res.message);
         getUser();
-         setOpen(false); 
+        setOpen(false);
       }
     } catch (error) {
       toast.error("Something went wrong!");
@@ -102,16 +101,14 @@ export const UpdateUserDialog = () => {
       <DialogTrigger>
         <Button
           className="bg-red-700 text-white rounded-full px-8 py-2 text-sm font-medium shadow hover:bg-red-800 active:scale-95"
-          variant={undefined}
-          size={undefined}
-        >
+          disabled={loading} variant={undefined} size={undefined}        >
           Update Profile
         </Button>
       </DialogTrigger>
-    
-        <DialogContent className="flex flex-col  bg-white ">
-            <form onSubmit={onSubmitForm}>
-          <DialogHeader>
+
+      <DialogContent className="flex flex-col bg-white ">
+        <form onSubmit={onSubmitForm}>
+          <DialogHeader className={undefined}>
             <DialogTitle className="mb-2">Edit Profile</DialogTitle>
             <div className="flex items-center gap-6">
               <div className="flex flex-col items-center gap-1">
@@ -119,9 +116,7 @@ export const UpdateUserDialog = () => {
                   <Avatar className={"size-24 p-3"}>
                     <AvatarImage
                       src={
-                        file
-                          ? URL.createObjectURL(file)
-                          : user?.profileImageUrl
+                        file ? URL.createObjectURL(file) : user?.profileImageUrl
                       }
                       className="rounded-full"
                     />
@@ -138,6 +133,7 @@ export const UpdateUserDialog = () => {
                       accept="image/*"
                       ref={inputRef}
                       className="hidden"
+                      disabled={loading}
                       onChange={(e) => {
                         const selected = e.target.files?.[0];
                         if (selected && selected.type.startsWith("image/")) {
@@ -149,12 +145,13 @@ export const UpdateUserDialog = () => {
                     />
                     <Button
                       onClick={handleClick}
-                        type="button" 
-                      className=" text-white rounded-full px-8  text-sm font-medium shadow hover:bg-gray-200 active:scale-95" variant={undefined} size={undefined}                    >
+                      type="button"
+                      disabled={loading}
+                      className="text-white rounded-full px-8 text-sm font-medium shadow hover:bg-gray-200 active:scale-95" variant={undefined} size={undefined}                    >
                       {file ? (
                         <FileCheck className="text-gray-600" />
                       ) : (
-                        <Upload className=" text-gray-600" />
+                        <Upload className="text-gray-600" />
                       )}
                     </Button>
                   </div>
@@ -170,6 +167,7 @@ export const UpdateUserDialog = () => {
                   className="w-full border rounded px-3 py-2 bg-gray-100"
                   onChange={handleChange}
                   name="firstname"
+                  disabled={loading}
                 />
                 {errors.firstname && (
                   <p className="text-xs text-red-500 mt-1">
@@ -185,6 +183,7 @@ export const UpdateUserDialog = () => {
                   className="w-full border rounded px-3 py-2 bg-gray-100"
                   onChange={handleChange}
                   name="lastname"
+                  disabled={loading}
                 />
                 {errors.lastname && (
                   <p className="text-xs text-red-500 mt-1">{errors.lastname}</p>
@@ -196,49 +195,50 @@ export const UpdateUserDialog = () => {
               <input
                 type="email"
                 value={formData?.email}
-                className="w-full border rounded px-3 py-2 bg-gray-100   "
+                className="w-full border rounded px-3 py-2 bg-gray-100"
                 onChange={handleChange}
                 name="email"
+                disabled={loading}
               />
               {errors.email && (
                 <p className="text-xs text-red-500 mt-1">{errors.email}</p>
               )}
-            </div>{" "}
+            </div>
             <div>
               <label className="block text-sm font-medium mb-1">Location</label>
               <input
                 type="text"
                 value={formData?.location}
-                className="w-full border rounded px-3 py-2 bg-gray-100   "
+                className="w-full border rounded px-3 py-2 bg-gray-100"
                 onChange={handleChange}
                 name="location"
+                disabled={loading}
               />
               {errors.location && (
                 <p className="text-xs text-red-500 mt-2">{errors.location}</p>
               )}
-            </div>{" "}
+            </div>
             <div className="flex justify-end mt-2"></div>
           </DialogHeader>
-       <div className="flex justify-end gap-3">
-         
-              <DialogClose asChild>
-                <Button variant="outline" className={undefined} size={undefined}
-                onClick={()=>setFile(null)}>
-                  Cancel
-                </Button>
-              </DialogClose>
+          <div className="flex justify-end gap-3">
+            <DialogClose asChild>
               <Button
-                type="submit"
-                className="bg-red-700 text-white  hover:bg-red-800 active:scale-95"
-                variant={undefined}
-                size={undefined}
-              >
-                Save changes
+                variant="outline"
+                disabled={loading}
+                onClick={() => setFile(null)} className={undefined} size={undefined}              >
+                Cancel
               </Button>
-       </div>
-          </form>
-        </DialogContent>
-
+            </DialogClose>
+            <Button
+              type="submit"
+              className="bg-red-700 text-white hover:bg-red-800 active:scale-95"
+              disabled={loading} variant={undefined} size={undefined}            >
+              {loading ? "Saving..." : "Save changes"}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 };
+

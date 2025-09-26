@@ -28,10 +28,10 @@ const ChatSideBar = ({
   >;
 }) => {
   //gets conversationId from list component and sets Conversation state to Conversation obj with given id
-  const { data: conversation, isFetching: isFetchingConversation } =
+  const { data: conversation, isPending: isPendingConversation } =
     useConversationQuery(!!conversationId, conversationId);
 
-  const { data: pet, isFetching: isFetchingPets } = usePetByIdQuery(
+  const { data: pet, isPending: isPendingPets } = usePetByIdQuery(
     conversation?.data?.petId,
     { enabled: !!conversation?.data?.petId }
   );
@@ -49,7 +49,7 @@ const ChatSideBar = ({
     hour12: true, // AM/PM
   };
 
-  if (isFetchingConversation || isFetchingPets) return <Loading />;
+  if (isPendingConversation || isPendingPets) return <Loading />;
   if (!conversationId || !conversation?.data)
     return <EmptySidebar type="no-convo" />;
 
@@ -90,7 +90,7 @@ const ChatSideBar = ({
       <div className="border border-gray-200 rounded-2xl shadow hover:shadow-lg transition overflow-hidden w-[380px] h-[380px] pt-4 bg-white">
         <div className="px-4 py-0">
           <img
-            src={pet.data?.imageUrls[0]}
+            src={pet.data?.imageUrls?.[0]}
             alt={pet.data?.name}
             className="w-full h-48 object-cover mb-2"
           />

@@ -9,7 +9,7 @@ import {
 } from "@/types/user";
 import { clearTokens, getAccessToken, setAccessToken } from "./tokenStore";
 import { toast } from "sonner";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type AuthContextType = {
   user: UserInfo | null;
@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     !!getAccessToken()
   );
+  const navigate = useNavigate();
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const location = useLocation();
@@ -56,15 +57,15 @@ export const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
     return res;
   };
 
-  const logout = async () => {
-    setIsLoggingOut(true);
-    await authService.logout();
-    clearTokens();
-    setIsAuthenticated(false);
-    setUser(null);
-    toast.message("Logged out successfully");
-    window.location.hash = "/login"; // Updated for HashRouter
-  };
+    const logout = async () => {
+      setIsLoggingOut(true);
+      await authService.logout();
+      clearTokens();
+      setIsAuthenticated(false);
+      setUser(null);
+      toast.message("Logged out successfully");
+      navigate("/login"); // Updated for HashRouter
+    };
 
   const getUser = async () => {
     const res = await authService.getUserInfo();

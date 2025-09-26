@@ -28,7 +28,7 @@ export const RegisterForm = () => {
   const LNAME_REGEX = /^[A-Za-z][A-Za-z'-]{1,}$/;
   const EMAIL_REGEX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/;
   const PSWD_LENGTH = 4;
-  const LOCATION_REGEX = /^([A-Za-z]+( [A-Za-z]+)+),.*([A-Za-z]+( [A-Za-z]+)+)/;
+const LOCATION_REGEX = /^[A-Za-z]+(?: [A-Za-z]+)*,\s*[A-Za-z]+(?: [A-Za-z]+)*$/;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

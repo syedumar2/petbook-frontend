@@ -12,8 +12,8 @@ import { PetGender, UpdatePetRequest } from "@/types/petListing";
 
 const PET_NAME_REGEX = /^[A-Za-z]+( [A-Za-z]+)?$/;
 const PET_BREED = /^[A-Za-z]+( [A-Za-z]+)?$/;
-const LOCATION_REGEX =
-  /^[A-Za-z]+(?:[ .'-][A-Za-z]+)*,\s*[A-Za-z]+(?:[ .'-][A-Za-z]+)*$/;
+const LOCATION_REGEX = /^[A-Za-z]+(?: [A-Za-z]+)*,\s*[A-Za-z]+(?: [A-Za-z]+)*$/;
+
 
 type PetListingFormProps = {
   formData: UpdatePetRequest;

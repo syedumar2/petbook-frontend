@@ -19,6 +19,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { useState } from "react";
 import { useConversationsQuery } from "@/hooks/useConversationsQuery";
 import { PrivatePetListingConversations } from "./PrivatePetListingConversations";
+import { Loading } from "@/components/Loader/Loading";
 
 const PrivatePetDetails = () => {
   const { petId } = useParams();
@@ -28,19 +29,19 @@ const PrivatePetDetails = () => {
   const { data, isError, isPending } = useUserPetByIdQuery(Number(petId));
   const { data: conversations } = useConversationsQuery();
 
-  const petListingConversations = conversations.data?.filter((conv)=> (conv.petId === Number(petId)));
-console.log(data.data?.imageUrls)
+  const petListingConversations = conversations.data?.filter(
+    (conv) => conv.petId === Number(petId)
+  );
+  console.log(data.data?.imageUrls);
 
-
-
+  if (isPending) return <Loading />;
   if (!data || data === null)
     return <p className="text-center mt-10">Pet not found!</p>;
   const parsedImageUrls: string[] = [];
   if (data.data?.imageUrls) {
     for (const url of data.data?.imageUrls) {
-      console.log(url)
+      console.log(url);
       for (const value of Object.values(url)) {
-
         parsedImageUrls.push(value);
       }
     }
@@ -54,7 +55,6 @@ console.log(data.data?.imageUrls)
       ) : (
         <div className="flex justify-center my-18 gap-6">
           <div className="w-1/2 gap-8">
-      
             <div className="lg:col-span-2 flex flex-col ">
               <ImageCarousel
                 images={
@@ -92,93 +92,97 @@ console.log(data.data?.imageUrls)
                   : "Pending"}
               </p>
             </div>
-
-          
           </div>
 
+          <div className="flex flex-col items-start gap-8 max-w-full">
+            <Card className="border rounded-2xl shadow-md p-6 h-fit w-full ">
+              <CardContent className="px-3 flex flex-col space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  Owner Details
+                </h2>
+                <div className="text-gray-700">
+                  <p>
+                    <span className="font-medium">Email:</span>{" "}
+                    {data.data.owner}
+                  </p>
+                </div>
 
-
-            <div className="flex flex-col items-start gap-8 max-w-full">
-              <Card className="border rounded-2xl shadow-md p-6 h-fit w-full ">
-                <CardContent className="px-3 flex flex-col space-y-4">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                    Owner Details
-                  </h2>
-                  <div className="text-gray-700">
-                    <p>
-                      <span className="font-medium">Email:</span>{" "}
-                      {data.data.owner}
-                    </p>
-                  </div>
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <Button
-                        className="bg-gray-700 text-white rounded-full w-xs text-sm font-medium shadow hover:bg-red-800 active:scale-95"
-                        variant={undefined}
-                        size={undefined}
-                      >
-                        Actions <ChevronDown />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className={"w-xs bg-white"}>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button
+                      className="bg-gray-700 text-white rounded-full w-xs text-sm font-medium shadow hover:bg-red-800 active:scale-95"
+                      variant={undefined}
+                      size={undefined}
+                    >
+                      Actions <ChevronDown />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className={"w-xs bg-white"}>
+                    <DropdownMenuItem
+                      className={"text-blue-800"}
+                      inset={undefined}
+                    >
+                      <Link to={`/profile/pets/update/${data?.data?.id}`}>
+                        Update Post
+                      </Link>
+                    </DropdownMenuItem>
+                    <Dialog
+                      open={deleteDialogOpen}
+                      onOpenChange={setDeleteDialogOpen}
+                    >
                       <DropdownMenuItem
-                        className={"text-blue-800"}
+                        className={"text-red-700"}
                         inset={undefined}
+                        onSelect={(e: Event) => e.preventDefault()}
                       >
-                        <Link to={`/profile/pets/update/${data?.data?.id}`}>
-                          Update Post
-                        </Link>
+                        <DeleteDialogBox
+                          petId={Number(petId)}
+                          open={deleteDialogOpen}
+                          setOpen={setDeleteDialogOpen}
+                        />
                       </DropdownMenuItem>
-                      <Dialog
-                        open={deleteDialogOpen}
-                        onOpenChange={setDeleteDialogOpen}
+                    </Dialog>
+                    <Dialog
+                      open={adoptionDialogOpen}
+                      onOpenChange={setAdoptionDialogOpen}
+                    >
+                      <DropdownMenuItem
+                        className={"text-green-700"}
+                        inset={undefined}
+                        onSelect={(e: Event) => e.preventDefault()}
                       >
-                        <DropdownMenuItem
-                          className={"text-red-700"}
-                          inset={undefined}
-                          onSelect={(e: Event) => e.preventDefault()}
-                        >
-                          <DeleteDialogBox
-                            petId={Number(petId)}
-                            open={deleteDialogOpen}
-                            setOpen={setDeleteDialogOpen}
-                          />
-                        </DropdownMenuItem>
-                      </Dialog>
-                      <Dialog
-                        open={adoptionDialogOpen}
-                        onOpenChange={setAdoptionDialogOpen}
-                      >
-                        <DropdownMenuItem
-                          className={"text-green-700"}
-                          inset={undefined}
-                          onSelect={(e: Event) => e.preventDefault()}
-                        >
-                          <AdoptionConfirmation
-                            open={adoptionDialogOpen}
-                            setOpen={setAdoptionDialogOpen}
-                            adoptionStatus={data.data?.adopted}
-                            petId={Number(petId)}
-                          />
-                        </DropdownMenuItem>
-                      </Dialog>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </CardContent>
-              </Card>
+                        <AdoptionConfirmation
+                          open={adoptionDialogOpen}
+                          setOpen={setAdoptionDialogOpen}
+                          adoptionStatus={data.data?.adopted}
+                          petId={Number(petId)}
+                        />
+                      </DropdownMenuItem>
+                    </Dialog>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </CardContent>
+            </Card>
 
-              <Card className="border  rounded-2xl shadow-md p-6 h-fit w-full ">
-                <CardContent className="p-0 flex flex-col space-y-4 ">
-                  <CardTitle className={undefined}>
-                    Conversations related to this Post
-                  </CardTitle>
-                  {/* Conversation 1 */}
-                  {petListingConversations && petListingConversations?.length> 0 ?
-               <PrivatePetListingConversations data={petListingConversations}/> : <p className="font bold text-center p-2"><span>No Conversations available</span></p>
-                }</CardContent>
-              </Card>
-            </div>
+            <Card className="border  rounded-2xl shadow-md p-6 h-fit w-full ">
+              <CardContent className="p-0 flex flex-col space-y-4 ">
+                <CardTitle className={undefined}>
+                  Conversations related to this Post
+                </CardTitle>
+                {/* Conversation 1 */}
+                {petListingConversations &&
+                petListingConversations?.length > 0 ? (
+                  <PrivatePetListingConversations
+                    data={petListingConversations}
+                  />
+                ) : (
+                  <p className="font bold text-center p-2">
+                    <span>No Conversations available</span>
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
           {/* Right 1/3 → Owner details */}
         </div>
       )}{" "}

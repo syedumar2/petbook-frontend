@@ -15,11 +15,11 @@ const PetDetailsComponent = () => {
   const { petId } = useParams();
   const { user } = useAuth();
 
-  const { data, isError, error, isFetching } = usePetByIdQuery(Number(petId));
+  const { data, isError, error, isPending } = usePetByIdQuery(Number(petId));
 
   const navigate = useNavigate();
   const [ignore, setIgnore] = useState<boolean>(false);
-  if (isFetching) return <Loading />;
+  if (isPending) return <Loading />;
   if (!data) return <p className="text-center mt-10">Pet not found!</p>;
   console.log(data.data?.description)
 
