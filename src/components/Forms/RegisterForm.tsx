@@ -212,12 +212,13 @@ const LOCATION_REGEX = /^[A-Za-z]+(?: [A-Za-z]+)*,\s*[A-Za-z]+(?: [A-Za-z]+)*$/;
 
       {/* Register Button */}
       <div className="mb-6 mt-6 text-center">
-        <button
-          className="w-full px-4 py-2 font-medium tracking-wide text-white bg-red-700 rounded-full hover:bg-red-800 focus:outline-none focus:shadow-outline"
+             <button
+          className="w-full px-4 py-2 font-medium tracking-wide text-white bg-red-700 rounded-full hover:bg-red-800 focus:outline-none focus:shadow-outline 
+               disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={loading || !isFormValid}
         >
-          Sign Up
+          {loading ? "Registering..." : "Sign Up"}
         </button>
       </div>
 
