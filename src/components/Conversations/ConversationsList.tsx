@@ -25,7 +25,7 @@ const ConversationsList = ({ setConversationId }: ConversationsListProps) => {
   return (
     <div className="flex flex-col w-2/5 border-r border-gray-200 overflow-y-auto min-h-screen">
     
-      {!data || !data.data ? (
+      {!data || data?.data?.length === 0 || !data.data ? (
       <EmptyChat/>
       ) : (
         data.data.map((conversation, index) => (

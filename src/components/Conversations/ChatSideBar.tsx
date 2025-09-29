@@ -48,10 +48,10 @@ const ChatSideBar = ({
     minute: "2-digit", // 34
     hour12: true, // AM/PM
   };
-
-  if (isPendingConversation || isPendingPets) return <Loading />;
   if (!conversationId || !conversation?.data)
     return <EmptySidebar type="no-convo" />;
+  if (isPendingConversation || isPendingPets) return <Loading />;
+
 
   if (!conversation.data.petId || !pet?.data)
     return <EmptySidebar type="no-pet" />;
